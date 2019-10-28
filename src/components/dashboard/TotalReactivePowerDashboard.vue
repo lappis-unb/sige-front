@@ -134,6 +134,7 @@ export default {
           .get(`http://localhost:8001/graph/minutely_total_reactive_power/?limit=${limit}&serial_number=${this.selectedTransductor}&start_date=${startDate}&end_date=${endDate}`)
           .then((res) => {
             const measurements = res.data.results
+
             this.buildGraphInformation(measurements)
           })
           .catch((err) => console.log(err))
@@ -189,6 +190,18 @@ export default {
       return startDate
     },
 
+    formattedDate (date) {
+      let dateValue
+      let timeValue
+      let result = date.split('T')
+
+      dateValue = result[0].split('-')
+      dateValue = dateValue[1] + '/' + dateValue[2] + '/' + dateValue[0]
+      timeValue = result[1]
+
+      return dateValue + ' ' + timeValue
+    },
+
     labelFormatter (value) {
       return value.toFixed(2)
     },
@@ -201,8 +214,7 @@ export default {
       let formattedDates = []
 
       let frequencyList = []
-      console.log(measurements)
-      console.log('AQUI')
+
       for (let measurement of measurements) {
         // index of measurement date
         date = measurement.measurements[0][1]
@@ -231,9 +243,9 @@ export default {
 
     getTransductors () {
       axios
-        .get(`http://localhost:8001/energy_transductors`)
+        .get(`http://0.0.0.0:8000/energy_transductors`)
         .then((res) => {
-          const transductors = res.data
+          const transductors = res.data.results
 
           let transductorsList = []
 
