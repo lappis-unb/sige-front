@@ -90,7 +90,7 @@ export default {
 
     title () {
       return {
-        text: 'total apparent power'
+        text: 'total reactive power'
       }
     },
 
@@ -131,7 +131,7 @@ export default {
 
       if (this.selectedTransductor !== undefined) {
         axios
-          .get(`http://localhost:8001/graph/minutely_total_apparent_power/?limit=${limit}&serial_number=${this.selectedTransductor}&start_date=${startDate}&end_date=${endDate}`)
+          .get(`http://localhost:8001/graph/minutely_total_reactive_power/?limit=${limit}&serial_number=${this.selectedTransductor}&start_date=${startDate}&end_date=${endDate}`)
           .then((res) => {
             const measurements = res.data.results
             this.buildGraphInformation(measurements)
