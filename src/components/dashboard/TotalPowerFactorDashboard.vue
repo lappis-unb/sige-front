@@ -16,13 +16,15 @@
           :options="['Hoje', 'Últimos 7 dias', 'Últimos 30 dias']"
           @input="updateChart()"/>
     </div>
-
     <q-separator/>
-
     <div
       v-if="(selectedTransductor && selectedPeriod)"
       class="row">
-     <linechart
+      <!-- <apexcharts
+        class="col-12"
+        :options="chartOptions"
+        :series="series"/> -->
+      <linechart
         class="col-12"
         :xaxis="xAxis"
         :yaxis="yAxis"
@@ -30,31 +32,18 @@
         :series="series"
         :labels="getDates"/>
       <q-separator class="col-12"/>
-
-      <!-- <area-chart
-        class="col-12"
-        :series="[{data: [28.3, 29, 33, 36, 32, 32, 33]},
-         {data: [22, 11, 14, 23, 11, 32, 23]}]"
-        :xaxis="{categories: this.dates,title: {text: 'Time'}}"
-        :yaxis="{title: {text: 'Temperature'},
-         min: 5, max: 40}"
-        :colors="['#9999ee','#9999ee','#9999ee']"
-        title="Something triphasic"/> -->
-
-      <q-separator class="col-12"/>
     </div>
-
     <no-data-placeholder v-else/>
   </q-page>
 </template>
 
 <script>
 import axios from 'axios'
-import LineChart from 'components/charts/LineChart.vue'
 import NoDataPlaceholder from 'components/dashboard/NoDataPlaceholder.vue'
+import LineChart from 'components/charts/LineChart.vue'
 
 export default {
-  name: 'TotalPowerFactor',
+  name: 'powerFactorDashboard',
 
   components: {
     NoDataPlaceholder,
@@ -66,9 +55,8 @@ export default {
       // min: 110,
       // max: 240,
       dates: [],
-      total_power_factor: [],
+      power_factor: [],
       measurements: [],
-      informations: [],
       transductorList: [],
       selectedCampus: '',
       selectedTransductor: '',
@@ -102,7 +90,7 @@ export default {
 
     title () {
       return {
-        text: 'Fator de potência'
+        text: 'total apparent power'
       }
     },
 
@@ -118,8 +106,8 @@ export default {
     series () {
       return [
         {
-          name: 'Fator de Potencia Total',
-          data: this.total_power_factor
+          name: 'Fator de Potência',
+          data: this.power_factor
         }
       ]
     }
@@ -143,10 +131,9 @@ export default {
 
       if (this.selectedTransductor !== undefined) {
         axios
-          .get(`http://127.0.0.1:8001/graph/minutely_total_power_factor/?limit=${limit}&serial_number=${this.selectedTransductor}&start_date=${startDate}&end_date=${endDate}`)
+          .get(`http://localhost:8001/graph/minutely_total_power_factor/?limit=${limit}&serial_number=${this.selectedTransductor}&start_date=${startDate}&end_date=${endDate}`)
           .then((res) => {
             const measurements = res.data.results
-
             this.buildGraphInformation(measurements)
           })
           .catch((err) => console.log(err))
@@ -202,18 +189,6 @@ export default {
       return startDate
     },
 
-    formattedDate (date) {
-      let dateValue
-      let timeValue
-      let result = date.split('T')
-
-      dateValue = result[0].split('-')
-      dateValue = dateValue[1] + '/' + dateValue[2] + '/' + dateValue[0]
-      timeValue = result[1]
-
-      return dateValue + ' ' + timeValue
-    },
-
     labelFormatter (value) {
       return value.toFixed(2)
     },
@@ -221,28 +196,27 @@ export default {
     buildGraphInformation (measurements) {
       let date
 
-      let totalPower
+      let powerFactor
 
       let formattedDates = []
 
-      let totalPowerList = []
+      let powerFactorList = []
 
       for (let measurement of measurements) {
-        date = measurement['collection_time']
-        date = this.formattedDate(date)
-
-        totalPower = measurement['total_power_factor']
-
+        // index of measurement date
+        date = measurement.measurements[0][1]
+        // index of measurement powerFactor
+        powerFactor = measurement.measurements[0][0]
         formattedDates.push(date)
 
-        totalPowerList.push(totalPower)
+        powerFactorList.push(powerFactor)
       }
 
-      this.setInformations(totalPowerList, formattedDates)
+      this.setInformations(powerFactorList, formattedDates)
     },
 
-    setInformations (totalPowerList, formattedDates) {
-      this.total_power_factor = totalPowerList
+    setInformations (powerFactorList, formattedDates) {
+      this.power_factor = powerFactorList
       this.dates = formattedDates
     },
 
@@ -256,9 +230,10 @@ export default {
 
     getTransductors () {
       axios
-        .get(`http://127.0.0.1:8001/energy_transductors`)
+        .get(`http://localhost:8001/energy_transductors`)
         .then((res) => {
           const transductors = res.data
+
           let transductorsList = []
 
           for (let transductor of transductors) {
