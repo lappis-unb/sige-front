@@ -82,6 +82,7 @@ export default {
         // FIX: a aba de status do sistema está sempre ativa
         { name: 'Estado do sistema', icon: 'healing', to: '/dashboard/' },
         { name: 'Tensão', icon: 'bolt', to: '/dashboard/tension' },
+        { name: 'Potência Total', icon: 'bolt', to: '/dashboard/total_power_factor' },
         { name: 'Corrente', icon: 'power', to: '/dashboard/current' },
         { name: 'Frequência', icon: 'swap_calls', to: '/dashboard/frequency' }
       ],

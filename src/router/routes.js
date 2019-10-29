@@ -146,6 +146,10 @@ const routes = [
       {
         path: 'frequency',
         component: () => import('components/dashboard/FrequencyDashboard.vue')
+      },
+      {
+        path: 'total_power_factor',
+        component: () => import('components/dashboard/TotalPowerFactorDashboard.vue')
       }
     ]
   }
