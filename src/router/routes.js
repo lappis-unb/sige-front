@@ -150,6 +150,10 @@ const routes = [
       {
         path: 'consumption',
         component: () => import('components/dashboard/ConsumptionDashboard.vue')
+      },
+      {
+        path: 'dht_voltage',
+        component: () => import('components/dashboard/ThreephasicDHTVoltageDashboard.vue')
       }
     ]
   }
