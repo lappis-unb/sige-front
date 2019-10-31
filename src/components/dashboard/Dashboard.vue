@@ -85,7 +85,7 @@ export default {
         { name: 'Corrente', icon: 'power', to: '/dashboard/current' },
         { name: 'Frequência', icon: 'swap_calls', to: '/dashboard/frequency' },
         { name: 'Consumo', icon: 'bar_chart', to: '/dashboard/consumption' },
-        { name: 'DHT Voltage', icon: 'flash_on', to: '/dashboard/dht_voltage' }
+        { name: 'Voltagem DHT', icon: 'flash_on', to: '/dashboard/dht_voltage' }
       ],
 
       something: [
