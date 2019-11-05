@@ -152,7 +152,7 @@ const routes = [
         component: () => import('components/dashboard/ConsumptionDashboard.vue')
       },
       {
-      path: 'total_reactive_power',
+        path: 'total_reactive_power',
         component: () => import('components/dashboard/TotalReactivePowerDashboard.vue')
       }
     ]

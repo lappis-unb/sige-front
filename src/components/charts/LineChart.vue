@@ -164,7 +164,8 @@ export default {
         axios
           .get(`http://127.0.0.1:8001/graph/minutely_${this.url}/?limit=${limit}&serial_number=${this.selectedTransductor}&start_date=${startDate}&end_date=${endDate}`)
           .then((res) => {
-            const measurements = res.data.results
+            // console.log(${this.url})
+            const measurements = res.data.results[0]
             this.buildGraphInformation(measurements)
           })
           .catch((err) => console.log(err))
@@ -221,70 +222,15 @@ export default {
       return a
     },
 
-    buildGraphInformation (measurements) {
+    buildGraphInformation (data) {
       if (this.graphic_type === '1') {
-        measurements = measurements[0].measurement
-        let date
-
-        let oneFaseMeasurement
-
-        let measurementList = []
-
-        for (let measurement of measurements) {
-          console.log((measurement[1]))
-          date = this.formattedDate(measurement[1])
-          oneFaseMeasurement = measurement[0]
-          let object = {
-            'x': date,
-            'y': oneFaseMeasurement
-          }
-          measurementList.push(object)
-        }
-
-        this.setOneFaseInformations(measurementList)
+        this.setOneFaseInformations(data.measurements)
       } else {
-        measurements = measurements[0]
-        let date
+        let phaseAList = data['phase_a']
+        let phaseBList = data['phase_b']
+        let phaseCList = data['phase_c']
 
-        let phaseAList = measurements['phase_a']
-        let phaseBList = measurements['phase_b']
-        let phaseCList = measurements['phase_c']
-
-        let measurementListA = []
-        let measurementListB = []
-        let measurementListC = []
-
-        for (let measurement of phaseAList) {
-          date = this.formattedDate(measurement[1])
-          let phaseAMeasurement = measurement[0]
-          let object = {
-            'x': date,
-            'y': phaseAMeasurement
-          }
-          measurementListA.push(object)
-        }
-
-        for (let measurement of phaseBList) {
-          date = this.formattedDate(measurement[1])
-          let phaseBMeasurement = measurement[0]
-          let object = {
-            'x': date,
-            'y': phaseBMeasurement
-          }
-          measurementListB.push(object)
-        }
-
-        for (let measurement of phaseCList) {
-          date = this.formattedDate(measurement[1])
-          let phaseCMeasurement = measurement[0]
-          let object = {
-            'x': date,
-            'y': phaseCMeasurement
-          }
-          measurementListC.push(object)
-        }
-
-        this.setThreeFaseInformations(measurementListA, measurementListB, measurementListC)
+        this.setThreeFaseInformations(phaseAList, phaseBList, phaseCList)
       }
     },
 
