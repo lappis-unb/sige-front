@@ -84,12 +84,8 @@ export default {
         { name: 'Tensão', icon: 'bolt', to: '/dashboard/tension' },
         { name: 'Corrente', icon: 'power', to: '/dashboard/current' },
         { name: 'Frequência', icon: 'swap_calls', to: '/dashboard/frequency' },
-<<<<<<< HEAD
         { name: 'Consumo', icon: 'bar_chart', to: '/dashboard/consumption' },
         { name: 'Potência Reativa Total', icon: 'power', to: '/dashboard/total_reactive_power' }
-=======
-        { name: 'Potência Reativa Total', icon: 'image', to: '/dashboard/total_reactive_power' }
->>>>>>> ec195a7ea52eebb295ea7fc4c71a7f99ba6666d7
       ],
 
       something: [
