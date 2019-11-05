@@ -243,7 +243,7 @@ export default {
 
     getTransductors () {
       axios
-        .get(`http://0.0.0.0:8000/energy_transductors`)
+        .get(`http://localhost:8001/energy_transductors`)
         .then((res) => {
           const transductors = res.data.results
 
