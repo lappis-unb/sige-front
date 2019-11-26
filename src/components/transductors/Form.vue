@@ -75,8 +75,8 @@ import HTTP from '../../services/masterApi/http-common'
 export default {
   data () {
     return {
-      serial_number: '',
-      ip_address: '',
+      serialNumber: '',
+      ipAddress: '',
       location: '',
       latitude: '',
       longitude: '',
@@ -94,8 +94,8 @@ export default {
     addTransductor () {
       HTTP
         .post('energy_transductors', {
-          serial_number: this.serial_number,
-          ip_address: this.ip_address,
+          serial_number: this.serialNumber,
+          ip_address: this.ipAddress,
           location: this.location,
           latitude: this.latitude,
           longitude: this.longitude,
@@ -124,9 +124,9 @@ export default {
         })
     },
     reset_fields () {
-      this.trans_model_name = ''
-      this.trans_model_serial = ''
-      this.trans_model_transport = ''
+      this.transModelName = ''
+      this.transModelSerial = ''
+      this.transModelTransport = ''
     }
 
   },

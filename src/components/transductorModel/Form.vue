@@ -15,19 +15,19 @@
         <q-input
           outlined
           name="model_name"
-          v-model="trans_model_name"
+          v-model="transModelName"
           label="Nome do modelo"
           :rules="[ val => val.length > 0 && val.length <= 50 || 'Esse campo deve conter entre 1 e 50 caracteres' ]"/>
         <q-input
           outlined
           name="model_name"
-          v-model="trans_model_serial"
+          v-model="transModelSerial"
           label="Protocolo serial"
           :rules="[ val => val.length > 0 && val.length <= 50 || 'Esse campo deve conter entre 1 e 50 caracteres' ]"/>
         <q-input
           outlined
           name="model_name"
-          v-model="trans_model_transport"
+          v-model="transModelTransport"
           label="Protocolo de transporte"
           :rules="[ val => val.length > 0 && val.length <= 50 || 'Esse campo deve conter entre 1 e 50 caracteres' ]"/>
         <q-btn
@@ -53,9 +53,9 @@ import HTTP from '../../services/masterApi/http-common'
 export default {
   data () {
     return {
-      trans_model_name: '',
-      trans_model_serial: '',
-      trans_model_transport: '',
+      transModelName: '',
+      transModelSerial: '',
+      transModelTransport: '',
       message: '',
       messageType: '',
       response: false,
@@ -67,9 +67,9 @@ export default {
     send () {
       const masterAddress = 'http://192.168.100.24:8001' || process.env.MASTER_URL
       const data = {
-        name: this.trans_model_name,
-        serial_protocol: this.trans_model_serial,
-        transport_protocol: this.trans_model_transport
+        name: this.transModelName,
+        serial_protocol: this.transModelSerial,
+        transport_protocol: this.transModelTransport
       }
 
       console.log(data)
@@ -91,9 +91,9 @@ export default {
         })
     },
     reset_fields () {
-      this.trans_model_name = ''
-      this.trans_model_serial = ''
-      this.trans_model_transport = ''
+      this.transModelName = ''
+      this.transModelSerial = ''
+      this.transModelTransport = ''
     }
   }
 }
