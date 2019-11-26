@@ -44,17 +44,17 @@ export default {
   props: [
     'title',
     'url',
-    'graphic_type',
-    'y_min',
-    'y_max',
-    'show_legend'
+    'graphicType',
+    'yMin',
+    'yMax',
+    'showLegend'
   ],
 
   data () {
     return {
-      phase_a: [],
-      phase_b: [],
-      phase_c: [],
+      phaseA: [],
+      phaseB: [],
+      phaseC: [],
       measurements: [],
       transductorList: [],
       selectedCampus: '',
@@ -66,26 +66,26 @@ export default {
 
   computed: {
     series () {
-      if (this.graphic_type === '1') {
+      if (this.graphicType === '1') {
         return [
           {
             name: this.title,
-            data: this.phase_a
+            data: this.phaseA
           }
         ]
       } else {
         return [
           {
             name: 'Fase A',
-            data: this.phase_a
+            data: this.phaseA
           },
           {
             name: 'Fase B',
-            data: this.phase_b
+            data: this.phaseB
           },
           {
             name: 'Fase C',
-            data: this.phase_c
+            data: this.phaseC
           }
         ]
       }
@@ -97,7 +97,7 @@ export default {
         },
 
         legend: {
-          show: this.show_legend
+          show: this.showLegend
         },
 
         stroke: {
@@ -140,8 +140,8 @@ export default {
           title: {
             text: this.title
           },
-          min: parseInt(this.y_min, 10),
-          max: parseInt(this.y_max, 10),
+          min: parseInt(this.yMin, 10),
+          max: parseInt(this.yMax, 10),
           tickAmount: 5,
           decimalsInFloat: 2
         },
@@ -173,7 +173,10 @@ export default {
 
       if (this.selectedTransductor !== undefined) {
         HTTP
-          .get(`graph/minutely_${this.url}/?limit=${limit}&serial_number=${this.selectedTransductor}&start_date=${startDate}&end_date=${endDate}`)
+          .get(
+            `graph/minutely_${this.url}/?limit=${limit}&serial_number=
+            ${this.selectedTransductor}&start_date=${startDate}&end_date=${endDate}`
+          )
           .then((res) => {
             const measurements = res.data.results[0]
             this.buildGraphInformation(measurements)
@@ -233,7 +236,7 @@ export default {
     },
 
     buildGraphInformation (data) {
-      if (this.graphic_type === '1') {
+      if (this.graphicType === '1') {
         this.setOneFaseInformations(data.measurements)
       } else {
         let phaseAList = data['phase_a']
@@ -245,13 +248,13 @@ export default {
     },
 
     setOneFaseInformations (measurementList) {
-      this.phase_a = measurementList
+      this.phaseA = measurementList
     },
 
     setThreeFaseInformations (measurementListA, measurementListB, measurementListC) {
-      this.phase_a = measurementListA
-      this.phase_b = measurementListB
-      this.phase_c = measurementListC
+      this.phaseA = measurementListA
+      this.phaseB = measurementListB
+      this.phaseC = measurementListC
     },
 
     setTransductorList (transductorList) {
