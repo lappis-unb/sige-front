@@ -44,15 +44,15 @@ export default {
   props: [
     'title',
     'url',
-    'graphic_type'
+    'graphicType'
   ],
 
   data () {
     return {
       dates: [],
-      phase_a: [],
-      phase_b: [],
-      phase_c: [],
+      phaseA: [],
+      phaseB: [],
+      phaseC: [],
       measurements: [],
       transductorList: [],
       selectedCampus: '',
@@ -67,15 +67,15 @@ export default {
       return [
         {
           name: 'Fase A',
-          data: this.phase_a
+          data: this.phaseA
         },
         {
           name: 'Fase B',
-          data: this.phase_b
+          data: this.phaseB
         },
         {
           name: 'Fase C',
-          data: this.phase_c
+          data: this.phaseC
         }
       ]
     },
@@ -160,7 +160,10 @@ export default {
 
       if (this.selectedTransductor !== undefined) {
         HTTP
-          .get(`graph/minutely_${this.url}/?limit=${limit}&serial_number=${this.selectedTransductor}&start_date=${startDate}&end_date=${endDate}`)
+          .get(
+            `graph/minutely_${this.url}/?limit=${limit}&serial_number=
+            s${this.selectedTransductor}&start_date=${startDate}&end_date=${endDate}`
+          )
           .then((res) => {
             const measurements = res.data.results
             this.buildGraphInformation(measurements)
@@ -221,7 +224,7 @@ export default {
 
     buildGraphInformation (measurements) {
       measurements = measurements[0].measurement
-      if (this.graphic_type === '1') {
+      if (this.graphicType === '1') {
         let date
 
         let oneFaseMeasurement
@@ -274,13 +277,13 @@ export default {
     },
 
     setOneFaseInformations (measurementList) {
-      this.phase_a = measurementList
+      this.phaseA = measurementList
     },
 
     setThreeFaseInformations (faseAList, faseBList, faseCList, formattedDates) {
-      this.phase_a = faseAList
-      this.phase_b = faseBList
-      this.phase_c = faseCList
+      this.phaseA = faseAList
+      this.phaseB = faseBList
+      this.phaseC = faseCList
       this.dates = formattedDates
     },
 
