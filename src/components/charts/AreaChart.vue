@@ -45,15 +45,15 @@ export default {
   props: [
     'title',
     'url',
-    'graphic_type'
+    'graphicType'
   ],
 
   data () {
     return {
       dates: [],
-      fase_a: [],
-      fase_b: [],
-      fase_c: [],
+      faseA: [],
+      faseB: [],
+      faseC: [],
       measurements: [],
       transductorList: [],
       selectedCampus: '',
@@ -68,15 +68,15 @@ export default {
       return [
         {
           name: 'Fase A',
-          data: this.fase_a
+          data: this.faseA
         },
         {
           name: 'Fase B',
-          data: this.fase_b
+          data: this.faseB
         },
         {
           name: 'Fase C',
-          data: this.fase_c
+          data: this.faseC
         }
       ]
     },
@@ -153,7 +153,10 @@ export default {
 
       if (this.selectedTransductor !== undefined) {
         HTTP
-          .get(`graph/minutely_${this.url}/?limit=${limit}&serial_number=${this.selectedTransductor}&start_date=${startDate}&end_date=${endDate}`)
+          .get(
+            `graph/minutely_${this.url}/?limit=${limit}&serial_number=
+            ${this.selectedTransductor}&start_date=${startDate}&end_date=${endDate}`
+          )
           .then((res) => {
             const measurements = res.data
             console.log(measurements)
@@ -212,7 +215,7 @@ export default {
     },
 
     buildGraphInformation (measurements) {
-      if (this.graphic_type === '1') {
+      if (this.graphicType === '1') {
         let date
 
         let oneFaseMeasurement
@@ -265,14 +268,14 @@ export default {
     },
 
     setOneFaseInformations (measurementList, formattedDates) {
-      this.fase_a = measurementList
+      this.faseA = measurementList
       this.dates = formattedDates
     },
 
     setThreeFaseInformations (faseAList, faseBList, faseCList, formattedDates) {
-      this.fase_a = faseAList
-      this.fase_b = faseBList
-      this.fase_c = faseCList
+      this.faseA = faseAList
+      this.faseB = faseBList
+      this.faseC = faseCList
       this.dates = formattedDates
     },
 
