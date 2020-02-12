@@ -2,7 +2,7 @@
   <div>
     <q-layout view="hhh lpR fff">
       <Header/>
-      <q-page-container class="bg-grey-2">
+      <q-page-container>
         <router-view />
       </q-page-container>
     </q-layout>
