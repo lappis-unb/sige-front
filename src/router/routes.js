@@ -54,7 +54,7 @@ export default function (ssrContext) {
         }
       },
       children: [
-        { path: '', name: 'admin', component: () => import('pages/AdminTest.vue') }
+        // Here is where we put the admin routes
       ]
     },
     { path: '/dashboard', name: 'dashboard', component: () => import('pages/DashboardBase.vue') }
