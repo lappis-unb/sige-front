@@ -5,6 +5,7 @@ export default function () {
     username: '',
     useremail: '',
     currentPage: '',
-    userAuth: false
+    userAuth: false,
+    admin: true
   }
 }

@@ -41,6 +41,22 @@ export default function (ssrContext) {
         { path: '/register', name: 'register', component: () => import('pages/Register.vue') }
       ]
     },
+    {
+      path: '/admin',
+      component: () => import('layouts/MainLayout.vue'),
+      beforeEnter (to, from, next) {
+        const { store } = ssrContext
+        const admin = store.getters['userStore/isAdmin']
+        if (admin) {
+          next()
+        } else {
+          next('/')
+        }
+      },
+      children: [
+        { path: '', name: 'admin', component: () => import('pages/AdminTest.vue') }
+      ]
+    },
     { path: '/dashboard', name: 'dashboard', component: () => import('pages/DashboardBase.vue') }
   ]
 
