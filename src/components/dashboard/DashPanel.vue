@@ -140,8 +140,7 @@ export default {
 
   mounted () {
     this.selectTransductor()
-    this.interval = setInterval(this.selectTransductor, 10000)
-    // setInterval(this.selectTransductor, 10000)
+    this.interval = setInterval(this.selectTransductor, 15000)
   },
 
   beforeDestroy () {
