@@ -85,10 +85,12 @@ export default {
 
   methods: {
     getTransductors () {
+      // TODO: allow filter by campus on the energy-transductors endpoint
       MASTER
-        .get(`/energy-transductors/?campi_id=${this.selectedCampus.id}`)
+        .get('/energy-transductors/')
         .then((res) => {
-          this.transductors = res.data
+          this.transductors = res.data.filter(
+            t => t.campus.match(/campi\/(\d+)\//)[1] === this.selectedCampus.id.toString())
           this.selectedTransductor = this.transductors[0]
         })
         .catch((err) => { console.error(err) })
