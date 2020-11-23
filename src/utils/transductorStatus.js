@@ -93,30 +93,30 @@ export class TransductorStatus {
   }
 
   static timePassedDays (date, compareDate, isStartTime) {
-    let res = ''
-    const day = new Date(date)
-    const compareDay = new Date(compareDate)
+    let timeFormatted = ''
+    const day = new Date(date).setHours(0, 0, 0, 0)
+    const compareDay = new Date(compareDate).setHours(0, 0, 0, 0)
 
-    day.setHours(0, 0, 0, 0)
-    compareDay.setHours(0, 0, 0, 0)
-    const days = Math.floor((compareDay - day) / (1000 * 60 * 60 * 24))
+    const dayInMiliSeconds = 86400000
+    const days = Math.floor((compareDay - day) / dayInMiliSeconds)
 
     if (isStartTime && days > 0) {
       const plural = days > 1 ? 's ' : ' '
 
-      res += days.toString() + ' dia' + plural
+      timeFormatted += days.toString() + ' dia' + plural
     } else {
-      const h = date.getHours()
-      const min = date.getMinutes()
-      res += h.toString() + 'h' + min.toString().padStart(2, 0)
+      const hour = date.getHours()
+      const minute = date.getMinutes()
+      timeFormatted += hour.toString() + 'h' + minute.toString().padStart(2, 0)
     }
-    return res
+    return timeFormatted
   }
 
-  static timePassed (time) {
-    const dateParsed = new Date(time)
+  static timePassed (itemDate) {
+    const dateParsed = new Date(itemDate)
     const currentDate = new Date()
-    const min = Math.floor((currentDate - dateParsed) / (1000 * 60))
+    const hourInMilliseconds = 1000 * 60
+    const min = Math.floor((currentDate - dateParsed) / hourInMilliseconds)
     if (min > 0) {
       if (min < 60) {
         return min + ' min'
@@ -144,13 +144,13 @@ export class TransductorStatus {
         writtenEndTime: this.timePassedDays(endTime, currentDate, false),
         info: this.getOccurrenceInfo(currentOccurrence, type)
       }
+
       if (formattedOccurrence.end_time === null) {
         occurrences.push(formattedOccurrence)
       }
-      endTime.setHours(0, 0, 0, 0)
-      currentDate.setHours(0, 0, 0, 0)
 
-      const diff = Math.floor((currentDate - endTime) / (1000 * 60 * 60 * 24))
+      const dayInMiliSeconds = 86400000
+      const diff = Math.floor((currentDate.setHours(0, 0, 0, 0) - endTime.setHours(0, 0, 0, 0)) / dayInMiliSeconds)
 
       if (diff === 0) {
         today.push(formattedOccurrence)
