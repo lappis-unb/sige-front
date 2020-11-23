@@ -36,7 +36,7 @@
 
 <script>
 import MASTER from '../services/masterApi/http-common'
-import { separateInDays } from '../utils/transductorStatus'
+import { TransductorStatus } from '../utils/transductorStatus'
 import transducerAlert from './TransducerAlert'
 import occurencesList from './OccurencesList'
 
@@ -70,7 +70,7 @@ export default {
         }
 
         Object.entries(typeOfOccorences).forEach(async ([type, values]) => {
-          await separateInDays(
+          await TransductorStatus.separateInDays(
             values,
             type,
             this.today,
