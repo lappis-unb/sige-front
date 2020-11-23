@@ -70,7 +70,7 @@ export default {
         }
 
         Object.entries(typeOfOccorences).forEach(async ([type, values]) => {
-          await TransductorStatus.separateInDays(
+          await TransductorStatus.separateOccurrencesByDays(
             values,
             type,
             this.today,

@@ -2,7 +2,7 @@
   <div>
     <chart-filter
       filterLabel="Dimensão"
-      :filterList="dimensions"
+      :filterList="transductorGraphControl.dimensions"
       :visionOptions="vision"
       :transductorId="transductorId"
     />
@@ -28,7 +28,7 @@ import chartFilter from './ChartFilter'
 import LineChart from './charts/LineChart.vue'
 import BarChart from './charts/BarChart.vue'
 import noDataPlaceholder from './NoDataPlaceHolder'
-import { dimensions, getGraph } from '../utils/transductorGraphControl'
+import { TransductorGraphControl } from '../utils/transductorGraphControl'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -44,7 +44,7 @@ export default {
   ],
   data () {
     return {
-      dimensions: dimensions,
+      transductorGraphControl: new TransductorGraphControl(),
       vision: [
         { label: 'Hora', value: 'hour' },
         { label: 'Dia', value: 'day' }
@@ -60,7 +60,7 @@ export default {
       ...this.filterOptions,
       transductor: this.transductorId
     }
-    const graphOpt = await getGraph(filter)
+    const graphOpt = await this.transductorGraphControl.getGraph(filter)
     await this.updateFilter(filter)
     await this.updateChartPhase(graphOpt)
     this.mounted = true

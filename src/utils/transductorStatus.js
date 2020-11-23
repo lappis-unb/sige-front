@@ -130,9 +130,9 @@ export class TransductorStatus {
     }
   }
 
-  static separateInDays (arr, type, today, yesterday, beforeYesterday, occurrences = []) {
+  static separateOccurrencesByDays (events, type, today, yesterday, beforeYesterday, occurrences = []) {
     const currentDate = new Date()
-    arr.forEach((currentOccurrence) => {
+    events.forEach((currentOccurrence) => {
       const startTime = new Date(currentOccurrence.start_time)
       const endTime = currentOccurrence.end_time === null ? new Date() : new Date(currentOccurrence.end_time)
 

@@ -53,7 +53,7 @@
   </div>
 </template>
 <script>
-import { getGraph } from '../utils/transductorGraphControl'
+import { TransductorGraphControl } from '../utils/transductorGraphControl'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -70,7 +70,8 @@ export default {
       options: [],
       vision: null,
       startDate: '',
-      endDate: ''
+      endDate: '',
+      transductorGraphControl: new TransductorGraphControl()
     }
   },
   created () {
@@ -100,7 +101,7 @@ export default {
         startDate: this.startDate,
         endDate: this.endDate
       }
-      const graphOpt = await getGraph(filter)
+      const graphOpt = await this.transductorGraphControl.getGraph(filter)
       await this.updateFilter(filter)
       await this.updateChartPhase(graphOpt)
     }
