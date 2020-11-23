@@ -61,47 +61,24 @@ export default {
   created () {
     MASTER.get('/occurences/?type=period&id=' + this.id)
       .then(async res => {
-        await separateInDays(
-          res.data.critical_tension,
-          'critical_tension',
-          this.today,
-          this.yesterday,
-          this.beforeYesterday,
-          this.occurrences
-        )
-        await separateInDays(
-          res.data.precarious_tension,
-          'precarious_tension',
-          this.today,
-          this.yesterday,
-          this.beforeYesterday,
-          this.occurrences
-        )
-        await separateInDays(
-          res.data.phase_drop,
-          'phase_drop',
-          this.today,
-          this.yesterday,
-          this.beforeYesterday,
-          this.occurrences
-        )
-        await separateInDays(
-          res.data.transductor_connection_fail,
-          'conection_fail',
-          this.today,
-          this.yesterday,
-          this.beforeYesterday,
-          this.occurrences
-        )
-        await separateInDays(
-          res.data.slave_connection_fail,
-          'conection_fail',
-          this.today,
-          this.yesterday,
-          this.beforeYesterday,
-          this.occurrences
-        )
-        console.log(this.occurrences)
+        const responseData = res.data
+        const typeOfOccorences = {
+          critical_tension: responseData.critical_tension,
+          precarious_tension: responseData.precarious_tension,
+          phase_drop: responseData.phase_drop,
+          conection_fail: responseData.transductor_connection_fail
+        }
+
+        Object.entries(typeOfOccorences).forEach(async ([type, values]) => {
+          await separateInDays(
+            values,
+            type,
+            this.today,
+            this.yesterday,
+            this.beforeYesterday,
+            this.occurrences
+          )
+        })
       })
       .catch(err => {
         console.log(err)
