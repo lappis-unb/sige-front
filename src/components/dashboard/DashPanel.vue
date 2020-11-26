@@ -1,23 +1,60 @@
 <template>
-  <div class="row">
+  <div class="dash-content">
   <!-- <div class="row" style="max-height: 55vh!important"> -->
 
     <dash-map
       v-if="transductors !== []"
-      class="col-7"
+      class="dash-map"
       :transductors="transductors"
       :occurences="occurences"
+      :unifilarDiagram="unifilarDiagram"
       :selected-transductor="selectedTransductor"
       :current-campus="selectedCampus"/>
 
     <dash-campus-info
-      class="col-5"
+      class="dash-campus"
       v-if="selectedTransductor !== {}"
       :selected-transductor="selectedTransductor"
       :current-campus="selectedCampus"/>
 
   </div>
 </template>
+
+<style lang="scss">
+  .dash-content {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    min-height: 53.9vh;
+  }
+
+  .dash-map {
+    width: 70%;
+  }
+
+  .dash-campus {
+    width: 50%;
+  }
+
+  @media screen and (max-width: 800px) {
+    .dash-content {
+      flex-direction: column;
+    }
+
+    .dash-map {
+      width: 100%;
+    }
+
+    .dash-campus {
+      width: 100%;
+      padding-right: 0 !important;
+    }
+
+    .q-pr-md .q-ma-none  {
+      padding-right: 0 !important;
+    }
+  }
+</style>
 
 <script>
 import DashMap from './DashMap'
@@ -36,6 +73,7 @@ export default {
     return {
       transductors: [],
       occurences: [],
+      unifilarDiagram: [],
       selectedTransductor: {},
       interval: undefined
     }
@@ -52,6 +90,15 @@ export default {
         .then((res) => {
           this.transductors = res.data
           this.selectedTransductor = this.transductors[0]
+        })
+        .catch((err) => { console.error(err) })
+    },
+
+    getUnifilarDiagram () {
+      MASTER
+        .get(`/lines/?campus=${this.selectedCampus.id}`)
+        .then((res) => {
+          this.unifilarDiagram = res.data
         })
         .catch((err) => { console.error(err) })
     },
@@ -81,6 +128,7 @@ export default {
     async getInfo () {
       await this.getTransductors()
       await this.getCampusOccurences()
+      await this.getUnifilarDiagram()
     }
   },
 

@@ -1,8 +1,7 @@
 <template>
-  <div class="q-pr-md q-ma-none">
+  <div class="map-wrapper">
     <l-map
-      style="height: 53.9vh!important"
-      class="rounded-borders cursor-not-allowed"
+      class="rounded-borders cursor-not-allowed map-dimension"
       :zoom="currentCampus.zoom_ratio || 16"
       :min-zoom="currentCampus.zoom_ratio || 16"
       :max-zoom="currentCampus.zoom_ratio || 16"
@@ -35,6 +34,13 @@
         :hover="true"
       />
 
+      <l-line
+        v-for="line in lines"
+        :key="line.id"
+        :lat-lngs="line.coordinates"
+        :color="line.color"
+      />
+
     </l-map>
   </div>
 </template>
@@ -49,7 +55,8 @@ export default {
     'l-icon': Vue2Leaflet.LIcon,
     'l-map': Vue2Leaflet.LMap,
     'l-circle': Vue2Leaflet.LCircle,
-    'l-tile-layer': Vue2Leaflet.LTileLayer
+    'l-tile-layer': Vue2Leaflet.LTileLayer,
+    'l-line': Vue2Leaflet.LPolyline
   },
 
   props: {
@@ -58,6 +65,10 @@ export default {
       required: true
     },
     occurences: {
+      type: Array,
+      required: true
+    },
+    unifilarDiagram: {
       type: Array,
       required: true
     },
@@ -138,9 +149,30 @@ export default {
 
       return arr
     },
+    lines () {
+      let arr = []
+      arr = []
+      if (this.unifilarDiagram === 0) {
+        return []
+      }
+
+      this.unifilarDiagram.forEach(point => {
+        arr.push({
+          id: point.id,
+          coordinates: [[point.start_lat, point.start_lng], [point.end_lat, point.end_lng]],
+          color: '#98274d'
+        })
+      })
+
+      return arr
+    },
     mapCenter () {
       if (!(this.currentCampus.geolocation_latitude)) {
-        return [-15.7658756, -47.8743207] // darcy's geo-pos
+        if (this.currentCampus.name.toLowerCase().includes('gama')) {
+          return [15.9894 - 48.0443] // gama's geo-pos
+        } else {
+          return [-15.7636, -47.8694] // darcy's geo-pos
+        }
       }
       return [this.currentCampus.geolocation_latitude, this.currentCampus.geolocation_longitude]
     }
@@ -156,4 +188,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .map-dimension {
+    height: 53.9vh;
+  }
+
+  .map-wrapper {
+    padding-right: 16px;
+  }
+
+  @media screen and (max-width: 1440px) {
+    .map-dimension {
+      height: 100% !important;
+    }
+  }
+
+  @media screen and (max-width: 800px) {
+    .map-wrapper {
+      padding-right: 0 !important;
+    }
+
+    .map-dimension {
+      height: 53.9vh !important;
+    }
+  }
 </style>
