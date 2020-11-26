@@ -1,5 +1,7 @@
 <template>
-
+  <div>
+    DashConsumptionStatusChart
+  </div>
 </template>
 
 <script>
