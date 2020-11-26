@@ -28,7 +28,7 @@
 </template>
 <script>
 import FormsInput from './FormsInput'
-import MASTER from '../services/masterApi/http-common'
+import { loginRequest } from '../utils/login'
 import { mapActions } from 'vuex'
 import SubmitButton from './SubmitButton.vue'
 
@@ -47,31 +47,25 @@ export default {
   methods: {
     ...mapActions('userStore', ['saveUserInfo']),
     login () {
-      MASTER
-        .post('login/', {
-          email: this.email,
-          password: this.password
-        })
-        .then(res => {
-          this.saveUserInfo({
-            userToken: res.data.token,
-            userID: res.data.user.id,
-            username: res.data.user.name,
-            useremail: res.data.user.email
-          })
-          this.$q.notify({
-            type: 'positive',
-            message: 'Voce está autenticado.'
-          })
-          this.$router.push('/')
-        })
-        .catch(err => {
-          console.log(err)
-          this.$q.notify({
-            type: 'negative',
-            message: 'Falha ao acessar sua conta. Tente novamente.'
-          })
-        })
+      loginRequest({
+        email: this.email,
+        password: this.password
+      }, this.logged, this.errorOnLogin)
+    },
+    logged (user) {
+      this.saveUserInfo(user)
+      this.$q.notify({
+        type: 'positive',
+        message: 'Voce está autenticado.'
+      })
+      this.$router.push('/')
+    },
+    errorOnLogin (err) {
+      console.log(err)
+      this.$q.notify({
+        type: 'negative',
+        message: 'Falha ao acessar sua conta. Tente novamente.'
+      })
     }
   }
 

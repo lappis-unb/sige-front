@@ -32,6 +32,7 @@
 
 <script>
 import MASTER from '../services/masterApi/http-common'
+import { loginRequest } from '../utils/login'
 import { mapActions } from 'vuex'
 import FormsInput from '../components/FormsInput.vue'
 import SubmitButton from '../components/SubmitButton.vue'
@@ -74,14 +75,16 @@ export default {
   methods: {
     ...mapActions('userStore', ['changePage', 'saveUserInfo', 'logUser']),
     register () {
+      var user = {
+        email: this.form.email.value,
+        password: this.form.password.value,
+        name: this.form.fullname.value
+      }
       MASTER
-        .post('users/', {
-          email: this.form.email.value,
-          password: this.form.password.value,
-          name: this.form.fullname.value
-        })
+        .post('users/', user)
         .then(res => {
-          this.login()
+          console.log(res)
+          loginRequest(user, this.logged, this.errorOnLogin)
         })
         .catch(err => {
           console.log(err)
@@ -91,34 +94,21 @@ export default {
           })
         })
     },
-
-    login () {
-      MASTER
-        .post('login/', {
-          email: this.form.email.value,
-          password: this.form.password.value
-        })
-        .then(res => {
-          this.saveUserInfo({
-            userToken: res.data.token,
-            userID: res.data.user.id,
-            username: res.data.user.name,
-            useremail: res.data.user.email
-          })
-          this.$router.push('/')
-          this.$q.notify({
-            type: 'positive',
-            message: 'Sua conta foi criada com sucesso.'
-          })
-        })
-        .catch(err => {
-          console.log(err)
-          this.$router.push('/login')
-          this.$q.notify({
-            type: 'positive',
-            message: 'Acesse sua conta.'
-          })
-        })
+    logged (user) {
+      this.saveUserInfo(user)
+      this.$router.push('/')
+      this.$q.notify({
+        type: 'positive',
+        message: 'Sua conta foi criada com sucesso.'
+      })
+    },
+    errorOnLogin (err) {
+      console.log(err)
+      this.$router.push('/login')
+      this.$q.notify({
+        type: 'positive',
+        message: 'Acesse sua conta.'
+      })
     }
   }
 }
