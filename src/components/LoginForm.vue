@@ -7,24 +7,18 @@
       <h3 class="login-text">
         Entre com seus dados para acessar
       </h3>
-      <login-input
+      <forms-input
         v-model="email"
         label="Email"
         :rules="[val => val.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/) || 'Insira um email válido.']"
       />
-      <login-input
+      <forms-input
         v-model="password"
         label="Senha"
         type="password"
         :rules="[ val => val && val.length >= 8 || 'Insira uma senha com ao menos 8 caracteres.']"
       />
-      <div class="text-center q-mt-lg">
-        <q-btn
-          size="1rem"
-          label="Entrar"
-          type="submit"
-          color="primary"/>
-      </div>
+      <submit-button label="Entrar"/>
     </q-form>
     <div class="col-12 q-pa-md text-center">
       Não possui uma conta?
@@ -33,13 +27,17 @@
   </div>
 </template>
 <script>
-import LoginInput from './LoginInput'
+import FormsInput from './FormsInput'
 import MASTER from '../services/masterApi/http-common'
 import { mapActions } from 'vuex'
+import SubmitButton from './SubmitButton.vue'
 
 export default {
   name: 'LoginForm',
-  components: { LoginInput },
+  components: {
+    FormsInput,
+    SubmitButton
+  },
   data () {
     return {
       email: '',

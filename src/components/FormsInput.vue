@@ -13,7 +13,7 @@
 <script>
 
 export default {
-  name: 'LoginInput',
+  name: 'FormsInput',
   props: [
     'label',
     'rules',
