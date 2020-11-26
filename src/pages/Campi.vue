@@ -6,7 +6,7 @@
         size="1rem"
         label="Novo"
         color="primary"
-        @click="handlePressButton('new')"/>
+        @click="handlePressButton('newCampi')"/>
     </div>
     <div class="container">
       <div class="lst-campi">
@@ -17,7 +17,7 @@
             <q-btn
               size="1rem"
               label="show"
-              @click="handlePressButton('show', campi.id)"
+              @click="handlePressButton('showCampi', campi.id)"
               color="primary"/>
               </p>
           </li>
@@ -124,97 +124,88 @@ export default {
     }
   },
   created () {
-    this.getCampis()
+    this.getCampisList()
   },
   methods: {
     handlePressButton (type, id = null) {
-      const options = {
-        new: () => {
+      const buttonActions = {
+        newCampi: () => {
           this.isSelectedCampi = false
           this.isCreatingNew = !this.isCreatingNew
         },
-        show: () => {
+        showCampi: () => {
           this.isSelectedCampi = true
           this.isCreatingNew = false
-          this.getCampi(id)
+          this.getCampiById(id)
         }
       }
-      if (options[type]) options[type]()
+      if (buttonActions[type]) buttonActions[type]()
     },
-    getCampis () {
+    getCampisList () {
       MASTER
-        .get('campi/', {})
-        .then(res => {
-          console.log(res.data)
-          this.campis = res.data
+        .get('campi/')
+        .then(({ data: campisList }) => {
+          this.campis = campisList
         })
-        .catch(err => {
-          this.err = err
-          console.log('err')
-        })
+        .catch(error => console.log('Error in getCampisList: ', error))
     },
-    getCampi (id) {
+    getCampiById (campiId) {
       MASTER
-        .get('campi/' + id, {})
-        .then(res => {
-          console.log(res.data)
-          this.campi = res.data
+        .get(`campi/${campiId}`)
+        .then(({ data: campi }) => {
+          this.campi = campi
           this.isSelectedCampi = true
         })
-        .catch(err => {
-          console.log(err)
-        })
+        .catch(error => console.log('Error in getCampiById: ', error))
     },
     putCampi () {
-      const { id } = this.campi
+      const { id: campiId } = this.campi
       MASTER
-        .put('campi/' + id + '/', this.campi)
-        .then(res => {
-          this.campi = res.data
-          this.campis = this.campis.map((campi) => {
-            if (campi.id === id) return res.data
-            return campi
-          })
+        .put(`campi/${campiId}`, this.campi)
+        .then(({ data: updatedCampi }) => {
+          this.campi = updatedCampi
+          this.updateCampiList({ ...updatedCampi, id: campiId })
           this.$q.notify({
             type: 'positive',
             message: 'Seus dados foram atualizados.'
           })
         })
-        .catch(err => {
-          console.log(err)
+        .catch(error => {
+          console.log('Error in putCampi: ', error)
           this.$q.notify({
             type: 'negative',
             message: 'Falha ao editar seus dados. Tente novamente.'
           })
         })
     },
-    deleteCampi (id) {
+    deleteCampi (campiId) {
       MASTER
-        .delete('campi/' + id, {})
-        .then(res => {
-          this.campis = this.campis.filter((campi) => campi.id !== id)
+        .delete(`campi/${campiId}`)
+        .then(() => {
+          this.removeCampiFromList(campiId)
           this.$q.notify({
             type: 'positive',
             message: 'Campi deletado com sucesso.'
           })
           this.isSelectedCampi = false
           this.campi = {}
-          console.log(res.data)
         })
-        .catch(err => {
-          console.log(err)
-        })
+        .catch(error => console.log('Error in deleteCampi: ', error))
     },
     postCampi () {
       MASTER
         .post('campi/', this.newCampi)
-        .then(res => {
-          this.campis.push(res.data)
+        .then(({ data: newCampi }) => {
+          this.campis.push(newCampi)
           this.newCampi = {}
         })
-        .catch(err => {
-          console.log(err)
-        })
+        .catch(error => console.log('Error in postCampi: ', error))
+    },
+    updateCampiList (updatedCampi) {
+      this.campis = this.campis.map((campi) => campi.id === updatedCampi.id ? updatedCampi : campi)
+    },
+    removeCampiFromList (campiId) {
+      this.campis = this.campis.filter((campi) => campi.id !== campiId)
     }
   }
 }

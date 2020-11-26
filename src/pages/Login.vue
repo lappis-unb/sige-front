@@ -107,12 +107,12 @@ export default {
           email: this.email,
           password: this.password
         })
-        .then(res => {
+        .then(({ data: { token, user } }) => {
           this.saveUserInfo({
-            userToken: res.data.token,
-            userID: res.data.user.id,
-            username: res.data.user.name,
-            useremail: res.data.user.email
+            userToken: token,
+            userID: user.id,
+            username: user.name,
+            useremail: user.email
           })
           this.$q.notify({
             type: 'positive',
@@ -120,8 +120,8 @@ export default {
           })
           this.$router.push('/')
         })
-        .catch(err => {
-          console.log(err)
+        .catch(error => {
+          console.log('Error in login: ', error)
           this.$q.notify({
             type: 'negative',
             message: 'Falha ao acessar sua conta. Tente novamente.'

@@ -56,29 +56,23 @@ export default {
   methods: {
     getAllCampi () {
       MASTER.get('campi/')
-        .then((res) => {
-          this.campiList = res.data
+        .then(({ data: campiList }) => {
+          this.campiList = campiList
         })
-        .catch(err => {
-          console.error(err)
+        .catch(error => {
+          console.log('Error in getAllCampi: ', error)
           this.requestsError = true
-        })
-        .then(() => {
-          // console.log(this.campiList)
         })
     },
 
     getEventsInProgress () {
       MASTER.get('occurences/')
-        .then((res) => {
-          this.eventsInProgress = res.data
+        .then(({ data: eventsList }) => {
+          this.eventsInProgress = eventsList
         })
-        .catch(err => {
-          console.error(err)
+        .catch(error => {
+          console.log('Error in getEventsInProgress: ', error)
           this.requestsError = true
-        })
-        .then(() => {
-          // console.log('getEventsInPro' + this.eventsInProgress)
         })
     },
 

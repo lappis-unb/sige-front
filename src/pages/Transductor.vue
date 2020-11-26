@@ -52,25 +52,25 @@ export default {
     }
   },
   created () {
-    const id = this.$router.currentRoute.params.id
+    const { id } = this.$router.currentRoute.params
     MASTER
-      .get('/energy-transductors/' + id)
+      .get(`/energy-transductors/${id}`)
       .then((res) => {
         this.model = res.data.model
         this.history = res.data.history
         res.data.grouping.forEach(group => {
-          this.groupRequest(group)
+          this.getGroup(group)
         })
         this.changePage(res.data.name)
       })
   },
   methods: {
     ...mapActions('userStore', ['changePage']),
-    groupRequest (url) {
+    getGroup (url) {
       MASTER
         .get(url)
-        .then((res) => {
-          this.groups.push(res.data.name)
+        .then(({ data: group }) => {
+          this.groups.push(group.name)
         })
     }
   }

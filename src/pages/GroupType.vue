@@ -95,7 +95,7 @@ export default {
   },
   methods: {
     handlePressButton (type, id = null) {
-      const options = {
+      const buttonActions = {
         new: () => {
           this.isSelectedGroupType = false
           this.isCreatingNew = !this.isCreatingNew
@@ -103,52 +103,42 @@ export default {
         show: () => {
           this.isSelectedGroupType = true
           this.isCreatingNew = false
-          this.getGroupType(id)
+          this.getGroupTypeById(id)
         }
       }
-      if (options[type]) options[type]()
+      if (buttonActions[type]) buttonActions[type]()
     },
     getGroupTypes () {
       MASTER
-        .get('group-types/', {})
-        .then(res => {
-          console.log(res.data)
-          this.groupTypes = res.data
+        .get('group-types/')
+        .then(({ data: groupTypeList }) => {
+          this.groupTypes = groupTypeList
         })
-        .catch(err => {
-          this.err = err
-          console.log('err')
-        })
+        .catch(error => console.log('Error in getGroupTypes: ', error))
     },
-    getGroupType (id) {
+    getGroupTypeById (id) {
       MASTER
-        .get('group-types/' + id, {})
-        .then(res => {
-          console.log(res.data)
-          this.groupType = res.data
+        .get(`group-types/${id}`)
+        .then(({ data: groupType }) => {
+          this.groupType = groupType
           this.isSelectedGroupType = true
         })
-        .catch(err => {
-          console.log(err)
-        })
+        .catch(error => console.log('Error in getGroupTypeById: ', error))
     },
     putGroupType () {
       const { id } = this.groupType
       MASTER
-        .put('group-types/' + id + '/', this.groupType)
-        .then(res => {
-          this.groupType = res.data
-          this.groupTypes = this.groupTypes.map((groupType) => {
-            if (groupType.id === id) return res.data
-            return groupType
-          })
+        .put(`group-types/${id}`, this.groupType)
+        .then(({ data: updatedGroupType }) => {
+          this.groupType = updatedGroupType
+          this.updateGroupTypeList(updatedGroupType)
           this.$q.notify({
             type: 'positive',
             message: 'Seus dados foram atualizados.'
           })
         })
-        .catch(err => {
-          console.log(err)
+        .catch(error => {
+          console.log('Error in putGroupType: ', error)
           this.$q.notify({
             type: 'negative',
             message: 'Falha ao editar seus dados. Tente novamente.'
@@ -157,31 +147,32 @@ export default {
     },
     deleteGroupType (id) {
       MASTER
-        .delete('group-types/' + id, {})
-        .then(res => {
-          this.groupTypes = this.groupTypes.filter((groupType) => groupType.id !== id)
+        .delete(`group-types/${id}`)
+        .then(() => {
+          this.removeGroupTypeFromList(id)
           this.$q.notify({
             type: 'positive',
             message: 'GroupType deletado com sucesso.'
           })
           this.isSelectedGroupType = false
           this.groupType = {}
-          console.log(res.data)
         })
-        .catch(err => {
-          console.log(err)
-        })
+        .catch(error => console.log('Error in deleteGroupType: ', error))
     },
     postGroupType () {
       MASTER
         .post('group-types/', this.newGroupType)
-        .then(res => {
-          this.groupTypes.push(res.data)
+        .then(({ data: newGroupType }) => {
+          this.groupTypes.push(newGroupType)
           this.newGroupType = {}
         })
-        .catch(err => {
-          console.log(err)
-        })
+        .catch(error => console.log('Error in postGroupType: ', error))
+    },
+    updateGroupTypeList (updatedGroupType) {
+      this.groupTypes = this.groupTypes.map((groupType) => groupType.id === updatedGroupType.id ? updatedGroupType : groupType)
+    },
+    removeGroupTypeFromList (id) {
+      this.groupTypes = this.groupTypes.filter((groupType) => groupType.id !== id)
     }
   }
 }

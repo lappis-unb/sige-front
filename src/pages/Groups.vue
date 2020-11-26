@@ -6,7 +6,7 @@
         size="1rem"
         label="Novo"
         color="primary"
-        @click="handlePressButton('new')"/>
+        @click="handlePressButton('newGroup')"/>
     </div>
     <div class="container">
       <div class="lst-groups">
@@ -17,7 +17,7 @@
             <q-btn
               size="1rem"
               label="show"
-              @click="handlePressButton('show', group.id)"
+              @click="handlePressButton('showGroup', group.id)"
               color="primary"/>
               </p>
           </li>
@@ -95,7 +95,6 @@
 
 <script>
 import MASTER from '../services/masterApi/http-common'
-// import { mapActions } from 'vuex'
 
 export default {
   name: 'Groups',
@@ -115,61 +114,50 @@ export default {
   },
   methods: {
     handlePressButton (type, id = null) {
-      const options = {
-        new: () => {
+      const buttonActions = {
+        newGroup: () => {
           this.isSelectedGroup = false
           this.isCreatingNew = !this.isCreatingNew
         },
-        show: () => {
+        showGroup: () => {
           this.isSelectedGroup = true
           this.isCreatingNew = false
-          this.getGroup(id)
-            .then()
+          this.getGroupById(id)
         }
       }
-      if (options[type]) options[type]()
+      if (buttonActions[type]) buttonActions[type]()
     },
     getGroups () {
       MASTER
-        .get('groups/', {})
-        .then(res => {
-          console.log(res.data)
-          this.groups = res.data
+        .get('groups/')
+        .then(({ data: groupsList }) => {
+          this.groups = groupsList
         })
-        .catch(err => {
-          this.err = err
-          console.log('err')
-        })
+        .catch(error => console.log('Error in getGroups: ', error))
     },
-    getGroup (id) {
+    getGroupById (id) {
       MASTER
-        .get('groups/' + id, {})
-        .then(res => {
-          console.log(res.data)
-          this.group = res.data
+        .get(`groups/${id}`)
+        .then(({ data: group }) => {
+          this.group = group
           this.isSelectedGroups = true
         })
-        .catch(err => {
-          console.log(err)
-        })
+        .catch(error => console.log('Error in getGroups: ', error))
     },
     putGroup () {
       const { id } = this.group
       MASTER
-        .put('groups/' + id + '/', this.group)
-        .then(res => {
-          this.group = res.data
-          this.groups = this.groups.map((group) => {
-            if (group.id === id) return res.data
-            return group
-          })
+        .put(`groups/${id}`, this.group)
+        .then(({ data: updatedGroup }) => {
+          this.group = updatedGroup
+          this.updateGroupList(updatedGroup)
           this.$q.notify({
             type: 'positive',
             message: 'Seus dados foram atualizados.'
           })
         })
-        .catch(err => {
-          console.log(err)
+        .catch(error => {
+          console.log('Error in putGroup: ', error)
           this.$q.notify({
             type: 'negative',
             message: 'Falha ao editar seus dados. Tente novamente.'
@@ -178,8 +166,9 @@ export default {
     },
     deleteGroup (id) {
       MASTER
-        .delete('groups/' + id, {})
+        .delete(`groups/${id}`)
         .then(res => {
+          this.removeGroupFromList(id)
           this.groups = this.groups.filter((group) => group.id !== id)
           this.$q.notify({
             type: 'positive',
@@ -189,30 +178,30 @@ export default {
           this.group = {}
           console.log(res.data)
         })
-        .catch(err => {
-          console.log(err)
-        })
+        .catch(error => console.log('Error in deleteGroup: ', error))
     },
     postGroup () {
       MASTER
         .post('groups/', this.newGroup)
-        .then(res => {
-          this.groups.push(res.data)
+        .then(({ data: newGroup }) => {
+          this.groups.push(newGroup)
           this.newGroup = {}
         })
-        .catch(err => {
-          console.log(err)
-        })
+        .catch(error => console.log('Error in postGroup: ', error))
     },
     getGroupTypes () {
       MASTER
         .get('group-types/', this.groupTypes)
-        .then(res => {
-          this.groupTypes = res.data
+        .then(({ data: groupTypeList }) => {
+          this.groupTypes = groupTypeList
         })
-        .catch(err => {
-          console.log(err)
-        })
+        .catch(error => console.log('Error in getGroupTypes: ', error))
+    },
+    updateGroupList (updatedGroup) {
+      this.groups = this.groups.map((group) => group.id === updatedGroup.id ? updatedGroup : group)
+    },
+    removeGroupFromList (groupId) {
+      this.groups = this.groups.filter((group) => group.id !== groupId)
     }
   }
 }

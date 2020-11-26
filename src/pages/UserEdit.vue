@@ -76,18 +76,17 @@ export default {
     retrieveUserInformation () {
       const { user } = this
       MASTER
-        .get('users/' + user.id + '/', {
+        .get(`users/${user.id}`, {
           headers: {
             authorization: 'Token ' + user.token
           }
         })
-        .then(res => {
-          console.log(res)
-          this.fullname = res.data.name
-          this.email = res.data.email
+        .then(({ data: user }) => {
+          this.fullname = user.name
+          this.email = user.email
         })
-        .catch(err => {
-          console.log(err)
+        .catch(error => {
+          console.log('Error in retrieveUserInformation: ', error)
           this.$q.notify({
             type: 'negative',
             message: 'Falha ao recuperar seus dados. Tente novamente.'
@@ -101,13 +100,13 @@ export default {
       data.email = this.email
       data.password = this.password
       MASTER
-        .put('users/' + user.id + '/', data,
+        .put(`users/${user.id}`, data,
           {
             headers: {
               authorization: 'Token ' + user.token
             }
           })
-        .then(res => {
+        .then(() => {
           this.saveUserInfo({
             username: this.fullname,
             useremail: this.useremail
@@ -118,8 +117,8 @@ export default {
           })
           this.$router.replace({ name: '/', force: true })
         })
-        .catch(err => {
-          console.log(err)
+        .catch(error => {
+          console.log('Error in putUserInfo: ', error)
           this.$q.notify({
             type: 'negative',
             message: 'Falha ao editar seus dados. Tente novamente.'

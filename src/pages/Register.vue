@@ -87,12 +87,12 @@ export default {
               email: this.email,
               password: this.password
             })
-            .then(res => {
+            .then(({ data: { token, user } }) => {
               this.saveUserInfo({
-                userToken: res.data.token,
-                userID: res.data.user.id,
-                username: res.data.user.name,
-                useremail: res.data.user.email
+                userToken: token,
+                userID: user.id,
+                username: user.name,
+                useremail: user.email
               })
               this.$router.push('/')
               this.$q.notify({
@@ -100,8 +100,8 @@ export default {
                 message: 'Sua conta foi criada com sucesso.'
               })
             })
-            .catch(err => {
-              console.log(err)
+            .catch(error => {
+              console.log('Error in login: ', error)
               this.$router.push('/login')
               this.$q.notify({
                 type: 'positive',
@@ -109,8 +109,8 @@ export default {
               })
             })
         })
-        .catch(err => {
-          console.log(err)
+        .catch(error => {
+          console.log('Error in Register: ', error)
           this.$q.notify({
             type: 'negative',
             message: 'Falha ao criar sua conta. Tente novamente.'

@@ -100,16 +100,14 @@ export default {
     async getTransductors () {
       await MASTER
         .get('energy-transductors-list/')
-        .then((res) => {
-          this.transductors = res.data
+        .then(({ data: transductorList }) => {
+          this.transductors = transductorList
         })
-        .catch((err) => {
-          console.log(err)
-        })
+        .catch(error => console.log('Error in getTransductors: ', error))
       this.dataLoaded = true
     },
     clickItem (row) {
-      this.$router.push('transductor/' + row.id)
+      this.$router.push(`transductor/${row.id}`)
     }
   },
   data () {
