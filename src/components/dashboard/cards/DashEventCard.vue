@@ -140,13 +140,11 @@ export default {
   }
 
   p {
-    // font-size: 22px;
     font-size: 20px;
   }
 
   .card-title {
     font-size: 30px;
-    // font-size: 32px;
     line-height: 40px;
     letter-spacing: .24px;
   }

@@ -11,7 +11,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
 import MASTER from '../../services/masterApi/http-common'
 
 export default {
@@ -19,7 +18,6 @@ export default {
 
   components: {
     Apexcharts: () => import('vue-apexcharts')
-    // 'no-data-placeholder': NoDataPlaceholder,
   },
 
   props: {
@@ -48,38 +46,6 @@ export default {
           data: this.consumption
         }
       ]
-
-    // return [
-    //   {
-    //     name: 'Carga',
-    //     data: [
-    //       32,
-    //       40,
-    //       42,
-    //       40,
-    //       240,
-    //       200,
-    //       420,
-    //       90,
-    //       10,
-    //       60,
-    //       400,
-    //       420,
-    //       350,
-    //       384,
-    //       70,
-    //       75,
-    //       90,
-    //       40,
-    //       70,
-    //       510,
-    //       112,
-    //       90,
-    //       35,
-    //       35
-    //     ]
-    //   }
-    // ]
     },
 
     chartOptions () {

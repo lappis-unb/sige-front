@@ -1,10 +1,5 @@
 <template>
-  <div>
-    <!-- <apexcharts
-      :options="chartOptions"
-      :series="series"/> -->
-    fddsfsdf
-  </div>
+
 </template>
 
 <script>

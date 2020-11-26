@@ -88,7 +88,6 @@ export default {
 
       generation: [],
 
-      // center: [-15.7650, -47.8665],
       center: [-15.7650, -47.8665],
       new_center: [-15.7658756, -47.8743207],
 
@@ -98,7 +97,6 @@ export default {
       },
 
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      // url: 'https://{s}.tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png',
       attribution:
         '© <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       selectedPeriod: 'DIA'

@@ -8,9 +8,6 @@
       row-key="name"
       :pagination.sync="pagination"
     >
-<!--       <template v-slot:bottom>
-        Bottom
-      </template> -->
     </q-table>
   </div>
 </template>

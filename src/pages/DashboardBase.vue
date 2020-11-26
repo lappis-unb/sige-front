@@ -64,7 +64,6 @@ export default {
           this.requestsError = true
         })
         .then(() => {
-          // console.log(this.campiList)
         })
     },
 
@@ -78,7 +77,6 @@ export default {
           this.requestsError = true
         })
         .then(() => {
-          // console.log('getEventsInPro' + this.eventsInProgress)
         })
     },
 

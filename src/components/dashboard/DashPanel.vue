@@ -1,7 +1,5 @@
 <template>
   <div class="dash-content">
-  <!-- <div class="row" style="max-height: 55vh!important"> -->
-
     <dash-map
       v-if="transductors !== []"
       class="dash-map"
@@ -139,7 +137,6 @@ export default {
   mounted () {
     this.selectTransductor()
     this.interval = setInterval(this.selectTransductor, 10000)
-    // setInterval(this.selectTransductor, 10000)
   },
 
   beforeDestroy () {

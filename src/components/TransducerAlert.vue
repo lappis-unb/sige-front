@@ -51,8 +51,6 @@ export default {
 .occurrence {
   text-align: center;
   background-color: #f5f5f5;
-  // margin-top: 0;
-  // margin-bottom: 5%;
 }
 .occurrence-img {
   color: #f5f5f5;

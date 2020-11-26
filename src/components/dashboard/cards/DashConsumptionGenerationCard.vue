@@ -83,7 +83,6 @@ export default {
 
   props: {
     transductor: {
-      // type: Object,
       required: true
     }
   },

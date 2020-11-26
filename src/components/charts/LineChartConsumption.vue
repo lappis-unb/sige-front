@@ -61,15 +61,7 @@ export default {
             }
           }
         },
-        // {
-        //   x: 18,
-        //   x2: 21,
-        //   fillColor: '#B3F7CA',
-        //   label: {
-        //     text: 'Horário de Ponta'
-        //   }
-        // }
-        // ],
+
         yaxis: {
           min: 0,
           labels: {

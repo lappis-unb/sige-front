@@ -54,7 +54,6 @@ export default {
   },
 
   props: {
-    // vuex pras coisas? to acessando de todo lado + tem q fazer o dataset se atualizar
     last72hEvents: Object
   },
 

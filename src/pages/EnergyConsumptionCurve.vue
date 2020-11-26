@@ -11,7 +11,6 @@
 
 <script >
 import TotalCostFilter from '../components/TotalCostFilter'
-// import BarChart from '../components/charts/BarChart'
 import LineChart from '../components/charts/LineChartConsumption'
 import { mapGetters, mapActions } from 'vuex'
 
