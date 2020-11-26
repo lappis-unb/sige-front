@@ -54,57 +54,57 @@ export function getInfo (item, info) {
 }
 
 export function getPhaseVoltage (item) {
-  let res = ''
+  let phaseVoltage = ''
   let isFirst = true
 
   if (item.data.voltage_a) {
-    res += 'A - ' + Math.round(item.data.voltage_a) + 'V '
+    phaseVoltage += 'A - ' + Math.round(item.data.voltage_a) + 'V '
     isFirst = false
   }
   if (item.data.voltage_b) {
     if (!isFirst) {
-      res += ' / '
+      phaseVoltage += ' / '
     }
-    res += 'B - ' + Math.round(item.data.voltage_b) + 'V '
+    phaseVoltage += 'B - ' + Math.round(item.data.voltage_b) + 'V '
     isFirst = false
   }
   if (item.data.voltage_c) {
     if (!isFirst) {
-      res += ' / '
+      phaseVoltage += ' / '
     }
-    res += 'C - ' + Math.round(item.data.voltage_c) + 'V '
+    phaseVoltage += 'C - ' + Math.round(item.data.voltage_c) + 'V '
     isFirst = false
   }
-  return res
+  return phaseVoltage
 }
 
 export function getPhase (item) {
-  let res = ''
+  let phase = ''
   let isFirst = true
 
   if (item.data.voltage_a) {
-    res += 'Fase A '
+    phase += 'Fase A '
     isFirst = false
   }
   if (item.data.voltage_b) {
     if (!isFirst) {
-      res += ' / '
+      phase += ' / '
     }
-    res += 'Fase B '
+    phase += 'Fase B '
     isFirst = false
   }
   if (item.data.voltage_c) {
     if (!isFirst) {
-      res += ' / '
+      phase += ' / '
     }
-    res += 'Fase C '
+    phase += 'Fase C '
     isFirst = false
   }
-  return res
+  return phase
 }
 
 export function timePassedDays (date, compareDate, isStartTime) {
-  let res = ''
+  let timeInDays = ''
   const day = new Date(date)
   const compareDay = new Date(compareDate)
 
@@ -115,13 +115,13 @@ export function timePassedDays (date, compareDate, isStartTime) {
   if (isStartTime && days > 0) {
     const plural = days > 1 ? 's ' : ' '
 
-    res += days.toString() + ' dia' + plural
+    timeInDays += days.toString() + ' dia' + plural
   } else {
     const h = date.getHours()
     const min = date.getMinutes()
-    res += h.toString() + 'h' + min.toString().padStart(2, 0)
+    timeInDays += h.toString() + 'h' + min.toString().padStart(2, 0)
   }
-  return res
+  return timeInDays
 }
 
 export function getOccurenceName (type) {

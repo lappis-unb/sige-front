@@ -13,8 +13,6 @@
           :last72hEvents="last72hEvents"/>
       </div>
     </div>
-
-        <!-- style="height: 100vh!important" -->
     <div>
       <dash-charge-bar-card
         class="q-mb-md height-conf"

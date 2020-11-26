@@ -81,11 +81,11 @@ export default {
   },
   methods: {
     getTime (d) {
-      let ans = timePassed(d)
-      if (ans !== 'agora') {
-        ans = 'há ' + ans
+      let time = timePassed(d)
+      if (time !== 'agora') {
+        time = 'há ' + time
       }
-      return ans
+      return time
     }
   }
 }

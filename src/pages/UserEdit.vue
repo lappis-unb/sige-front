@@ -135,7 +135,6 @@ export default {
     font-size: 1.3em;
   }
   .primary-text {
-    // font-family: ?
     font-size: 2em;
   }
   .driver-text {
