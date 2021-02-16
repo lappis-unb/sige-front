@@ -16,7 +16,7 @@
 
       <!-- for custom icons -->
       <l-marker
-        v-for="transductor in transductors_points[1]"
+        v-for="transductor in transductorsWithOccurences"
         :key="transductor.id"
         :lat-lng="transductor.coordinates">
         <l-icon
@@ -26,7 +26,7 @@
       </l-marker>
 
       <l-circle
-        v-for="transductor in transductors_points[0]"
+        v-for="transductor in transductorsWithoutOccurences"
         :key="transductor.id"
         :lat-lng="transductor.coordinates"
         :radius="14"
@@ -106,65 +106,69 @@ export default {
   },
 
   computed: {
-    transductors_points () {
-      let arr = [[], []] // First array for non occurrence related and second for occurrences
-      arr = [[], []]
-      if (this.transductors === 0) {
-        return [[], []]
-      }
-
-      let mapTrans = {}
-      mapTrans = {}
-
-      let i = 4
-      // Mark occurences in mapTrans
-      this.occurences.forEach(occ => {
-        occ.forEach(o => {
-          mapTrans[o.transductor] = `statics/ic_ocorrencia_${i}.svg`
-        })
-        i -= 1
-      })
-
-      this.transductors.forEach(t => {
-        if (mapTrans[t.serial_number]) {
-          arr[1].push({
-            id: t.id,
-            name: t.name,
-            coordinates: [t.geolocation_latitude, t.geolocation_longitude],
-            img_src: mapTrans[t.serial_number]
+    transductorsWithOccurences () {
+      let mapOccurencesInTranductors = {}
+      mapOccurencesInTranductors = this.getMapOccurencesInTranductors()
+      let transductorsArray = []
+      transductorsArray = []
+      this.transductors.forEach(_transductor => {
+        if (mapOccurencesInTranductors[_transductor.serial_number]) {
+          transductorsArray.push({
+            id: _transductor.id,
+            name: _transductor.name,
+            coordinates: [
+              _transductor.geolocation_latitude,
+              _transductor.geolocation_longitude
+            ],
+            img_src: mapOccurencesInTranductors[_transductor.serial_number]
           })
-        } else {
-          arr[0].push({
-            id: t.id,
-            name: t.name,
-            coordinates: [t.geolocation_latitude, t.geolocation_longitude],
+        }
+      })
+      return transductorsArray
+    },
+    transductorsWithoutOccurences () {
+      let mapOccurencesInTranductors = {}
+      mapOccurencesInTranductors = this.getMapOccurencesInTranductors()
+      let transductorsArray = []
+      transductorsArray = []
+      this.transductors.forEach(_transductor => {
+        if (!mapOccurencesInTranductors[_transductor.serial_number]) {
+          transductorsArray.push({
+            id: _transductor.id,
+            name: _transductor.name,
+            coordinates: [
+              _transductor.geolocation_latitude,
+              _transductor.geolocation_longitude
+            ],
             style: {
-              color: !t.broken ? 'green' : '#CC0000',
-              fillColor: !t.broken ? 'lime' : '#FF0000',
+              color: !_transductor.broken ? 'green' : '#CC0000',
+              fillColor: !_transductor.broken ? 'lime' : '#FF0000',
               fillOpacity: 1
             }
           })
         }
       })
-
-      return arr
+      return transductorsArray
     },
     lines () {
-      let arr = []
-      arr = []
-      if (this.unifilarDiagram === 0) {
-        return []
+      let pointsArray = []
+      pointsArray = []
+      if (this.unifilarDiagram.lenght === 0) {
+        return pointsArray
       }
 
-      this.unifilarDiagram.forEach(point => {
-        arr.push({
-          id: point.id,
-          coordinates: [[point.start_lat, point.start_lng], [point.end_lat, point.end_lng]],
+      this.unifilarDiagram.forEach(line => {
+        pointsArray.push({
+          id: line.id,
+          coordinates: [
+            [line.start_lat, line.start_lng],
+            [line.end_lat, line.end_lng]
+          ],
           color: '#98274d'
         })
       })
 
-      return arr
+      return pointsArray
     },
     mapCenter () {
       if (!(this.currentCampus.geolocation_latitude)) {
@@ -179,6 +183,21 @@ export default {
   },
 
   methods: {
+    getMapOccurencesInTranductors () {
+      let mapTransductors = {}
+      mapTransductors = {}
+
+      let i = 4 // Number of diferent type of occurences
+      // Mark occurences in mapTransductors
+      this.occurences.forEach(occurenceType => {
+        occurenceType.forEach(occurence => {
+          mapTransductors[occurence.transductor] = `statics/ic_ocorrencia_${i}.svg`
+        })
+        i -= 1
+      })
+
+      return mapTransductors
+    },
     getColorStatus (isBroken) {
       return isBroken ? 'text-red-9' : 'text-green-9'
     }
