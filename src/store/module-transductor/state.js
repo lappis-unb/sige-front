@@ -1,4 +1,4 @@
-import { getDateNowSelectFormat } from '../../utils/transductorStatus'
+import { TransductorStatus } from '../../utils/transductorStatus'
 
 export default {
   openMap: false,
@@ -17,7 +17,7 @@ export default {
   filterOptions: {
     dimension: 'Tensão',
     vision: '',
-    startDate: getDateNowSelectFormat(1),
-    endDate: getDateNowSelectFormat()
+    startDate: TransductorStatus.getDateNowSelectFormat(1),
+    endDate: TransductorStatus.getDateNowSelectFormat()
   }
 }
