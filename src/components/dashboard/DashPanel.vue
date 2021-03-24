@@ -58,7 +58,9 @@
 <script>
 import DashMap from './DashMap'
 import DashCampusInfo from './DashCampusInfo'
-import MASTER from '../../services/masterApi/http-common'
+import { unifilarDiagramServiceInstance } from 'src/services/UnifilarDiagramService'
+import { transductorServiceInstance } from 'src/services/TransductorService'
+import { occurrenceServiceInstance } from 'src/services/OccurencesService'
 
 export default {
   name: 'DashPanel',
@@ -95,7 +97,8 @@ export default {
 
   methods: {
     getTransductors () {
-      MASTER
+      transductorServiceInstance
+        .getTransductorById
         .get(`/energy-transductors/?campus_id=${this.selectedCampus.id}`)
         .then((res) => {
           this.transductors = res.data
@@ -105,8 +108,8 @@ export default {
     },
 
     getUnifilarDiagram () {
-      MASTER
-        .get(`/lines/?campus=${this.selectedCampus.id}`)
+      unifilarDiagramServiceInstance
+        .getLinesByCampus(this.selectedCampus.id)
         .then((res) => {
           this.unifilarDiagram = res.data
         })
@@ -114,8 +117,8 @@ export default {
     },
 
     getCampusOccurences () {
-      MASTER
-        .get(`/occurences/?type=active&campi_id=${this.selectedCampus.id}`)
+      occurrenceServiceInstance
+        .getOccurences({ type: 'active', campus: this.selectedCampus.id })
         .then((res) => {
           this.occurences = [res.data.transductor_connection_fail, res.data.precarious_tension, res.data.phase_drop, res.data.critical_tension]
         })

@@ -75,7 +75,8 @@
 </template>
 
 <script>
-import MASTER from '../../../services/masterApi/http-common'
+import { measurementServiceInstance } from 'src/services/MeasurementService'
+import { occurrenceServiceInstance } from 'src/services/OccurencesService'
 
 export default {
   name: 'DashLastMeasurementCard',
@@ -106,8 +107,8 @@ export default {
 
   methods: {
     getLastMeasurement () {
-      MASTER
-        .get(`/realtime-measurements/?id=${this.transductor.id}`)
+      measurementServiceInstance
+        .getRealTimeMeasurement(this.transductor.id)
         .then((res) => {
           this.rtm = res.data[0]
         })
@@ -117,8 +118,8 @@ export default {
         })
     },
     getTransductorsLast72h () {
-      MASTER
-        .get(`/occurences/?type=period&id=${this.transductor.id}`)
+      occurrenceServiceInstance
+        .getOccurences({ type: 'period', occurrenceId: this.transductor.id })
         .then((res) => {
           this.transductor_occurences = res.data
         })

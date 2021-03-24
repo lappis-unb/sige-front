@@ -103,8 +103,7 @@
 </template>
 
 <script>
-import MASTER from '../../services/masterApi/http-common'
-// import { mapActions } from 'vuex'
+import { groupServiceInstance } from 'src/services/GroupService'
 
 export default {
   name: 'GroupTypes',
@@ -148,8 +147,8 @@ export default {
       if (options[type]) options[type]()
     },
     getGroupTypes () {
-      MASTER
-        .get('group-types/', {})
+      groupServiceInstance
+        .getGroupTypes('', {})
         .then(res => {
           console.log(res.data)
           this.groupTypes = res.data
@@ -160,8 +159,8 @@ export default {
         })
     },
     getGroupType (id) {
-      MASTER
-        .get('group-types/' + id, {})
+      groupServiceInstance
+        .getGroupTypes(id, {})
         .then(res => {
           console.log(res.data)
           this.groupType = res.data
@@ -173,8 +172,8 @@ export default {
     },
     putGroupType () {
       const { id } = this.groupType
-      MASTER
-        .put('group-types/' + id + '/', this.groupType)
+      groupServiceInstance
+        .editGroupTypes(id, this.groupType)
         .then(res => {
           this.groupType = res.data
           this.groupTypes = this.groupTypes.map((groupType) => {
@@ -195,8 +194,8 @@ export default {
         })
     },
     deleteGroupType (id) {
-      MASTER
-        .delete('group-types/' + id, {})
+      groupServiceInstance
+        .deleteGroupTypes(id)
         .then(res => {
           this.groupTypes = this.groupTypes.filter((groupType) => groupType.id !== id)
           this.$q.notify({
@@ -212,8 +211,8 @@ export default {
         })
     },
     postGroupType () {
-      MASTER
-        .post('group-types/', this.newGroupType)
+      groupServiceInstance
+        .createGroupTypes(this.newGroupType)
         .then(res => {
           this.groupTypes.push(res.data)
           this.newGroupType = {}

@@ -87,8 +87,8 @@
 </template>
 
 <script>
-import MASTER from '../services/masterApi/http-common'
 import { mapActions } from 'vuex'
+import { transductorServiceInstance } from 'src/services/TransductorService'
 
 export default {
   created () {
@@ -98,8 +98,8 @@ export default {
   methods: {
     ...mapActions('userStore', ['changePage']),
     async getTransductors () {
-      await MASTER
-        .get('energy-transductors-list/')
+      await transductorServiceInstance
+        .listTransductors()
         .then((res) => {
           this.transductors = res.data
         })

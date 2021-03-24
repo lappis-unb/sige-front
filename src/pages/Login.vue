@@ -82,8 +82,8 @@
 </template>
 
 <script>
-import MASTER from '../services/masterApi/http-common'
 import { mapActions } from 'vuex'
+import { userServiceInstance } from 'src/services/UserService'
 export default {
   name: 'Login',
   data () {
@@ -102,11 +102,8 @@ export default {
   methods: {
     ...mapActions('userStore', ['saveUserInfo']),
     login () {
-      MASTER
-        .post('login/', {
-          email: this.email,
-          password: this.password
-        })
+      userServiceInstance
+        .login(this.email, this.password)
         .then(res => {
           this.saveUserInfo({
             userToken: res.data.token,

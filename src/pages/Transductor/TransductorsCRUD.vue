@@ -168,7 +168,9 @@
 </template>
 
 <script>
+import { transductorServiceInstance } from 'src/services/TransductorService'
 import MASTER from '../../services/masterApi/http-common'
+import { campiServiceInstance } from 'src/services/CampiService'
 // import { mapActions } from 'vuex'
 
 export default {
@@ -202,8 +204,8 @@ export default {
       if (options[type]) options[type]()
     },
     getTransductors () {
-      MASTER
-        .get('energy-transductors/', {})
+      transductorServiceInstance
+        .getTransductorById('')
         .then(res => {
           console.log(res.data)
           this.transductors = res.data
@@ -214,8 +216,8 @@ export default {
         })
     },
     getTransductor (id) {
-      MASTER
-        .get('energy-transductors/' + id, {})
+      transductorServiceInstance
+        .getTransductorById(id)
         .then(res => {
           console.log(res.data)
           this.transductor = res.data
@@ -227,8 +229,8 @@ export default {
     },
     putTransductor () {
       const { id } = this.transductor
-      MASTER
-        .put('energy-transductors/' + id + '/', this.transductor)
+      transductorServiceInstance
+        .editTransductor(id, this.transductor)
         .then(res => {
           this.transductor = res.data
           this.transductors = this.transductors.map((transductor) => {
@@ -249,8 +251,8 @@ export default {
         })
     },
     deleteTransductor (id) {
-      MASTER
-        .delete('energy-transductors/' + id, {})
+      transductorServiceInstance
+        .deleteTransductor(id)
         .then(res => {
           this.transductors = this.transductors.filter((transductor) => transductor.id !== id)
           this.$q.notify({
@@ -266,8 +268,8 @@ export default {
         })
     },
     postTransductor () {
-      MASTER
-        .post('energy-transductors/', this.newTransductor)
+      transductorServiceInstance
+        .createTransductor(this.newTransductor)
         .then(res => {
           this.transductors.push(res.data)
           this.newTransductors = {}
@@ -277,7 +279,7 @@ export default {
         })
     },
     getCampi () {
-      MASTER
+      campiServiceInstance.client
         .get('campi/', this.campi)
         .then(res => {
           this.campi = res.data

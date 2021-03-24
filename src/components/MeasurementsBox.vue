@@ -31,7 +31,7 @@
 
 <script>
 import { timePassed } from '../utils/transductorStatus'
-import MASTER from '../services/masterApi/http-common'
+import { measurementServiceInstance } from '../services/MeasurementService'
 
 export default {
   name: 'MeasurementsBox',
@@ -50,8 +50,8 @@ export default {
   },
   async created () {
     console.log('id:', this.id)
-    await MASTER
-      .get('/realtime-measurements/?id=' + this.id)
+    await measurementServiceInstance
+      .getRealTimeMeasurement(this.id)
       .then(res => {
         this.tension = {
           a: Math.round(res.data[0].voltage_a),

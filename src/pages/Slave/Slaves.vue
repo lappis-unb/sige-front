@@ -139,7 +139,7 @@
 </template>
 
 <script>
-import MASTER from '../../services/masterApi/http-common'
+import { slaveServiceInstance } from '../../services/SlaveService'
 // import { mapActions } from 'vuex'
 
 export default {
@@ -186,8 +186,8 @@ export default {
       if (options[type]) options[type]()
     },
     getSlaves () {
-      MASTER
-        .get('slave/', {})
+      slaveServiceInstance
+        .getSlave()
         .then(res => {
           console.log(res.data)
           this.slaves = res.data
@@ -198,8 +198,8 @@ export default {
         })
     },
     getSlave (id) {
-      MASTER
-        .get('slave/' + id, {})
+      slaveServiceInstance
+        .getSlave(id)
         .then(res => {
           console.log(res.data)
           this.slave = res.data
@@ -211,8 +211,8 @@ export default {
     },
     putSlave () {
       const { id } = this.slave
-      MASTER
-        .put('slave/' + id + '/', this.slave)
+      slaveServiceInstance
+        .editSlave(id, this.slave)
         .then(res => {
           this.slave = res.data
           this.slaves = this.slaves.map((slave) => {
@@ -233,8 +233,8 @@ export default {
         })
     },
     deleteSlave (id) {
-      MASTER
-        .delete('slave/' + id, {})
+      slaveServiceInstance
+        .deleteSlave(id)
         .then(res => {
           this.slaves = this.slaves.filter((slave) => slave.id !== id)
           this.$q.notify({
@@ -250,8 +250,8 @@ export default {
         })
     },
     postSlave () {
-      MASTER
-        .post('slave/', this.newSlave)
+      slaveServiceInstance
+        .createSlave(this.newSlave)
         .then(res => {
           this.slaves.push(res.data)
           this.newSlaves = {}

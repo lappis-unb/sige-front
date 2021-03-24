@@ -25,11 +25,11 @@
 </template>
 
 <script>
-import MASTER from '../services/masterApi/http-common'
-
 import DashBottomBar from 'components/dashboard/DashBottomBar'
 import DashCampusTab from 'components/dashboard/DashCampusTab'
 import DashGeneralEventBar from 'components/dashboard/DashGeneralEventBar'
+import { campiServiceInstance } from 'src/services/CampiService'
+import { occurrenceServiceInstance } from 'src/services/OccurencesService'
 
 export default {
   name: 'DashboardBase',
@@ -55,7 +55,8 @@ export default {
 
   methods: {
     getAllCampi () {
-      MASTER.get('campi/')
+      campiServiceInstance
+        .getCampi()
         .then((res) => {
           this.campiList = res.data
         })
@@ -66,7 +67,8 @@ export default {
     },
 
     getEventsInProgress () {
-      MASTER.get('occurences/')
+      occurrenceServiceInstance
+        .getOccurences()
         .then((res) => {
           this.eventsInProgress = res.data
         })

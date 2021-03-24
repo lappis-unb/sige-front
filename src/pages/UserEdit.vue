@@ -49,8 +49,8 @@
 </template>
 
 <script>
-import MASTER from '../services/masterApi/http-common'
 import { mapActions, mapGetters } from 'vuex'
+import { userServiceInstance } from 'src/services/UserService'
 
 export default {
   name: '',
@@ -75,12 +75,8 @@ export default {
     ...mapActions('userStore', ['changePage', 'saveUserInfo']),
     retrieveUserInformation () {
       const { user } = this
-      MASTER
-        .get('users/' + user.id + '/', {
-          headers: {
-            authorization: 'Token ' + user.token
-          }
-        })
+      userServiceInstance
+        .getUserById(user.id, user.token)
         .then(res => {
           console.log(res)
           this.fullname = res.data.name
@@ -100,13 +96,12 @@ export default {
       data.name = this.fullname
       data.email = this.email
       data.password = this.password
-      MASTER
-        .put('users/' + user.id + '/', data,
-          {
-            headers: {
-              authorization: 'Token ' + user.token
-            }
-          })
+      userServiceInstance
+        .editUser({
+          userId: user.id,
+          userData: data,
+          userToken: user.token
+        })
         .then(res => {
           this.saveUserInfo({
             username: this.fullname,

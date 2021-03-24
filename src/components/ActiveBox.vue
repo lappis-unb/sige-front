@@ -20,7 +20,8 @@
   </q-card>
 </template>
 <script>
-import MASTER from '../services/masterApi/http-common'
+import { campiServiceInstance } from '../services/CampiService'
+import { transductorServiceInstance } from '../services/TransductorService'
 import mapModal from './MapModal'
 import { mapActions } from 'vuex'
 
@@ -43,8 +44,8 @@ export default {
     }
   },
   async created () {
-    await MASTER
-      .get('/energy-transductors/' + this.id)
+    await transductorServiceInstance
+      .getTransductorById(this.id)
       .then((res) => {
         this.active = res.data.active
         this.lat = res.data.geolocation_latitude
@@ -55,8 +56,9 @@ export default {
       .catch(err => {
         console.log(err)
       })
-    await MASTER
-      .get('/campi/' + this.campusId)
+
+    await campiServiceInstance
+      .getCampi(this.campusId)
       .then((res) => {
         this.campusName = res.data.name
       })

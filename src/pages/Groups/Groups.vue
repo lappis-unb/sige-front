@@ -127,7 +127,7 @@
 </template>
 
 <script>
-import MASTER from '../../services/masterApi/http-common'
+import { groupServiceInstance } from '../../services/GroupService'
 // import { mapActions } from 'vuex'
 
 export default {
@@ -176,8 +176,8 @@ export default {
       if (options[type]) options[type]()
     },
     getGroups () {
-      MASTER
-        .get('groups/', {})
+      groupServiceInstance
+        .getGroup()
         .then(res => {
           console.log(res.data)
           this.groups = res.data
@@ -188,8 +188,8 @@ export default {
         })
     },
     getGroup (id) {
-      MASTER
-        .get('groups/' + id, {})
+      groupServiceInstance
+        .getGroup(id)
         .then(res => {
           console.log(res.data)
           this.group = res.data
@@ -201,8 +201,8 @@ export default {
     },
     putGroup () {
       const { id } = this.group
-      MASTER
-        .put('groups/' + id + '/', this.group)
+      groupServiceInstance
+        .editGroup(id, this.group)
         .then(res => {
           this.group = res.data
           this.groups = this.groups.map((group) => {
@@ -223,8 +223,8 @@ export default {
         })
     },
     deleteGroup (id) {
-      MASTER
-        .delete('groups/' + id, {})
+      groupServiceInstance
+        .deleteGroup(id)
         .then(res => {
           this.groups = this.groups.filter((group) => group.id !== id)
           this.$q.notify({
@@ -240,8 +240,8 @@ export default {
         })
     },
     postGroup () {
-      MASTER
-        .post('groups/', this.newGroup)
+      groupServiceInstance
+        .createGroup(this.newGroup)
         .then(res => {
           this.groups.push(res.data)
           this.newGroup = {}
@@ -251,8 +251,8 @@ export default {
         })
     },
     getGroupTypes () {
-      MASTER
-        .get('group-types/', this.groupTypes)
+      groupServiceInstance
+        .getGroupTypes('group-types/', this.groupTypes)
         .then(res => {
           this.groupTypes = res.data
         })

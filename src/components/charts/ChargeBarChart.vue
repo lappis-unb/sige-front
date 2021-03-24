@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import MASTER from '../../services/masterApi/http-common'
+import { measurementServiceInstance } from 'src/services/MeasurementService'
 
 export default {
   name: 'ChargeBarChart',
@@ -135,8 +135,8 @@ export default {
 
   methods: {
     updateChart () {
-      MASTER
-        .get(`/graph/quarterly-daily-consumption/?campus=${this.selectedCampus.id}`)
+      measurementServiceInstance
+        .getQuarterlyDailyConsumptionGraph(this.selectedCampus.id)
         .then((res) => {
           this.consumption = res.data
         })

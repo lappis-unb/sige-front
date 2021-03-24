@@ -28,12 +28,12 @@
 </template>
 
 <script>
-import MASTER from '../services/masterApi/http-common'
 import measurementsBox from '../components/MeasurementsBox'
 import activeBox from '../components/ActiveBox'
 import occurences from '../components/Occurences'
 import graph from '../components/Graph'
 import { mapGetters, mapActions } from 'vuex'
+import { transductorServiceInstance } from 'src/services/TransductorService'
 
 export default {
   name: 'Transductor',
@@ -66,8 +66,8 @@ export default {
   },
   created () {
     const id = this.$router.currentRoute.params.id
-    MASTER
-      .get('/energy-transductors/' + id)
+    transductorServiceInstance
+      .getTransductorById(id)
       .then((res) => {
         this.model = res.data.model
         this.history = res.data.history
@@ -81,7 +81,7 @@ export default {
   methods: {
     ...mapActions('userStore', ['changePage']),
     groupRequest (url) {
-      MASTER
+      transductorServiceInstance.client
         .get(url)
         .then((res) => {
           this.groups.push(res.data.name)
