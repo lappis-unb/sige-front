@@ -169,7 +169,6 @@
 
 <script>
 import { transductorServiceInstance } from 'src/services/TransductorService'
-import MASTER from '../../services/masterApi/http-common'
 import { campiServiceInstance } from 'src/services/CampiService'
 // import { mapActions } from 'vuex'
 
