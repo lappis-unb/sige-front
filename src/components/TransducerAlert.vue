@@ -25,7 +25,6 @@ export default {
     }
   },
   props: {
-    /* eslint-disable */
     serious: {
       type: Boolean,
       default: true
@@ -33,7 +32,6 @@ export default {
     occurrence: {
       type: Object
     }
-    /* eslint-enable */
   },
   methods: {
     getIcon (serious) {

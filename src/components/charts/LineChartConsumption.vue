@@ -17,10 +17,16 @@ export default {
   components: {
     Apexcharts: () => import('vue-apexcharts')
   },
-  props: [
-    'unit',
-    'exportOptions'
-  ],
+  props: {
+    unit: {
+      type: String,
+      required: true
+    },
+    exportOptions: {
+      type: Object,
+      required: true
+    }
+  },
   computed: {
     ...mapGetters('consumptionCurve', ['getSerie', 'getFilters', 'getTypeXAxis', 'getGraphNotEmpty', 'getPeriodicity', 'getStartDate', 'getEndDate']),
     chartConf () {
@@ -85,15 +91,6 @@ export default {
             }
           }
         },
-        // {
-        //   x: 18,
-        //   x2: 21,
-        //   fillColor: '#B3F7CA',
-        //   label: {
-        //     text: 'Horário de Ponta'
-        //   }
-        // }
-        // ],
         yaxis: {
           min: 0,
           labels: {

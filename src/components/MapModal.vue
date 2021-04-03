@@ -47,9 +47,12 @@ export default {
     'l-tile-layer': Vue2Leaflet.LTileLayer,
     'l-circle': Vue2Leaflet.LCircle
   },
-  props: [
-    'center'
-  ],
+  props: {
+    center: {
+      type: [Object, Array],
+      required: true
+    }
+  },
   computed: {
     ...mapGetters('transductorStore', ['openMap'])
   },
@@ -61,10 +64,6 @@ export default {
         '#F29F05',
         '#088521'
       ],
-      mapOptions: {
-        maxbounds: this.center
-      },
-
       url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
       attribution:
         '© <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

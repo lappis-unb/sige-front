@@ -28,15 +28,37 @@ export default {
     Apexcharts: () => import('vue-apexcharts'),
     noDataPlaceholder: noDataPlaceholder
   },
-  props: [
-    'graphic_type',
-    'show_legend',
-    'id',
-    'min',
-    'decimals',
-    'max',
-    'exportOptions'
-  ],
+  props: {
+    graphic_type: {
+      type: String,
+      required: true
+    },
+    show_legend: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    id: {
+      type: [Number, String],
+      required: true
+    },
+    min: {
+      type: Number,
+      required: true
+    },
+    max: {
+      type: Number,
+      required: true
+    },
+    decimals: {
+      type: Number,
+      required: true
+    },
+    exportOptions: {
+      type: Object,
+      required: true
+    }
+  },
 
   data () {
     return {
@@ -197,6 +219,6 @@ export default {
 <style scoped>
   #chart {
     padding: .5rem;
-    colors: #147900;
+    color: #147900;
   }
 </style>

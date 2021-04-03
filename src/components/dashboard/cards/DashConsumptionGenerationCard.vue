@@ -82,6 +82,9 @@ export default {
   },
 
   props: {
+    /** TODO verificar esse componente porque a prop com required == true
+      * mas condições verificando se é undefined não faz sentido
+      */
     transductor: {
       // type: Object,
       required: true

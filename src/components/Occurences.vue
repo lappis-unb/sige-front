@@ -46,9 +46,12 @@ export default {
     transducerAlert: transducerAlert,
     occurencesList: occurencesList
   },
-  props: [
-    'id'
-  ],
+  props: {
+    id: {
+      type: [Number, String],
+      required: true
+    }
+  },
   data () {
     return {
       today: [],
@@ -111,8 +114,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .occ {
-  // display: flex;
-  // flex-direction: column;
   min-height: 100vh;
 
   background-color: #f5f5f5;

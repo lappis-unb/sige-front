@@ -18,12 +18,11 @@
 
 <script>
 export default {
-  props: [
-    'info'
-  ]
+  props: {
+    info: {
+      type: String,
+      required: true
+    }
+  }
 }
 </script>
-
-<style>
-
-</style>

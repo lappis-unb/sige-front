@@ -12,10 +12,17 @@ export default {
   components: {
     Apexcharts: () => import('vue-apexcharts')
   },
-  props: [
-    'isCostPage',
-    'exportOptions'
-  ],
+  props: {
+    isCostPage: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    exportOptions: {
+      type: Object,
+      required: true
+    }
+  },
   computed: {
     ...mapGetters('transductorStore', ['chartOptions', 'filterOptions']),
     ...mapGetters('totalCostStore', ['totalCostChart']),

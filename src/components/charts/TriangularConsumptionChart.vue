@@ -7,9 +7,6 @@
       :options="chartOptions"
       class="q-pa-none"
       height="75"/>
-    <!-- <p class="text-center vertical-top q-pa-none">
-      {{ 800 }} kW
-    </p> -->
   </q-no-ssr>
   </div>
 </template>
@@ -23,10 +20,6 @@ export default {
   components: {
     Apexcharts: () => import('vue-apexcharts')
   },
-
-  props: [
-  ],
-
   data () {
     return {
       min: 0,
@@ -38,12 +31,6 @@ export default {
 
   computed: {
     series () {
-      // return [
-      //   {
-      //     data: [0, this.consumption]
-      //   }
-      // ]
-
       return [
         {
           data: [0, 500]
@@ -84,8 +71,6 @@ export default {
 
         chart: {
           type: 'area',
-          // height: 96,
-          // width: 174,
           background: '#00101F',
           toolbar: {
             show: false

@@ -24,11 +24,15 @@ export default {
   },
 
   props: {
-    transductor: Object,
-    campus: Object
+    transductor: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    campus: {
+      type: Object,
+      required: true
+    }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-</style>

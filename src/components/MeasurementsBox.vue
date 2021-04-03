@@ -35,9 +35,12 @@ import MASTER from '../services/masterApi/http-common'
 
 export default {
   name: 'MeasurementsBox',
-  props: [
-    'id'
-  ],
+  props: {
+    id: {
+      type: [Number, String],
+      required: true
+    }
+  },
   data () {
     return {
       lastReading: '',
@@ -49,7 +52,6 @@ export default {
     }
   },
   async created () {
-    console.log('id:', this.id)
     await MASTER
       .get('/realtime-measurements/?id=' + this.id)
       .then(res => {
