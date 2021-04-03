@@ -6,7 +6,7 @@ describe('Testing GroupService', () => {
     // cleaning up the mess left behind the previous test
     mockAxios.reset()
   });
-  
+
   test('app instance', () => {
     expect(groupServiceInstance).toBeDefined();
   })
@@ -17,7 +17,7 @@ describe('Testing GroupService', () => {
       .then(jest.fn)
       .catch(jest.fn)
 
-    expect(mockAxios.get).toHaveBeenCalledWith('group/')
+    expect(mockAxios.get).toHaveBeenCalledWith('groups/')
   })
 
   test('get group with id', async () => {
@@ -27,7 +27,7 @@ describe('Testing GroupService', () => {
       .then(jest.fn)
       .catch(jest.fn)
 
-    expect(mockAxios.get).toHaveBeenCalledWith('group/' + id)
+    expect(mockAxios.get).toHaveBeenCalledWith('groups/' + id)
   })
 
   test('get group types', async () => {
@@ -51,7 +51,7 @@ describe('Testing GroupService', () => {
       .then(jest.fn)
       .catch(jest.fn)
 
-    expect(mockAxios.post).toHaveBeenCalledWith('group/', data)
+    expect(mockAxios.post).toHaveBeenCalledWith('groups/', data)
   })
 
   test('create group-types', async () => {
@@ -79,7 +79,7 @@ describe('Testing GroupService', () => {
       .then(jest.fn)
       .catch(jest.fn)
 
-    expect(mockAxios.put).toHaveBeenCalledWith('group/' + id + '/', data)
+    expect(mockAxios.put).toHaveBeenCalledWith('groups/' + id + '/', data)
   })
 
   test('edit group-types', async () => {
@@ -104,7 +104,7 @@ describe('Testing GroupService', () => {
       .then(jest.fn)
       .catch(jest.fn)
 
-    expect(mockAxios.delete).toHaveBeenCalledWith('group/' + id)
+    expect(mockAxios.delete).toHaveBeenCalledWith('groups/' + id)
   })
 
   test('delete group-types', async () => {

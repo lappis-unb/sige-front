@@ -6,7 +6,7 @@ class GroupService {
   }
 
   async getGroup (id = '') {
-    return await this.client.get('group/' + id)
+    return await this.client.get('groups/' + id)
   }
 
   async getGroupTypes (groupId, groupTypes) {
@@ -14,15 +14,15 @@ class GroupService {
   }
 
   async createGroup (groupData) {
-    return await this.client.post('group/', groupData)
+    return await this.client.post('groups/', groupData)
   }
 
   async editGroup (groupId, data) {
-    return await this.client.put('group/' + groupId + '/', data)
+    return await this.client.put('groups/' + groupId + '/', data)
   }
 
   async deleteGroup (groupId) {
-    return await this.client.delete('group/' + groupId)
+    return await this.client.delete('groups/' + groupId)
   }
 
   async createGroupTypes (groupTypesData) {
