@@ -63,7 +63,7 @@ export default {
     chartTitle: {
       type: String,
       required: true
-    },
+    }
   },
 
   data () {
