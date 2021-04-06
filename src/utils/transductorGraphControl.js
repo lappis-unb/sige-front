@@ -20,7 +20,7 @@ export async function getGraph (filter) {
   const startDate = await getDate(filter.startDate)
   const endDate = await getDate(filter.endDate)
   const type = graphOptions.url === 'cost-consumption' ? 'daily' : 'hourly'
-  const url = `/graph/${graphOptions.url}/?id=${filter.transductor}&start_date=${startDate}&end_date=${endDate}&type=${type}`
+  const url = `/graph/${graphOptions.url}/?id=${filter.transductor}&start_date=${startDate}&end_date=${endDate}&type=${type}&is_filtered=True`
   const graph = {
     unit: graphOptions.unit,
     dimension: filter.dimension,
@@ -76,10 +76,10 @@ export async function getGraph (filter) {
 }
 
 export function hasAllData (filter, options) {
-  if (options.url !== '' &&
-    filter.transductor !== undefined &&
-    filter.startDate !== undefined &&
-    filter.endDate !== undefined) {
+  if (options.url &&
+    filter.transductor &&
+    filter.startDate &&
+    filter.endDate) {
     return true
   } else {
     return false
@@ -87,9 +87,9 @@ export function hasAllData (filter, options) {
 }
 
 export function getDate (date) {
-  if (date !== '' && date !== undefined) {
+  if (date) {
     const dateParts = date.split('/')
-    const res = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0] + ' ' + '00:00:00'
+    const res = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0] + ' ' + '23:59:00'
 
     return res
   } else {

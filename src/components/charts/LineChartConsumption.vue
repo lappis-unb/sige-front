@@ -22,6 +22,10 @@ export default {
       type: String,
       required: true
     },
+    chartTitle: {
+      type: String,
+      required: true
+    },
     exportOptions: {
       type: Object,
       required: true
@@ -35,6 +39,20 @@ export default {
 
       return {
         colors: ['#00417e'],
+        title: {
+          text: this.chartTitle,
+          align: 'center',
+          margin: 10,
+          offsetX: 0,
+          offsetY: 0,
+          floating: false,
+          style: {
+            fontSize: '24px',
+            fontWeight: '300',
+            fontFamily: 'Roboto',
+            color: '#00417e'
+          }
+        },
         chart: {
           stacked: false,
           toolbar: {
@@ -42,11 +60,9 @@ export default {
               csv: {
                 filename: filename
               },
-
               svg: {
                 filename: filename
               },
-
               png: {
                 filename: filename
               }
@@ -65,23 +81,13 @@ export default {
             }
           }
         },
-        title: {
-          text: 'Column',
-          align: 'left',
-          style: {
-            color: '#FFF'
-          }
-        },
-
         dataLabels: {
           enabled: false
         },
 
         xaxis: {
-          type: this.getTypeXAxis,
           labels: {
             show: true,
-            formatter: this.labelFormatterX,
             style: {
               colors: [],
               fontSize: '16px',
@@ -92,7 +98,6 @@ export default {
           }
         },
         yaxis: {
-          min: 0,
           labels: {
             formatter: this.labelFormatter,
             style: {
@@ -100,6 +105,13 @@ export default {
             }
           },
           tickAmount: 10
+        },
+        tooltip: {
+          y: {
+            formatter: (val) => {
+              return `${val.toFixed(1)} ${this.unit}`
+            }
+          }
         }
       }
     }
@@ -112,7 +124,7 @@ export default {
   methods: {
     ...mapActions('consumptionCurve', ['updateChartSerie']),
     labelFormatter (value) {
-      return value.toFixed(2) + ' ' + this.unit
+      return value + ' ' + this.unit
     }
   },
   created () {}
