@@ -29,6 +29,7 @@ const clearStartDate = ({ commit }) => {
 const clearEndDate = ({ commit }) => {
   commit('clearEndDate')
 }
+
 const updateChart = ({ commit }, chart) => {
   commit('updateChart', chart)
 }
