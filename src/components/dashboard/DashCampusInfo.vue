@@ -41,7 +41,7 @@ import DashConsumptionGenerationCard from './cards/DashConsumptionGenerationCard
 import DashLast72hCard from './cards/DashLast72hCard'
 import DashChargeBarCard from './cards/DashChargeBarCard'
 import DashLastMeasurementCard from './cards/DashLastMeasurementCard'
-import MASTER from '../../services/masterApi/http-common'
+import { occurrenceServiceInstance } from 'src/services/OccurencesService'
 
 export default {
   name: 'DashCampusInfo',
@@ -80,8 +80,8 @@ export default {
 
   methods: {
     getLast72hEvents (campus) {
-      MASTER
-        .get(`/occurences/?type=period&campus=${campus.id}`)
+      occurrenceServiceInstance
+        .getOccurences({ campus: campus.id, type: 'period' })
         .then((res) => {
           this.last72hEvents = res.data
           this.last72hEvents.campus_name = this.currentCampus.name

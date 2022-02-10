@@ -170,8 +170,7 @@
 </template>
 
 <script>
-import MASTER from '../../services/masterApi/http-common'
-// import { mapActions } from 'vuex'
+import { campiServiceInstance } from 'src/services/CampiService'
 
 export default {
   name: 'Campi',
@@ -218,8 +217,8 @@ export default {
       if (options[type]) options[type]()
     },
     getCampi () {
-      MASTER
-        .get('campi/', {})
+      campiServiceInstance
+        .getCampi()
         .then(res => {
           console.log(res.data)
           this.campi = res.data
@@ -230,8 +229,8 @@ export default {
         })
     },
     getCampus (id) {
-      MASTER
-        .get('campi/' + id, {})
+      campiServiceInstance
+        .getCampi(id)
         .then(res => {
           console.log(res.data)
           this.campus = res.data
@@ -243,8 +242,8 @@ export default {
     },
     putCampus () {
       const { id } = this.campus
-      MASTER
-        .put('campi/' + id + '/', this.campus)
+      campiServiceInstance
+        .editCampus(id, this.campus)
         .then(res => {
           this.campus = res.data
           this.campi = this.campi.map((campus) => {
@@ -265,8 +264,8 @@ export default {
         })
     },
     deleteCampus (id) {
-      MASTER
-        .delete('campi/' + id, {})
+      campiServiceInstance
+        .deleteCampus(id)
         .then(res => {
           this.campi = this.campi.filter((campus) => campus.id !== id)
           this.$q.notify({
@@ -282,8 +281,8 @@ export default {
         })
     },
     postCampus () {
-      MASTER
-        .post('campi/', this.newCampus)
+      campiServiceInstance
+        .createCampus(this.newCampus)
         .then(res => {
           this.campi.push(res.data)
           this.newCampus = {}

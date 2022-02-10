@@ -39,7 +39,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import MASTER from '../services/masterApi/http-common'
+import { userServiceInstance } from '../services/UserService'
 import logoutHelper from '../mixins/logoutHelper.js'
 
 export default {
@@ -81,12 +81,8 @@ export default {
         this.username = userName
         this.useremail = userEmail
       }
-      MASTER
-        .get('users/' + user.id + '/', {
-          headers: {
-            authorization: 'Token ' + user.token
-          }
-        })
+      userServiceInstance
+        .getUserById(user.id, user.token)
         .then(res => {
           this.username = res.data.name
           this.useremail = res.data.email

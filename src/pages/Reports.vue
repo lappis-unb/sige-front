@@ -16,7 +16,6 @@
 </template>
 
 <script>
-// import MASTER from '../services/masterApi/http-common'
 import TotalCostFilter from '../components/TotalCostFilter'
 import { mapGetters, mapActions } from 'vuex'
 

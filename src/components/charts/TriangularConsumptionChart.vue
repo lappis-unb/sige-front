@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import MASTER from '../../services/masterApi/http-common'
+import { measurementServiceInstance } from 'src/services/MeasurementService'
 
 export default {
   name: 'TriangularConsumptionChart',
@@ -153,16 +153,11 @@ export default {
   methods: {
     updateChart () {
       if (this.selectedTransductor !== undefined) {
-        const consumption = [
-          '/graph/quarterly-consumption-off-peak/?start_date=2019-06-01 00:00&end_date=2019-06-30 23:59',
-          '/graph/quarterly-consumption-peak/?start_date=2019-06-01 00:00&end_date=2019-06-30 23:59'
-        ]
-
-        MASTER.all([
-          MASTER.get(consumption[0]),
-          MASTER.get(consumption[1])
+        measurementServiceInstance.client.all([
+          measurementServiceInstance.getQuarterlyConsumptionOffPeak('2019-06-01 00:00', '2019-06-30 23:59'),
+          measurementServiceInstance.getQuarterlyConsumptionPeak('2019-06-01 00:00', '2019-06-30 23:59')
         ])
-          .then(MASTER.spread((consA, consB) => {
+          .then(measurementServiceInstance.client.spread((consA, consB) => {
             this.consumption = [...consA.data, ...consB.data]
           }))
           .catch(errArray => {

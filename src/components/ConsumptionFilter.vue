@@ -94,10 +94,10 @@
 </template>
 
 <script>
-import MASTER from '../services/masterApi/http-common'
 import { getGraphInformation } from '../utils/graphControl'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
+import { campiServiceInstance } from 'src/services/CampiService'
 const allCampus = []
 const groups = []
 
@@ -118,7 +118,8 @@ export default {
   },
   props: {},
   async created () {
-    await MASTER.get('campi/')
+    await campiServiceInstance
+      .getCampi()
       .then(res => {
         res.data.forEach(elem => {
           allCampus.push(elem)

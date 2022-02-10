@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import MASTER from '../services/masterApi/http-common'
+import { occurrenceServiceInstance } from '../services/OccurencesService'
 import { separateInDays } from '../utils/transductorStatus'
 import transducerAlert from './TransducerAlert'
 import occurencesList from './OccurencesList'
@@ -59,7 +59,8 @@ export default {
     }
   },
   created () {
-    MASTER.get('/occurences/?type=period&id=' + this.id)
+    occurrenceServiceInstance
+      .getOccurences({ occurrenceId: this.id, type: 'period' })
       .then(async res => {
         await separateInDays(
           res.data.critical_tension,
