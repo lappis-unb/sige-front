@@ -3,7 +3,7 @@
     <div class="adjust">
       <div class="filter">
         <q-select
-          v-model="campusModel"
+          v-model="selectedCampus"
           use-input
           map-options
           emit-value
@@ -11,10 +11,9 @@
           option-label="name"
           input-debounce="0"
           label="Campus"
-          :options="optionsCampus"
-          @filter="filterCampus"
+          :options="campusOptions"
           class="col-4 elem select"
-          @input="getGroups(); filterByCampus(campusModel)"
+          @input="getGroups(); filterByCampus(selectedCampus)"
         >
           <template v-slot:no-option>
             <q-item>
@@ -24,7 +23,7 @@
         </q-select>
 
         <q-select
-          v-model="optionsModel"
+          v-model="selectedGroup"
           use-input
           map-options
           emit-value
@@ -32,10 +31,9 @@
           option-label="name"
           input-debounce="0"
           label="Filtro"
-          :options="optionsGroup"
-          @filter="filterFn"
+          :options="groupOptions"
           class="col-4 elem select"
-          @input="filterByGroup(optionsModel)"
+          @input="filterByGroup(selectedGroup)"
         >
           <template v-slot:no-option>
             <q-item>
@@ -47,7 +45,7 @@
           <a class="caption">Visão</a>
           <br />
           <q-btn-toggle
-            v-model="model"
+            v-model="periodicity"
             toggle-color="primary"
             class="elem toggle"
             :options="[
@@ -55,10 +53,10 @@
           {label: 'DIA', value: 'daily'},
           {label: 'MES', value: 'monthly'}
         ]"
-        @input="changePeriodicity(model)"
+        @input="changePeriodicity(periodicity)"
           />
         </div>
-        <q-input v-model="startDate" :mask="mask" label="Período: Início" class="elem input" :error="errorStartDate" @input="verifyClearInput">
+        <q-input v-model="startDate" :mask="mask" label="Período: Início" class="elem input" :error="errorStartDate" @input="validateStartDate()">
           <template v-slot:append>
             <q-icon name="event" class="cursor-pointer calendar">
               <q-popup-proxy transition-show="scale" transition-hide="scale">
@@ -67,7 +65,7 @@
             </q-icon>
           </template>
         </q-input>
-        <q-input v-model="endDate" :mask="mask" label="Período: Fim" class="elem input" :error="errorEndDate" @input="verifyClearInput">
+        <q-input v-model="endDate" :mask="mask" label="Período: Fim" class="elem input" :error="errorEndDate" @input="validateEndDate()">
           <template v-slot:append>
             <q-icon name="event" class="cursor-pointer calendar">
               <q-popup-proxy transition-show="scale" transition-hide="scale">
@@ -81,7 +79,7 @@
             size="1rem"
             label="Aplicar"
             type="button"
-            @click="applyFilter()"
+            @click="updateChart()"
             color="primary"
         />
       </div>
@@ -95,9 +93,10 @@
 
 <script>
 import MASTER from '../services/masterApi/http-common'
-import { getGraphInformation } from '../utils/graphControl'
-import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
+import { mapActions, mapGetters } from 'vuex'
+import { getGraphInformation } from '../utils/graphControl'
+
 const allCampus = []
 const groups = []
 
@@ -105,11 +104,11 @@ export default {
   name: 'ConsumptionFilter',
   data () {
     return {
-      model: 'hourly',
-      campusModel: null,
-      optionsCampus: allCampus,
-      optionsModel: null,
-      optionsGroup: groups,
+      periodicity: 'hourly',
+      selectedCampus: null,
+      campusOptions: allCampus,
+      selectedGroup: null,
+      groupOptions: groups,
       startDate: '',
       endDate: '',
       mask: '##/##/####',
@@ -118,89 +117,50 @@ export default {
   },
   props: {},
   async created () {
-    await MASTER.get('campi/')
-      .then(res => {
-        res.data.forEach(elem => {
-          allCampus.push(elem)
-        })
-        this.campusModel = res.data[0]
-        this.$parent.location.campus = this.campusModel.acronym
-      })
-      .catch(err => {
-        console.log(err)
-      })
-
-    this.startDate = moment().format('DD/MM/YYYY')
-    this.endDate = moment().format('DD/MM/YYYY')
-
-    const serie = await getGraphInformation(this.getFilters)
-    this.updateChartSerie(serie)
+    this.getCampus()
   },
   computed: {
     ...mapGetters('consumptionCurve', ['errorStartDate', 'errorEndDate', 'getFilters'])
   },
   methods: {
     ...mapActions('consumptionCurve', ['changePeriodicity', 'changeStartDate', 'changeEndDate', 'filterByCampus', 'filterByGroup', 'clearStartDate', 'clearEndDate', 'updateChartSerie']),
-    filterFn (val, update, abort) {
-      update(() => {
-        const needle = val.toLowerCase()
-        this.optionsCampus = allCampus.filter(
-          v => v.name.toLowerCase().indexOf(needle) > -1
-        )
-      })
-    },
-    filterCampus (val, update, abort) {
-      update(async () => {
-        const needle = val.toLowerCase()
-        this.optionsCampus = await allCampus.filter(
-          v => v.name.toLowerCase().indexOf(needle) > -1
-        )
-      })
+    async getCampus () {
+      await MASTER.get('campi/')
+        .then(res => {
+          res.data.forEach(elem => {
+            allCampus.push(elem)
+          })
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     getGroups () {
       while (groups.length) {
         groups.pop()
       }
-      this.optionsModel = null
-      allCampus.filter(campus => campus.id === this.campusModel)[0].groups_related.map(group => {
+      this.selectedGroup = null
+      allCampus.filter(campus => campus.id === this.selectedCampus)[0].groups_related.map(group => {
         if (groups.filter(subGroup => subGroup.name === group.name).length === 0) {
           groups.push(group)
         }
       })
     },
-
-    verifyClearInput () {
-      if (!this.startDate) {
-        this.clearStartDate()
-      } else {
-        if (moment(this.startDate, 'DD-MM-YYYY').isValid()) {
-          this.changeStartDate(this.startDate)
-        }
-      }
-
-      if (!this.endDate) {
-        this.clearEndDate()
-      } else {
-        if (moment(this.endDate, 'DD-MM-YYYY').isValid()) {
-          this.changeEndDate(this.endDate)
-        }
+    validateStartDate () {
+      if (moment(this.startDate, 'DD-MM-YYYY').isValid()) {
+        this.changeStartDate(this.startDate)
       }
     },
-
-    async applyFilter () {
+    validateEndDate () {
+      if (moment(this.endDate, 'DD-MM-YYYY').isValid()) {
+        this.changeEndDate(this.endDate)
+      }
+    },
+    async updateChart () {
       const serie = await getGraphInformation(this.getFilters)
       this.updateChartSerie(serie)
-      if (isNaN(this.campusModel)) {
-        this.$parent.location.campus = this.campusModel.acronym
-      } else {
-        this.$parent.location.campus = this.optionsCampus.find(campus => campus.id === this.campusModel).acronym
-      }
-
-      if (this.optionsModel) {
-        this.$parent.location.group = this.optionsGroup.find(group => group.id === this.optionsModel).name
-      } else {
-        this.$parent.location.group = null
-      }
+      this.$parent.location.campus = this.campusOptions.find(campus => campus.id === this.selectedCampus).acronym
+      this.$parent.location.group = this.groupOptions.find(group => group.id === this.selectedGroup).name
     }
   }
 }
