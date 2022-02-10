@@ -12,6 +12,13 @@
         Bottom
       </template> -->
     </q-table>
+    <q-btn
+      size="1rem"
+      label="Aplicar"
+      type="button"
+      color="primary"
+      @click="downloadCsv(data)"
+    />
   </div>
 </template>
 
@@ -32,6 +39,23 @@ export default {
     ...mapActions('userStore', ['changePage']),
     clickItem (row) {
       this.$router.push('transductor/' + row.serial_number)
+    },
+    downloadCsv (data) {
+      const dataFromApi = data
+      let csv = Object.keys(data[0]).join() + '\n'
+      dataFromApi.forEach((row) => {
+        console.log(row.name)
+        csv += row.name + ','
+        csv += row.valor_kwh + ','
+        csv += row.tarifa + ','
+        csv += row.total + ','
+        csv += '\n'
+      })
+      const csvFile = document.createElement('a')
+      csvFile.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv)
+      csvFile.target = '_blank'
+      csvFile.download = 'reports.csv'
+      csvFile.click()
     }
   },
   created () {
