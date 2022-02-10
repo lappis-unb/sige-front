@@ -42,10 +42,17 @@ export default {
     BarChart: BarChart,
     noDataPlaceholder: noDataPlaceholder
   },
-  props: [
-    'transductorId',
-    'exportOptions'
-  ],
+  props: {
+    transductorId: {
+      type: [String, Number],
+      required: true
+    },
+    exportOptions: {
+      type: Object,
+      required: false,
+      default: () => ({})
+    }
+  },
   data () {
     return {
       dimensions: dimensions,

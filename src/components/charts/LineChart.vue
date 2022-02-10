@@ -30,16 +30,41 @@ export default {
     Apexcharts: () => import('vue-apexcharts'),
     noDataPlaceholder: noDataPlaceholder
   },
-  props: [
-    'graphic_type',
-    'show_legend',
-    'id',
-    'min',
-    'decimals',
-    'max',
-    'chartTitle',
-    'exportOptions'
-  ],
+  props: {
+    graphic_type: {
+      type: String,
+      required: true
+    },
+    show_legend: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    id: {
+      type: [Number, String],
+      required: true
+    },
+    min: {
+      type: Number,
+      required: true
+    },
+    max: {
+      type: Number,
+      required: true
+    },
+    decimals: {
+      type: Number,
+      required: true
+    },
+    exportOptions: {
+      type: Object,
+      required: true
+    },
+    chartTitle: {
+      type: String,
+      required: true
+    }
+  },
 
   data () {
     const USED_VOLTAGE = 220

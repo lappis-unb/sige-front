@@ -32,12 +32,10 @@ export default {
     title: {
       type: String
     },
-    /* eslint-disable */
     items: {
       type: Array,
-      default: []
+      default: () => ([])
     },
-    /* eslint-enable */
     type: {
       type: String,
       default: 'list'

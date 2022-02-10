@@ -116,7 +116,6 @@ export default {
       value: false
     }
   },
-  props: {},
   async created () {
     await MASTER.get('campi/')
       .then(res => {

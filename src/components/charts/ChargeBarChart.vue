@@ -21,8 +21,10 @@ export default {
   },
 
   props: {
-    selectedCampus: Object,
-    selectedTransductor: Object
+    selectedCampus: {
+      type: Object,
+      required: true
+    }
   },
 
   data () {

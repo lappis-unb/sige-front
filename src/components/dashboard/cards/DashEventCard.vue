@@ -58,10 +58,22 @@ export default {
   },
 
   props: {
-    name: String,
-    activeClass: String,
-    eventsList: Array,
-    icon: Number
+    name: {
+      type: String,
+      required: true
+    },
+    activeClass: {
+      type: String,
+      required: true
+    },
+    eventsList: {
+      type: Array,
+      required: true
+    },
+    icon: {
+      type: Number,
+      required: true
+    }
   },
 
   methods: {
@@ -140,13 +152,11 @@ export default {
   }
 
   p {
-    // font-size: 22px;
     font-size: 20px;
   }
 
   .card-title {
     font-size: 30px;
-    // font-size: 32px;
     line-height: 40px;
     letter-spacing: .24px;
   }

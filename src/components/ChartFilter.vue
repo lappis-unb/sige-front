@@ -59,12 +59,26 @@ import { getDateNowSelectFormat } from '../utils/transductorStatus'
 
 export default {
   name: 'ChartFilter',
-  props: [
-    'filterLabel',
-    'filterList',
-    'visionOptions',
-    'transductorId'
-  ],
+  props: {
+    filterLabel: {
+      type: String,
+      required: false,
+      default: ''
+    },
+    filterList: {
+      type: Array,
+      required: true
+    },
+    visionOptions: {
+      type: Array,
+      required: true
+    },
+    transductorId: {
+      type: String,
+      required: false,
+      default: ''
+    }
+  },
   data () {
     return {
       option: '',

@@ -29,9 +29,12 @@ export default {
   components: {
     mapModal: mapModal
   },
-  props: [
-    'id'
-  ],
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   data () {
     return {
       active: false,

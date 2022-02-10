@@ -19,42 +19,6 @@
   </div>
 </template>
 
-<style lang="scss">
-  .dash-content {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    min-height: 53.9vh;
-  }
-
-  .dash-map {
-    width: 70%;
-  }
-
-  .dash-campus {
-    width: 50%;
-  }
-
-  @media screen and (max-width: 800px) {
-    .dash-content {
-      flex-direction: column;
-    }
-
-    .dash-map {
-      width: 100%;
-    }
-
-    .dash-campus {
-      width: 100%;
-      padding-right: 0 !important;
-    }
-
-    .q-pr-md .q-ma-none  {
-      padding-right: 0 !important;
-    }
-  }
-</style>
-
 <script>
 import DashMap from './DashMap'
 import DashCampusInfo from './DashCampusInfo'
@@ -69,7 +33,10 @@ export default {
   },
 
   props: {
-    selectedCampus: Object
+    selectedCampus: {
+      type: Object,
+      required: true
+    }
   },
 
   data () {
@@ -157,3 +124,39 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  .dash-content {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    min-height: 53.9vh;
+  }
+
+  .dash-map {
+    width: 70%;
+  }
+
+  .dash-campus {
+    width: 50%;
+  }
+
+  @media screen and (max-width: 800px) {
+    .dash-content {
+      flex-direction: column;
+    }
+
+    .dash-map {
+      width: 100%;
+    }
+
+    .dash-campus {
+      width: 100%;
+      padding-right: 0 !important;
+    }
+
+    .q-pr-md .q-ma-none  {
+      padding-right: 0 !important;
+    }
+  }
+</style>

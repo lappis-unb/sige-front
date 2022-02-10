@@ -40,7 +40,7 @@
 import DashConsumptionGenerationCard from './cards/DashConsumptionGenerationCard'
 import DashLast72hCard from './cards/DashLast72hCard'
 import DashChargeBarCard from './cards/DashChargeBarCard'
-import DashLastMeasurementCard from './cards/DashLastMeasurementCard'
+import DashLastMeasurementCard from './cards/DashLastMeasurementCard.vue'
 import MASTER from '../../services/masterApi/http-common'
 
 export default {
@@ -55,7 +55,10 @@ export default {
 
   props: {
     currentCampus: Object,
-    selectedTransductor: Object,
+    selectedTransductor: {
+      type: Object,
+      required: true
+    },
     transductorCycleProgress: {
       type: Number,
       default: 0

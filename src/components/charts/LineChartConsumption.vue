@@ -17,11 +17,20 @@ export default {
   components: {
     Apexcharts: () => import('vue-apexcharts')
   },
-  props: [
-    'unit',
-    'chartTitle',
-    'exportOptions'
-  ],
+  props: {
+    unit: {
+      type: String,
+      required: true
+    },
+    chartTitle: {
+      type: String,
+      required: true
+    },
+    exportOptions: {
+      type: Object,
+      required: true
+    }
+  },
   computed: {
     ...mapGetters('consumptionCurve', ['getSerie', 'getFilters', 'getTypeXAxis', 'getGraphNotEmpty', 'getPeriodicity', 'getStartDate', 'getEndDate']),
     chartConf () {
