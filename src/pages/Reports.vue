@@ -12,13 +12,15 @@
         Bottom
       </template> -->
     </q-table>
-    <q-btn
-      size="1rem"
-      label="Aplicar"
-      type="button"
-      color="primary"
-      @click="downloadCsv(data)"
-    />
+    <div class="button-box">
+      <q-btn
+        size="1rem"
+        label="Aplicar"
+        type="button"
+        color="primary"
+        @click="downloadCsv(data)"
+      />
+    </div>
   </div>
 </template>
 
@@ -40,6 +42,11 @@ export default {
     clickItem (row) {
       this.$router.push('transductor/' + row.serial_number)
     },
+    getDate () {
+      const today = new Date()
+      const date = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear()
+      return date
+    },
     downloadCsv (data) {
       const dataFromApi = data
       let csv = Object.keys(data[0]).join() + '\n'
@@ -54,7 +61,7 @@ export default {
       const csvFile = document.createElement('a')
       csvFile.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv)
       csvFile.target = '_blank'
-      csvFile.download = 'reports.csv'
+      csvFile.download = `reports${this.getDate()}.csv`
       csvFile.click()
     }
   },
@@ -164,5 +171,12 @@ export default {
 
   .meter-header-group th.meter-table-header-group-cell-grouped {
     border-bottom: solid 1px #527ea7;
+  }
+
+  .button-box {
+    display: flex;
+    flex-direction: row-reverse;
+    align-self: flex-end;
+    margin-top: 15px;
   }
 </style>
