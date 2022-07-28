@@ -16,7 +16,7 @@
           <a class="data-body">{{serial_number}}</a><br/>
           <a class="data-label">GRUPOS</a><br/>
           <a class="data-body" v-for="(group, i) in groups" v-bind:key="i"> {{group}}, </a>
-        </div>
+        </div>    
         <div class="transductor-info col-9">
           <p class="title">Histórico</p>
           <p class="history">{{history}}</p>
@@ -24,6 +24,7 @@
       </div>
     </div>
     <occurences :id="id" class="col-3"/>
+    <tEventList />
   </div>
 </template>
 
@@ -33,6 +34,7 @@ import measurementsBox from '../components/MeasurementsBox'
 import activeBox from '../components/ActiveBox/ActiveBox'
 import occurences from '../components/Occurences'
 import graph from '../components/Graph'
+import TransducerEventList from '../components/TransducerEventList.vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -41,7 +43,8 @@ export default {
     measurementsBox: measurementsBox,
     activeBox: activeBox,
     occurences: occurences,
-    graph: graph
+    graph: graph,
+    tEventList: TransducerEventList
   },
   computed: {
     ...mapGetters('transductorStore', ['filterOptions']),
