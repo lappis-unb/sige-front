@@ -2,29 +2,31 @@
   <div class="row">
     <div class="col-9">
       <div class="row">
-        <measurements-box class="col-8" :id="id"/>
-        <active-box class="col-3" :id="id"/>
+        <measurements-box class="col-8" :id="id" />
+        <active-box class="col-3" :id="id" />
       </div>
-      <graph :transductorId='id' :exportOptions="exportOptions"/>
-      <q-separator spaced inset/>
+      <graph :transductorId='id' :exportOptions="exportOptions" />
+      <q-separator spaced inset />
       <div class="row">
         <div class="transductor-info col-3">
           <p class="title">Dados do medidor</p>
-          <a class="data-label">MODELO</a><br/>
-          <a class="data-body">{{model}}</a><br/>
-          <a class="data-label">NÚM. DE SÉRIE</a><br/>
-          <a class="data-body">{{serial_number}}</a><br/>
-          <a class="data-label">GRUPOS</a><br/>
+          <a class="data-label">MODELO</a><br />
+          <a class="data-body">{{model}}</a><br />
+          <a class="data-label">NÚM. DE SÉRIE</a><br />
+          <a class="data-body">{{serial_number}}</a><br />
+          <a class="data-label">GRUPOS</a><br />
           <a class="data-body" v-for="(group, i) in groups" v-bind:key="i"> {{group}}, </a>
-        </div>    
+        </div>
         <div class="transductor-info col-9">
           <p class="title">Histórico</p>
           <p class="history">{{history}}</p>
         </div>
       </div>
     </div>
-    <occurences :id="id" class="col-3"/>
-    <tEventList />
+    <div class="col-1"></div>
+    <div class="col-1"></div>
+    <tEventList class="col-1"/>
+    <!-- <occurences :id="id" class="col-3" /> -->
   </div>
 </template>
 
@@ -32,7 +34,7 @@
 import MASTER from '../services/masterApi/http-common'
 import measurementsBox from '../components/MeasurementsBox'
 import activeBox from '../components/ActiveBox/ActiveBox'
-import occurences from '../components/Occurences'
+// import occurences from '../components/Occurences'
 import graph from '../components/Graph'
 import TransducerEventList from '../components/TransducerEventList.vue'
 import { mapGetters, mapActions } from 'vuex'
@@ -42,7 +44,7 @@ export default {
   components: {
     measurementsBox: measurementsBox,
     activeBox: activeBox,
-    occurences: occurences,
+    // occurences: occurences,
     graph: graph,
     tEventList: TransducerEventList
   },

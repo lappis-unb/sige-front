@@ -1,35 +1,30 @@
 <template>
-   <div class="q-pa-md q-gutter-sm">
+  <button v-on:click="toggleEventList"> Botão
+    <div class="q-pa-md q-gutter-sm">
 
-    <q-btn label="Fixed size" color="primary" @click="toggleEventList" />
+      <q-dialog v-model="fixed">
+        <q-card>
+          <q-card-section>
+            <div class="text-h6">Lista de Transducers</div>
+          </q-card-section>
 
-    <q-dialog v-model="fixed">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Lista de Transducers</div>
-        </q-card-section>
+          <q-separator />
 
-        <q-separator />
+          <q-card-section style="max-height: 100vh" class="scroll">
+            <div class="q-pa-md">
+              <q-table title="Transducers" :columns="columns" :data="rows" row-key="name" />
+            </div>
+          </q-card-section>
 
-        <q-card-section style="max-height: 100vh" class="scroll">
-          <div class="q-pa-md">
-            <q-table
-              title="Transducers"
-              :columns="columns"
-              :data="rows"
-              row-key="name"
-            />
-          </div>
-        </q-card-section>
+          <q-separator />
 
-        <q-separator />
-
-        <q-card-actions align="right">
-          <q-btn flat label="Fechar" color="primary" v-close-popup />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-  </div>
+          <q-card-actions align="right">
+            <q-btn flat label="Fechar" color="primary" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+    </div>
+  </button>
 </template>
 
 <script>
