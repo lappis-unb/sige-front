@@ -3,34 +3,22 @@
     <p class="occ-title" v-if="occurrences.length > 0">
       Ocorrência{{occurrences.length > 1? 's': '' }} em andamento
     </p>
-    <div class="alert" v-for="occ in occurrences" v-bind:key="occ.id + occ.transductor + occ.start_time">
-      <transducer-alert :occurrence="occ" :serious="seriousOccurrences.includes(occ.originalType)" />
+
+    <div class="alert" v-for="occ in occurrences" :key="occ" :id="occ.id" :transductor="occ.transductor" :start_time="occ.start_time">
+      <TransducerEventList :occurrence="occ" :serious="seriousOccurrences.includes(occ.originalType)" />
+      <!-- <transducer-alert :occurrence="occ" :serious="seriousOccurrences.includes(occ.originalType)" /> -->
     </div>
 
-      <p class="history">Outras ocorrências nas últimas 72h:</p>
-      <occurences-list
-        v-if="today.length > 0"
-        :title="'HOJE'"
-        :items="this.today"
-        :type="'transducer'"
-      />
-      <q-separator spaced inset v-if="yesterday.length > 0"/>
-      <occurences-list
-        v-if="yesterday.length > 0"
-        :title="'ONTEM'"
-        :items="this.yesterday"
-        :type="'transducer'"
-      />
-      <q-separator spaced inset v-if="beforeYesterday.length > 0"/>
-      <occurences-list
-        v-if="beforeYesterday.length > 0"
-        :title="'ANTEONTEM'"
-        :items="this.beforeYesterday"
-        :type="'transducer'"
-      />
-      <p v-if="today.length === 0 && yesterday.length === 0 && beforeYesterday.length === 0" class="no-occ">
-        Não houve ocorrências
-      </p>
+    <p class="history">Outras ocorrências nas últimas 72h:</p>
+    <occurences-list v-if="today.length > 0" :title="'HOJE'" :items="this.today" :type="'transducer'" />
+    <q-separator spaced inset v-if="yesterday.length > 0" />
+    <occurences-list v-if="yesterday.length > 0" :title="'ONTEM'" :items="this.yesterday" :type="'transducer'" />
+    <q-separator spaced inset v-if="beforeYesterday.length > 0" />
+    <occurences-list v-if="beforeYesterday.length > 0" :title="'ANTEONTEM'" :items="this.beforeYesterday"
+      :type="'transducer'" />
+    <p v-if="today.length === 0 && yesterday.length === 0 && beforeYesterday.length === 0" class="no-occ">
+      Não houve ocorrências
+    </p>
   </q-scroll-area>
 </template>
 
@@ -39,12 +27,15 @@ import MASTER from '../services/masterApi/http-common'
 import { separateInDays } from '../utils/transductorStatus'
 import transducerAlert from './TransducerAlert'
 import occurencesList from './OccurencesList'
+import TransducerEventList from './TransducerEventList.vue'
+
 
 export default {
   name: 'Occurences',
   components: {
-    transducerAlert: transducerAlert,
-    occurencesList: occurencesList
+    // transducerAlert: transducerAlert,
+    occurencesList: occurencesList,
+    TransducerEventList
   },
   props: [
     'id'

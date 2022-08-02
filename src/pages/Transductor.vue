@@ -23,10 +23,10 @@
         </div>
       </div>
     </div>
-    <div class="col-1"></div>
-    <div class="col-1"></div>
-    <tEventList class="col-1"/>
-    <!-- <occurences :id="id" class="col-3" /> -->
+    <occurences :id="id" class="col-3" />
+    <!-- <div class="col-1"></div>
+    <div class="col-1"></div> -->
+    <!-- <tEventList class="col-1"/> --> -->
   </div>
 </template>
 
@@ -34,7 +34,7 @@
 import MASTER from '../services/masterApi/http-common'
 import measurementsBox from '../components/MeasurementsBox'
 import activeBox from '../components/ActiveBox/ActiveBox'
-// import occurences from '../components/Occurences'
+import occurences from '../components/Occurences'
 import graph from '../components/Graph'
 import TransducerEventList from '../components/TransducerEventList.vue'
 import { mapGetters, mapActions } from 'vuex'
@@ -44,9 +44,9 @@ export default {
   components: {
     measurementsBox: measurementsBox,
     activeBox: activeBox,
-    // occurences: occurences,
+    occurences: occurences,
     graph: graph,
-    tEventList: TransducerEventList
+    // tEventList: TransducerEventList
   },
   computed: {
     ...mapGetters('transductorStore', ['filterOptions']),
