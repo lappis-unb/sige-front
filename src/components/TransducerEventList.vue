@@ -12,7 +12,29 @@
 
           <q-card-section style="max-height: 100vh" class="scroll">
             <div class="q-pa-md">
-              <q-table title="Transducers" :columns="columns" :data="occs" row-key="name" />
+              <q-table 
+                title="Transducers" 
+                :columns="columns" 
+                :data="filteredOccs" 
+                row-key="name"
+              > 
+                <template v-slot:top-right>
+                  <q-select 
+                    outlined
+                    v-model="optionSelected"
+                    :options="optionsType"
+                    input-debounce="0"
+                    emit-value
+                    map-options
+                    label="Tipos"
+                    @filter="filterFn"
+                  >
+                    <template v-slot:append>
+                      <q-icon name="search" />
+                    </template>
+                  </q-select>
+                </template>
+              </q-table>
             </div>
           </q-card-section>
 
@@ -40,15 +62,26 @@ export default {
     },
     data: function () { 
       return {
-        fixed: false, 
+        fixed: false,
+        filteredOccs: [],
+        optionSelected: '',
+        optionsType : ['','Tensão precária', 'Tensão Crítica', 'Queda de Fase',  'Falha de comunicação'], 
         columns : [
+          { name:'start_time', 
+            align: 'center', 
+            label: 'Data', 
+            field: 'start_time', 
+            format: val => `${val}`,
+            sortable: true},  
           { name: 'info', align: 'center', label: 'Fase/Nível de Energia', field: 'info', sortable: true },
           { name: 'type', align: 'center', label: 'Tipo', field: 'type', sortable: true },
-          { name: 'writtenStartTime', align: 'center', label: 'Data', field: 'writtenStartTime', sortable: true },  
         ],
         rows : [
         ]
       }
+    },
+    created () {
+
     },
     methods: {
       toggleEventList () {
@@ -65,19 +98,18 @@ export default {
             data: item.start_time
           }
         })
-        
       },
-      getDataRows () {
-        console.log('Occs: ', this.occs)
-        this.occs.forEach((item) => {
-          console.log('Item: ', item.info)
-          console.log('Item: ', item.type)
-          console.log('Item: ', item.start_time)
-          return {
-            info: item.info,
-            tipo: item.type,
-            data: item.start_time
-          }
+      filterFn(val, update) {
+        console.log('Opcao selecionada: ', val)
+        if (this.optionSelected === '') {
+          update(() => {
+            this.filteredOccs = this.occs
+          })
+        }
+ 
+        update(() => {
+          const needle = this.optionSelected.toLowerCase()
+          this.filteredOccs = this.occs.filter(v => v.type.toLowerCase().indexOf(needle) > -1)
         })
       }
     }
