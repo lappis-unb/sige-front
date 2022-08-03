@@ -33,7 +33,7 @@ import TransducerEventList from './TransducerEventList.vue'
 export default {
   name: 'Occurences',
   components: {
-    // transducerAlert: transducerAlert,
+    //transducerAlert: transducerAlert,
     occurencesList: occurencesList,
     TransducerEventList
   },

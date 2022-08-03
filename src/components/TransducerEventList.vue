@@ -1,9 +1,7 @@
 <template>
   <button v-on:click="toggleEventList">
     <div class="q-pa-md q-gutter-sm">
-      <p>{{ occurrence.type }}</p>
-      <p>{{ occurrence.info }}</p>
-      <p>{{ occurrence.writtenStartTime }}</p>
+      <!-- <p>{{ occs }}</p> -->
       <q-dialog v-model="fixed">
         <q-card>
           <q-card-section>
@@ -14,7 +12,7 @@
 
           <q-card-section style="max-height: 100vh" class="scroll">
             <div class="q-pa-md">
-              <q-table title="Transducers" :columns="columns" :data="rows" row-key="name" />
+              <q-table title="Transducers" :columns="columns" :data="occs" row-key="name" />
             </div>
           </q-card-section>
 
@@ -36,35 +34,54 @@ export default {
           
     },
     props: {
-      occurrence: {
-        type: Object
+      occs: {
+        type: Array
       }
     },
     data: function () { 
       return {
         fixed: false, 
         columns : [
-          { name: 'energia', align: 'center', label: 'Letra/Nível de Energia', field: 'energia', sortable: true },
-          { name: 'tipo', align: 'center', label: 'Tipo', field: 'tipo', sortable: true },
-          { name: 'data', align: 'center', label: 'Data', field: 'data', sortable: true },
-          
+          { name: 'info', align: 'center', label: 'Fase/Nível de Energia', field: 'info', sortable: true },
+          { name: 'type', align: 'center', label: 'Tipo', field: 'type', sortable: true },
+          { name: 'writtenStartTime', align: 'center', label: 'Data', field: 'writtenStartTime', sortable: true },  
         ],
         rows : [
-          {
-            energia: this.occurrence.info,
-            tipo: this.occurrence.type,
-            data: this.occurrence.writtenStartTime,
-          },
         ]
       }
     },
     methods: {
       toggleEventList () {
         this.fixed = !this.fixed
+        console.log('Dados: ', this.occs)
+        console.log('Occs: ', this.occs)
+        this.occs.forEach((item) => {
+          console.log('Item: ', item.info)
+          console.log('Item: ', item.type)
+          console.log('Item: ', item.start_time)
+          return {
+            info: item.info,
+            tipo: item.type,
+            data: item.start_time
+          }
+        })
+        
+      },
+      getDataRows () {
+        console.log('Occs: ', this.occs)
+        this.occs.forEach((item) => {
+          console.log('Item: ', item.info)
+          console.log('Item: ', item.type)
+          console.log('Item: ', item.start_time)
+          return {
+            info: item.info,
+            tipo: item.type,
+            data: item.start_time
+          }
+        })
       }
-    },
+    }
   }
-
 
 </script>
 

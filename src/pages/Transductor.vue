@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-9">
+    <div class="col-11">
       <div class="row">
         <measurements-box class="col-8" :id="id" />
         <active-box class="col-3" :id="id" />
@@ -23,10 +23,12 @@
         </div>
       </div>
     </div>
-    <occurences :id="id" class="col-3" />
+      <tEventList class="col-1" :occs="occurrences" />
+      <!-- <transducer-alert :occurrence="occ" :serious="seriousOccurrences.includes(occ.originalType)" /> -->
+    <!-- <button class="col-1">Click me</button> -->
+    <!-- <occurences style="display: none" :id="id" class="col-3" /> -->
     <!-- <div class="col-1"></div>
     <div class="col-1"></div> -->
-    <!-- <tEventList class="col-1"/> --> -->
   </div>
 </template>
 
@@ -38,15 +40,17 @@ import occurences from '../components/Occurences'
 import graph from '../components/Graph'
 import TransducerEventList from '../components/TransducerEventList.vue'
 import { mapGetters, mapActions } from 'vuex'
+import { separateInDays } from '../utils/transductorStatus'
+
 
 export default {
   name: 'Transductor',
   components: {
     measurementsBox: measurementsBox,
     activeBox: activeBox,
-    occurences: occurences,
+    //occurences: occurences,
     graph: graph,
-    // tEventList: TransducerEventList
+    tEventList: TransducerEventList
   },
   computed: {
     ...mapGetters('transductorStore', ['filterOptions']),
@@ -66,7 +70,12 @@ export default {
       model: '',
       serial_number: '',
       groups: [],
-      history: ''
+      history: '',
+      today: [],
+      yesterday: [],
+      beforeYesterday: [],
+      occurrences: [],
+      seriousOccurrences: ['phase_drop', 'critical_tension']
     }
   },
   created () {
@@ -81,6 +90,52 @@ export default {
           this.groupRequest(group)
         })
         this.changePage(res.data.name)
+      })
+    MASTER.get('/occurences/?type=period&id=' + id)
+      .then(async res => {
+        await separateInDays({
+          eventsArray: res.data.critical_tension,
+          type: 'critical_tension',
+          today: this.today,
+          yesterday: this.yesterday,
+          beforeYesterday: this.beforeYesterday,
+          occurrences: this.occurrences
+        })
+        await separateInDays({
+          eventsArray: res.data.precarious_tension,
+          type: 'precarious_tension',
+          today: this.today,
+          yesterday: this.yesterday,
+          beforeYesterday: this.beforeYesterday,
+          occurrences: this.occurrences
+        })
+        await separateInDays({
+          eventsArray: res.data.phase_drop,
+          type: 'phase_drop',
+          today: this.today,
+          yesterday: this.yesterday,
+          beforeYesterday: this.beforeYesterday,
+          occurrences: this.occurrences
+        })
+        await separateInDays ({
+          eventsArray: res.data.transductor_connection_fail,
+          type: 'conection_fail',
+          today: this.today,
+          yesterday: this.yesterday,
+          beforeYesterday: this.beforeYesterday,
+          occurrences: this.occurrences
+        })
+        await separateInDays ({
+          eventsArray: res.data.slave_connection_fail,
+          type: 'conection_fail',
+          today: this.today,
+          yesterday: this.yesterday,
+          beforeYesterday: this.beforeYesterday,
+          occurrences: this.occurrences
+        })
+      })
+      .catch(err => {
+        console.log(err)
       })
   },
   methods: {
