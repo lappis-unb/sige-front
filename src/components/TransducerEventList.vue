@@ -20,6 +20,8 @@
                 virtual-scroll
                 :rows-per-page-options="[0]"
                 :pagination.sync="pagination"
+                :filter="optionSelected"
+                :filter-method="filterFn"
               > 
                 <template v-slot:top-right>
                   <q-select 
@@ -32,7 +34,6 @@
                     emit-value
                     map-options
                     label="Tipos"
-                    @filter="filterFn"
                   >
                     <template v-slot:append>
                       <q-icon name="search" />
@@ -88,36 +89,18 @@ export default {
         ]
       }
     },
-    created () {
-      this.filteredOccs = this.occs.forEach((occ) => {
-        console.log('Time: ', occ.start_time.split('T')[0])
-        return occ.start_time.split('T')[0]
-      })
-    },
-    computed: {
-    
-    },
     methods: {
       toggleEventList () {
         this.fixed = !this.fixed
-        console.log('Occs: ', this.occs)
       },
       formatedOccDate (date) {
         return date.split('T')[0]
       },
-      filterFn(val, update) {
-        if (this.optionSelected === '') {
-          update(() => {
-            this.filteredOccs = this.occs.forEach(occ => this.formatedOccDate(occ.start_time))
-          })
-        }
- 
-        update(() => {
-          const needle = this.optionSelected.toLowerCase()
-          this.filteredOccs = this.occs.forEach(occ => this.formatedOccDate(occ.start_time))
-          this.filteredOccs = this.occs.filter(v => v.type.toLowerCase().indexOf(needle) > -1)
-
-        })
+      filterFn(rows, optionSelected, cols, cellValue) {
+        const lowerTerms = optionSelected ? optionSelected.toLowerCase() : ''
+        return rows.filter(
+          row => cols.some(col => (cellValue(col, row) + '').toLowerCase().indexOf(lowerTerms) !== -1)
+        )
       }
     }
   }

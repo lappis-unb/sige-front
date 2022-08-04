@@ -152,14 +152,12 @@ export default {
         })
     },
     formatOccs(occurences) {
-      console.log('Ocurrences: ', occurences)
       occurences.map((occ) => {
         if (occ.start_time) {
           occ.start_time = occ.start_time.split('T')[0]
         }
         return this.formatedOcurrences.push(occ)
       })
-      console.log('Ocurrences Formatedd: ', this.formatedOcurrences)
       return this.formatedOcurrences
     }
   }
