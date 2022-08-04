@@ -151,15 +151,22 @@ export default {
           this.groups.push(res.data.name)
         })
     },
+    formatDate(input) {
+    var datePart = input.match(/\d+/g),
+    year = datePart[0].substring(),
+    month = datePart[1], day = datePart[2];
+
+    return day + '/' + month + '/' + year;
+    },
     formatOccs(occurences) {
       occurences.map((occ) => {
         if (occ.start_time) {
-          occ.start_time = occ.start_time.split('T')[0]
+          occ.start_time = this.formatDate(occ.start_time.split('T')[0])
         }
         return this.formatedOcurrences.push(occ)
       })
       return this.formatedOcurrences
-    }
+    },
   }
 }
 </script>
