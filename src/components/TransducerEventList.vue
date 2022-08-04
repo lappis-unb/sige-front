@@ -1,5 +1,9 @@
 <template>
   <button v-on:click="toggleEventList">
+    <q-icon name="open_in_new" size="100px" />
+    <q-tooltip anchor="center left">
+      <div class="tooltip">Eventos do Transducer</div>
+    </q-tooltip>
     <div class="q-pa-md q-gutter-sm">
       <!-- <p>{{ occs }}</p> -->
       <q-dialog v-model="fixed" style="max-width: 650px">
@@ -12,29 +16,12 @@
 
           <q-card-section style="max-height: 100vh" class="scroll">
             <div class="q-pa-md">
-              <q-table 
-                title="Transducers" 
-                :columns="columns" 
-                :data="filteredOccs" 
-                row-key="name"
-                virtual-scroll
-                :rows-per-page-options="[0]"
-                :pagination.sync="pagination"
-                :filter="optionSelected"
-                :filter-method="filterFn"
-              > 
+              <q-table title="Transducers" :columns="columns" :data="filteredOccs" row-key="name" virtual-scroll
+                :rows-per-page-options="[0]" :pagination.sync="pagination" :filter="optionSelected"
+                :filter-method="filterFn">
                 <template v-slot:top-right>
-                  <q-select 
-                    outlined
-                    v-model="optionSelected"
-                    :options="optionsType"
-                    option-label="type"
-                    option-value="id"
-                    input-debounce="0"
-                    emit-value
-                    map-options
-                    label="Tipos"
-                  >
+                  <q-select outlined v-model="optionSelected" :options="optionsType" option-label="type"
+                    option-value="id" input-debounce="0" emit-value map-options label="Tipos">
                     <template v-slot:append>
                       <q-icon name="search" />
                     </template>
@@ -108,5 +95,16 @@ export default {
 </script>
 
 <style>
+button {
+   border-top-left-radius: 0.2em;
+   border-bottom-left-radius: 0.2em;
+}
 
+q-tooltip {
+  background-color: blue;
+}
+
+.tooltip {
+  font-size: 20px;
+}
 </style>
