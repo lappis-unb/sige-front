@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-      <tEventList class="col-1" :occs="occurrences" />
+      <tEventList class="col-1" :occs="formatedOcurrences" />
       <!-- <transducer-alert :occurrence="occ" :serious="seriousOccurrences.includes(occ.originalType)" /> -->
     <!-- <button class="col-1">Click me</button> -->
     <!-- <occurences style="display: none" :id="id" class="col-3" /> -->
@@ -41,6 +41,7 @@ import graph from '../components/Graph'
 import TransducerEventList from '../components/TransducerEventList.vue'
 import { mapGetters, mapActions } from 'vuex'
 import { separateInDays } from '../utils/transductorStatus'
+import noThisBeforeSuper from 'eslint/lib/rules/no-this-before-super'
 
 
 export default {
@@ -74,6 +75,7 @@ export default {
       today: [],
       yesterday: [],
       beforeYesterday: [],
+      formatedOcurrences: [],
       occurrences: [],
       seriousOccurrences: ['phase_drop', 'critical_tension']
     }
@@ -133,10 +135,12 @@ export default {
           beforeYesterday: this.beforeYesterday,
           occurrences: this.occurrences
         })
+        await this.formatOccs(this.occurrences)
       })
       .catch(err => {
         console.log(err)
       })
+    
   },
   methods: {
     ...mapActions('userStore', ['changePage']),
@@ -146,6 +150,17 @@ export default {
         .then((res) => {
           this.groups.push(res.data.name)
         })
+    },
+    formatOccs(occurences) {
+      console.log('Ocurrences: ', occurences)
+      occurences.map((occ) => {
+        if (occ.start_time) {
+          occ.start_time = occ.start_time.split('T')[0]
+        }
+        return this.formatedOcurrences.push(occ)
+      })
+      console.log('Ocurrences Formatedd: ', this.formatedOcurrences)
+      return this.formatedOcurrences
     }
   }
 }
