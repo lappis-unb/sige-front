@@ -74,6 +74,13 @@ export default {
       endDate: ''
     }
   },
+  mounted () {
+    this.$root.$on('getTensionGraph', (data) => {
+      this.startDate = data.start_time
+      this.endDate = data.end_time
+      this.applyFilter()
+    })
+  },
 
   created () {
     this.vision = this.visionOptions[0].value

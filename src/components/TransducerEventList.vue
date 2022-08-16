@@ -1,5 +1,5 @@
 <template>
-  <button v-on:click="toggleEventList">
+  <button v-on:click="toggleModalEvents">
     <q-icon name="open_in_new" size="100px" />
     <q-tooltip anchor="center left">
       <div class="tooltip">Eventos do Transducer</div>
@@ -16,8 +16,15 @@
 
           <q-card-section style="max-height: 100vh" class="scroll">
             <div class="q-pa-md">
-              <q-table title="Transducers" :columns="columns" :data="filteredOccs" row-key="name" virtual-scroll
-                :rows-per-page-options="[0]" :pagination.sync="pagination" :filter="optionSelected"
+              <q-table 
+                title="Transducers" 
+                :columns="columns" 
+                :data="filteredOccs" 
+                row-key="name" 
+                @row-click="getTensionGraphic"
+                virtual-scroll
+                :rows-per-page-options="[0]" :pagination.sync="pagination" 
+                :filter="optionSelected"
                 :filter-method="filterFn">
                 <template v-slot:top-right>
                   <q-select outlined v-model="optionSelected" :options="optionsType" option-label="type"
@@ -45,9 +52,6 @@
 <script>
 
 export default {
-    components: {
-          
-    },
     props: {
       occs: {
         type: Array
@@ -73,17 +77,31 @@ export default {
           { name: 'type', align: 'center', label: 'Tipo', field: 'type', sortable: false },
         ],
         rows : [
-        ]
+        ],
       }
     },
     methods: {
-      toggleEventList () {
+      toggleModalEvents () {
         this.fixed = !this.fixed
       },
-      formatedOccDate (date) {
-        return date.split('T')[0]
+      getTensionGraphic (e, row) {
+        if (e.target.nodeName === 'TD') {
+          this.fixed = !this.fixed;
+          this.$root.$emit('getTensionGraph', {
+            start_time: row.start_time,
+            end_time: this.getEndTimeMock()
+          })
+        } 
       },
-      filterFn(rows, optionSelected, cols, cellValue) {
+      getEndTimeMock () {
+        let date = new Date()
+        const dd = String(date.getDate()).padStart(2, '0');
+        const mm = String(date.getMonth() + 1).padStart(2, '0'); 
+        const yyyy = date.getFullYear();
+
+        return dd + '/' + mm + '/' + yyyy
+      },
+       filterFn(rows, optionSelected, cols, cellValue) {
         const lowerTerms = optionSelected ? optionSelected.toLowerCase() : ''
         return rows.filter(
           row => cols.some(col => (cellValue(col, row) + '').toLowerCase().indexOf(lowerTerms) !== -1)
