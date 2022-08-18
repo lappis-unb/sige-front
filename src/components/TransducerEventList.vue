@@ -22,10 +22,18 @@
                 :data="filteredOccs" 
                 row-key="name" 
                 @row-click="getTensionGraphic"
-                virtual-scroll
                 :rows-per-page-options="[0]" :pagination.sync="pagination" 
                 :filter="optionSelected"
                 :filter-method="filterFn">
+                <template v-slot:body="props">
+                  <q-tr :props="props" >
+                    <q-td class="data" key="start_time" :props="props">{{ props.row.start_time }}
+                      <q-btn v-if="props.row.type==='Tensão precária' || props.row.type === 'Tensão crítica'" icon="info" @click.stop="getTensionGraphic(props.row)" dense flat/>
+                    </q-td>
+                    <q-td key="info" :props="props">{{ props.row.info }}</q-td>
+                    <q-td :class="formatRow(props.row.type)" key="type" :props="props">{{ props.row.type }}</q-td>
+                  </q-tr>
+                </template>
                 <template v-slot:top-right>
                   <q-select outlined v-model="optionSelected" :options="optionsType" option-label="type"
                     option-value="id" input-debounce="0" emit-value map-options label="Tipos">
@@ -84,14 +92,18 @@ export default {
       toggleModalEvents () {
         this.fixed = !this.fixed
       },
-      getTensionGraphic (e, row) {
-        if (e.target.nodeName === 'TD') {
+      getTensionGraphic (row) {
+        if (row.type === 'Tensão precária' || row.type === 'Tensão crítica') {
           this.fixed = !this.fixed;
           this.$root.$emit('getTensionGraph', {
             start_time: row.start_time,
             end_time: this.getEndTimeMock()
           })
         } 
+      },
+      formatRow (row) {
+        if (row === 'Tensão precária' || row === 'Tensão crítica') return 'text-red'
+
       },
       getEndTimeMock () {
         let date = new Date()
@@ -124,5 +136,11 @@ q-tooltip {
 
 .tooltip {
   font-size: 20px;
+}
+
+.data {
+  padding-left: 50px;
+  display: flex;
+  align-items: center;
 }
 </style>
