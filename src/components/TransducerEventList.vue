@@ -17,7 +17,7 @@
           <q-card-section style="max-height: 100vh" class="scroll">
             <div class="q-pa-md">
               <q-table 
-                title="Transducers" 
+                title="Histórico de Eventos" 
                 :columns="columns" 
                 :data="filteredOccs" 
                 row-key="name" 
