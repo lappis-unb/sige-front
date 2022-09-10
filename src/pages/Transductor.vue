@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-11">
+    <div class="col-9">
       <div class="row">
         <measurements-box class="col-8" :id="id" />
         <active-box class="col-3" :id="id" />
@@ -23,12 +23,7 @@
         </div>
       </div>
     </div>
-      <tEventList class="col-1" :occs="formatedOcurrences" />
-      <!-- <transducer-alert :occurrence="occ" :serious="seriousOccurrences.includes(occ.originalType)" /> -->
-    <!-- <button class="col-1">Click me</button> -->
-    <!-- <occurences style="display: none" :id="id" class="col-3" /> -->
-    <!-- <div class="col-1"></div>
-    <div class="col-1"></div> -->
+    <OcurrencesTab class="col-3"  :occurrences="formatedOcurrences" />
   </div>
 </template>
 
@@ -37,6 +32,7 @@ import MASTER from '../services/masterApi/http-common'
 import measurementsBox from '../components/MeasurementsBox'
 import activeBox from '../components/ActiveBox/ActiveBox'
 import occurences from '../components/Occurences'
+import OcurrencesTab from '../components/OccurrencesTab.vue'
 import graph from '../components/Graph'
 import TransducerEventList from '../components/TransducerEventList.vue'
 import { mapGetters, mapActions } from 'vuex'
@@ -49,9 +45,8 @@ export default {
   components: {
     measurementsBox: measurementsBox,
     activeBox: activeBox,
-    //occurences: occurences,
+    OcurrencesTab,
     graph: graph,
-    tEventList: TransducerEventList
   },
   computed: {
     ...mapGetters('transductorStore', ['filterOptions']),

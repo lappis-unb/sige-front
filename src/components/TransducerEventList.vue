@@ -1,20 +1,10 @@
 <template>
-  <button v-on:click="toggleModalEvents">
-    <q-icon name="open_in_new" size="100px" />
-    <q-tooltip anchor="center left">
-      <div class="tooltip">Eventos do Transducer</div>
-    </q-tooltip>
     <div class="q-pa-md q-gutter-sm">
-      <!-- <p>{{ occs }}</p> -->
-      <q-dialog v-model="fixed" style="max-width: 650px">
         <q-card>
           <q-card-section>
             <div class="text-h6">Lista de Transducers</div>
           </q-card-section>
-
           <q-separator />
-
-          <q-card-section style="max-height: 100vh" class="scroll">
             <div class="q-pa-md">
               <q-table 
                 title="Histórico de Eventos" 
@@ -44,17 +34,9 @@
                 </template>
               </q-table>
             </div>
-          </q-card-section>
-
           <q-separator />
-
-          <q-card-actions align="right">
-            <q-btn flat label="Fechar" color="primary" v-close-popup />
-          </q-card-actions>
         </q-card>
-      </q-dialog>
     </div>
-  </button>
 </template>
 
 <script>
