@@ -211,7 +211,7 @@
 </template>
 
 <script>
-import MASTER from '../services/masterApi/http-common'
+import MASTER from '../../services/masterApi/http-common'
 
 export default {
   data () {
