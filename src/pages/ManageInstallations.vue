@@ -1,10 +1,6 @@
 <template>
   <q-page class="flex flex-start column q-pa-md">
-    <div
-      class="q-pa-sm"
-      v-for="item in graphData"
-      :key="item.name"
-    >
+    <div class="q-pa-sm" v-for="item in graphData" :key="item.name">
       <a :href="item.link" style="text-decoration: none">
         <q-card class="installation-card">
           <q-list>
@@ -29,7 +25,7 @@ import { mapActions } from 'vuex'
 
 export default {
   name: 'ManageInstallations',
-  data () {
+  data() {
     return {
       graphData: [
         {
@@ -51,7 +47,6 @@ export default {
           link: '/slaves',
           name: 'Servidores Distribuídos',
           icon: 'fa-server'
-
         },
         {
           link: '/transductors',
@@ -59,14 +54,14 @@ export default {
           icon: 'fa-weight'
         },
         {
-          image: 'statics/Relatorios.png',
+          image: 'Relatorios.png',
           link: '/tariffs',
           name: 'Tarifas'
         }
       ]
     }
   },
-  created () {
+  created() {
     this.changePage('Gerenciar Instalações')
   },
   methods: {
