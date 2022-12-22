@@ -72,8 +72,5 @@
     "testPathIgnorePatterns": [
       "**.stories.js"
     ]
-  },
-  "resolutions": {
-    "@babel/parser": "7.7.5"
   }
 }
