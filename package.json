@@ -58,7 +58,8 @@
     "eslint-plugin-vue": "^8.4.1",
     "identity-obj-proxy": "^3.0.0",
     "prettier": "2.5.1",
-    "vue-loader": "^15.9.8"
+    "vue-loader": "^15.9.8",
+    "workbox-webpack-plugin": "^5.0.0"
   },
   "engines": {
     "node": ">= 10.18.1",
