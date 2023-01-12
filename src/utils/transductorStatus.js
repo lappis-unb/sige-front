@@ -8,7 +8,7 @@ export function getDateNowSelectFormat (daysBeforeToday = 0) {
 }
 
 export function getDateAndHourFormatted(date) {
-  
+
   var dateUTC = new Date(date);
 
   return `${dateUTC.toLocaleDateString('pt-BR')} às ${dateUTC.toLocaleTimeString()}`
@@ -160,4 +160,12 @@ export function getTimePassed (time) {
   } else {
     return 'agora'
   }
+}
+
+export const isOccurrenceSerious = (type) => {
+  if (['phase_drop', 'critical_tension'].includes(type)) {
+    return true
+  }
+
+  return false
 }

@@ -23,25 +23,27 @@
         </div>
       </div>
     </div>
-    <occurences :id="id" class="col-3"/>
+
+    <TransducerEvents :id="id" class="col-3"/>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import MASTER from '../services/masterApi/http-common'
+
 import measurementsBox from '../components/MeasurementsBox'
 import activeBox from '../components/ActiveBox/ActiveBox'
-import occurences from '../components/Occurences'
 import graph from '../components/Graph'
-import { mapGetters, mapActions } from 'vuex'
+import TransducerEvents from "src/components/Transducer/Events"
 
 export default {
   name: 'Transductor',
   components: {
     measurementsBox: measurementsBox,
     activeBox: activeBox,
-    occurences: occurences,
-    graph: graph
+    graph: graph,
+    TransducerEvents
   },
   computed: {
     ...mapGetters('transductorStore', ['filterOptions']),
