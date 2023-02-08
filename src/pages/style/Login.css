@@ -1,0 +1,43 @@
+.secondary-text {
+    font-family: Roboto;
+    font-size: 17px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.43;
+    letter-spacing: 0.25px;
+    color: rgba(0, 0, 0, 0.87);
+}
+.primary-text {
+    font-family: Roboto;
+    font-size: 25px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.5;
+    letter-spacing: 0.15px;
+    text-align: center;
+    color: rgba(0, 64, 126, 100%);
+}
+.driver-text {
+    color: rgba(0, 64, 126, 100%);
+    font-family: Roboto;
+    font-size: 30px;
+    font-weight: 300;
+    font-stretch: normal;
+    font-style: italic;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+}
+.login-text {
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.25px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.6);
+}

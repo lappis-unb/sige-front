@@ -31,6 +31,8 @@ import DashCampusTab from 'components/dashboard/DashCampusTab/DashCampusTab'
 import DashBottomBar from 'components/dashboard/DashBottomBar/DashBottomBar.vue'
 import DashGeneralEventBar from 'components/dashboard/DashGeneralEventBar/DashGeneralEventBar'
 
+require('./style/DashboardBase.css')
+
 export default {
   name: 'DashboardBase',
   components: {
@@ -93,38 +95,11 @@ export default {
 </script>
 
 <style lang="scss">
-  html {
-    background-color: #00080f;
-  }
-
   .base {
     background-color: #00080f;
     color: rgba($color: white, $alpha: .6);
     .active {
       color: white;
     }
-  }
-
-  #base {
-    min-height: 100vh;
-    max-height: 100vh;
-  }
-
-  .card-bg {
-    background-color: #00101f;
-    color: white;
-  }
-
-  .card-base {
-    min-height: 100%;
-    max-height: 100%;
-  }
-
-  .card-title {
-    font-size: 24px;
-  }
-
-  #conn-error {
-    margin-top: 30vh;
   }
 </style>

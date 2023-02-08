@@ -20,6 +20,8 @@
 <script>
 import { mapActions } from 'vuex'
 
+require('./style/Index.css')
+
 export default {
   name: 'PageIndex',
   data () {
@@ -57,16 +59,3 @@ export default {
 }
 </script>
 
-<style>
-.card-text {
-  font-family: Roboto;
-  font-size: 24px;
-  font-weight: 300;
-  font-stretch: normal;
-  font-style: italic;
-  line-height: normal;
-  letter-spacing: normal;
-  text-align: center;
-  color: rgba(0, 0, 0, 0.87);
-}
-</style>

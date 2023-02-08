@@ -58,6 +58,8 @@
 import MASTER from '../services/masterApi/http-common'
 import { mapActions } from 'vuex'
 
+require('./style/Register.css')
+
 export default {
   name: 'Register',
   created () {
@@ -121,33 +123,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-  .secondary-text {
-    font-size: 1.3em;
-  }
-  .primary-text {
-    // font-family: ?
-    font-size: 2em;
-  }
-  .driver-text {
-    color: rgba(0, 64, 126, 100%);
-    font-size: 2em;
-    text-align: center;
-    padding-left: 5%;
-    padding-right: 5%;
-  }
-  .login-text {
-    color: rgba(100, 100, 100, 100%);
-  }
-  .helper-text {
-    font-family: Roboto;
-    font-size: 20px;
-    font-weight: 500;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: 0.25px;
-    text-align: center;
-    color: rgba(0, 0, 0, 0.6);
-  }
-</style>
+

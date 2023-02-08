@@ -20,6 +20,8 @@
 import TotalCostFilter from '../components/TotalCostFilter/TotalCostFilter.vue'
 import { mapGetters, mapActions } from 'vuex'
 
+require('./style/Reports.css')
+
 export default {
   name: 'Report',
   components: {
@@ -120,25 +122,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  .q-table__top,
-  thead tr th {
-    background-color: #00417e !important;
-    color: #fff;
-    font-size: 1em !important;
-  }
-
-  thead tr.meter-header-group {
-    height: 1em;
-  }
-
-  thead tr.meter-header-group th {
-    border: none;
-    padding: 0 0 4px;
-  }
-
-  .meter-header-group th.meter-table-header-group-cell-grouped {
-    border-bottom: solid 1px #527ea7;
-  }
-</style>
