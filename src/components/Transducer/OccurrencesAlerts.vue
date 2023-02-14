@@ -1,7 +1,8 @@
 <template>
     <q-scroll-area class="full-height">
         <div class="q-py-sm" v-for="occurrence in occurrences" :key="occurrence.id">
-            <transducer-alert :occurrence="occurrence" :serious="occurrence.serious" />
+            <TransducerAlert :serious="occurrence.serious" :type="occurrence.type" :info="occurrence.info"
+                :written-start-time="occurrence.writtenStartTime" />
         </div>
     </q-scroll-area>
 </template>
