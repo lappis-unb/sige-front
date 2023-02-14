@@ -501,6 +501,7 @@
             })
             console.log(err)
           })
+        this.newTransductor.grouping = []
       },
       getCampi () {
         const that = this
