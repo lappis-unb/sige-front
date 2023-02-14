@@ -2,29 +2,29 @@
   <div class="row">
     <div class="col-9">
       <div class="row">
-        <measurements-box class="col-8" :id="id"/>
-        <active-box class="col-3" :id="id"/>
+        <measurements-box class="col-8" :id="id" />
+        <active-box class="col-3" :id="id" />
       </div>
-      <graph :transductorId='id' :exportOptions="exportOptions"/>
-      <q-separator spaced inset/>
+      <graph :transductorId='id' :exportOptions="exportOptions" />
+      <q-separator spaced inset />
       <div class="row">
         <div class="transductor-info col-3">
           <p class="title">Dados do medidor</p>
-          <a class="data-label">MODELO</a><br/>
-          <a class="data-body">{{model}}</a><br/>
-          <a class="data-label">NÚM. DE SÉRIE</a><br/>
-          <a class="data-body">{{serial_number}}</a><br/>
-          <a class="data-label">GRUPOS</a><br/>
-          <a class="data-body" v-for="(group, i) in groups" v-bind:key="i"> {{group}}, </a>
+          <a class="data-label">MODELO</a><br />
+          <a class="data-body">{{ model }}</a><br />
+          <a class="data-label">NÚM. DE SÉRIE</a><br />
+          <a class="data-body">{{ serial_number }}</a><br />
+          <a class="data-label">GRUPOS</a><br />
+          <a class="data-body" v-for="(group, i) in groups" v-bind:key="i"> {{ group }}, </a>
         </div>
         <div class="transductor-info col-9">
           <p class="title">Histórico</p>
-          <p class="history">{{history}}</p>
+          <p class="history">{{ history }}</p>
         </div>
       </div>
     </div>
 
-    <TransducerEvents :id="id" class="col-3"/>
+    <TransducerOccurrences :id="id" class="col-3" />
   </div>
 </template>
 
@@ -35,7 +35,7 @@ import MASTER from '../services/masterApi/http-common'
 import measurementsBox from '../components/MeasurementsBox'
 import activeBox from '../components/ActiveBox/ActiveBox'
 import graph from '../components/Graph'
-import TransducerEvents from "src/components/Transducer/Events"
+import TransducerOccurrences from "src/components/Transducer/Occurrences"
 
 export default {
   name: 'Transductor',
@@ -43,12 +43,12 @@ export default {
     measurementsBox: measurementsBox,
     activeBox: activeBox,
     graph: graph,
-    TransducerEvents
+    TransducerOccurrences
   },
   computed: {
     ...mapGetters('transductorStore', ['filterOptions']),
     ...mapGetters('userStore', ['getPage']),
-    exportOptions () {
+    exportOptions() {
       return {
         location: this.getPage,
         dimension: this.filterOptions.dimension,
@@ -57,7 +57,7 @@ export default {
       }
     }
   },
-  data () {
+  data() {
     return {
       id: this.$router.currentRoute.params.id,
       model: '',
@@ -66,7 +66,7 @@ export default {
       history: ''
     }
   },
-  created () {
+  created() {
     const id = this.$router.currentRoute.params.id
     MASTER
       .get('/energy-transductors/' + id)
@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     ...mapActions('userStore', ['changePage']),
-    groupRequest (url) {
+    groupRequest(url) {
       MASTER
         .get(url)
         .then((res) => {

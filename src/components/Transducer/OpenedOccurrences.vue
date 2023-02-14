@@ -10,7 +10,7 @@
 import TransducerAlert from 'src/components/TransducerAlert'
 
 export default {
-    name: "TransducerOpenedEvents",
+    name: "TransducerOpenedOccurrences",
     components: {
         TransducerAlert
     },

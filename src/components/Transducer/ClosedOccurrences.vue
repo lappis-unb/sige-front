@@ -32,7 +32,7 @@ import moment from 'moment'
 import { getGraph } from 'src/utils/transductorGraphControl'
 
 export default {
-    name: "TransducerClosedEvents",
+    name: "TransducerClosedOccurrences",
     components: {
     },
     props: {
