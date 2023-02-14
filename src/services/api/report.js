@@ -16,6 +16,7 @@ class Report {
         });
 
         return responseMap.data
+        
     }
 }
 
