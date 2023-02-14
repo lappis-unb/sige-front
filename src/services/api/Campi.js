@@ -13,5 +13,4 @@ class Campi{
     return response;
   }
 }
-
 export default new Campi()
