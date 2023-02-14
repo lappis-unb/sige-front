@@ -10,22 +10,22 @@
 
         <q-separator />
 
-        <TransducerOpenedOccurrences v-if="tab === 'opened'" :openedOccurrences="openedOccurrences" />
-        <TransducerClosedOccurrences v-else-if="tab === 'closed'" :closedOccurrences="closedOccurrences" />
+        <TransducerOccurrencesAlerts v-if="tab === 'opened'" :occurrences="openedOccurrences" />
+        <TransducerOccurrencesList v-else-if="tab === 'closed'" :occurrences="closedOccurrences" />
     </div>
 </template>
 
 <script>
 import MASTER from 'src/services/masterApi/http-common'
 import { getOccurenceName, getInfo, timePassedDays, isOccurrenceSerious } from 'src/utils/transductorStatus'
-import TransducerOpenedOccurrences from 'src/components/Transducer/OpenedOccurrences'
-import TransducerClosedOccurrences from 'src/components/Transducer/ClosedOccurrences'
+import TransducerOccurrencesAlerts from 'src/components/Transducer/OccurrencesAlerts'
+import TransducerOccurrencesList from 'src/components/Transducer/OccurrencesList'
 
 export default {
-    name: 'Occurrences',
+    name: 'TransducerOccurrences',
     components: {
-        TransducerOpenedOccurrences,
-        TransducerClosedOccurrences
+        TransducerOccurrencesAlerts,
+        TransducerOccurrencesList
     },
     props: [
         'id'

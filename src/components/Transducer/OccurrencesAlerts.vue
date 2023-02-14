@@ -1,6 +1,6 @@
 <template>
     <q-scroll-area class="full-height">
-        <div class="q-py-sm" v-for="occurrence in openedOccurrences" :key="occurrence.id">
+        <div class="q-py-sm" v-for="occurrence in occurrences" :key="occurrence.id">
             <transducer-alert :occurrence="occurrence" :serious="occurrence.serious" />
         </div>
     </q-scroll-area>
@@ -10,12 +10,12 @@
 import TransducerAlert from 'src/components/TransducerAlert'
 
 export default {
-    name: "TransducerOpenedOccurrences",
+    name: "TransducerOccurrencesAlerts",
     components: {
         TransducerAlert
     },
     props: {
-        openedOccurrences: {
+        occurrences: {
             type: Array,
             required: true
         }

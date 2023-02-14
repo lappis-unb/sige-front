@@ -2,7 +2,7 @@
     <div class="full-height">
         <q-scroll-area class="full-height" visible>
             <q-list separator>
-                <q-item v-for="occurrence in closedOccurrences" :key="occurrence.id" clickable v-ripple
+                <q-item v-for="occurrence in occurrences" :key="occurrence.id" clickable v-ripple
                     @click="onOccurrenceClick(occurrence)">
                     <q-item-section>
                         <div class="row justify-between">
@@ -32,11 +32,11 @@ import moment from 'moment'
 import { getGraph } from 'src/utils/transductorGraphControl'
 
 export default {
-    name: "TransducerClosedOccurrences",
+    name: "TransducerOccurrencesList",
     components: {
     },
     props: {
-        closedOccurrences: {
+        occurrences: {
             type: Array,
             required: true
         }
