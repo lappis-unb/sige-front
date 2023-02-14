@@ -11,8 +11,7 @@
         <q-separator />
 
         <TransducerOpenedEvents v-if="tab === 'opened'" :openedOccurrences="openedOccurrences" />
-        <TransducerClosedEvents v-else-if="tab === 'closed'"
-            :closedOccurrences="new Array(100).fill(openedOccurrences).flat()" />
+        <TransducerClosedEvents v-else-if="tab === 'closed'" :closedOccurrences="closedOccurrences" />
     </div>
 </template>
 
