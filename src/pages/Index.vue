@@ -1,13 +1,9 @@
 <template>
   <q-page class="flex flex-start row q-pa-md">
-    <div
-      class="col-md-3 col-sm-6 col-lg-3 q-pa-sm"
-      v-for="item in graphData"
-      :key="item.name"
-    >
+    <div class="col-md-3 col-sm-6 col-lg-3 q-pa-sm" v-for="item in graphData" :key="item.name">
       <a :href="item.link" style="text-decoration: none">
         <q-card>
-          <img :src="item.image">
+          <img :src="item.image" />
           <q-card-section>
             <div class="card-text">{{ item.name }}</div>
           </q-card-section>
@@ -22,33 +18,33 @@ import { mapActions } from 'vuex'
 
 export default {
   name: 'PageIndex',
-  data () {
+  data() {
     return {
       graphData: [
         {
-          image: 'statics/Medidores.png',
+          image: 'Medidores.png',
           link: '/transductor_list',
           name: 'Medidores'
         },
         {
-          image: 'statics/CustoTotal.png',
+          image: 'CustoTotal.png',
           link: '/total_cost',
           name: 'Custo Total'
         },
         {
-          image: 'statics/CurvaDeCarga.png',
+          image: 'CurvaDeCarga.png',
           link: '/energy_consumption',
           name: 'Curva de Carga'
         },
         {
-          image: 'statics/Relatorios.png',
+          image: 'Relatorios.png',
           link: '/reports',
           name: 'Relatórios'
         }
       ]
     }
   },
-  created () {
+  created() {
     this.changePage('Início')
   },
   methods: {

@@ -170,7 +170,7 @@ exports[`Dash Last Measurement Card Teste de snapshot Componente formato Default
               aria-hidden="true"
               class="q-icon notranslate"
               role="presentation"
-              src="statics/ic_ocorrencia_critica_mono.svg"
+              src="ic_ocorrencia_critica_mono.svg"
               style="opacity: 0.5;"
             />
           </td>
@@ -184,7 +184,7 @@ exports[`Dash Last Measurement Card Teste de snapshot Componente formato Default
               aria-hidden="true"
               class="q-icon notranslate"
               role="presentation"
-              src="statics/ic_ocorrencia_precaria_mono.svg"
+              src="ic_ocorrencia_precaria_mono.svg"
               style="opacity: 0.5;"
             />
           </td>

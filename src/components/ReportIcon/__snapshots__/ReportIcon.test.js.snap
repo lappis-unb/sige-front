@@ -15,7 +15,7 @@ exports[`Report Icon Teste de snapshot Componente critico 1`] = `
       2
       
       <q-icon-stub
-        name="img:statics/ic_ocorrencia_critica_color.svg"
+        name="img:ic_ocorrencia_critica_color.svg"
         tag="i"
       />
     </p>
@@ -46,7 +46,7 @@ exports[`Report Icon Teste de snapshot Componente precario 1`] = `
       12
       
       <q-icon-stub
-        name="img:statics/ic_ocorrencia_precaria_color.svg"
+        name="img:ic_ocorrencia_precaria_color.svg"
         tag="i"
       />
     </p>

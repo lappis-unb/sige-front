@@ -11,30 +11,29 @@
  *   "src-ssr/extension.js"
  */
 
-const
-  express = require('express'),
+const express = require('express'),
   compression = require('compression')
 
-const
-  ssr = require('quasar-ssr'),
+const ssr = require('quasar-ssr'),
   extension = require('./extension'),
   app = express(),
   port = process.env.PORT || 3000
 
-const serve = (path, cache) => express.static(ssr.resolveWWW(path), {
-  maxAge: cache ? 1000 * 60 * 60 * 24 * 30 : 0
-})
+const serve = (path, cache) =>
+  express.static(ssr.resolveWWW(path), {
+    maxAge: cache ? 1000 * 60 * 60 * 24 * 30 : 0
+  })
 
 // gzip
-app.use(compression({ threshold: 0 }))
+app.use(ssr.resolveUrl(compression({ threshold: 0 })))
 
 // serve this with no cache, if built with PWA:
 if (ssr.settings.pwa) {
-  app.use('/service-worker.js', serve('service-worker.js'))
+  app.use(ssr.resolveUrl('/service-worker.js'), serve('service-worker.js'))
 }
 
 // serve "www" folder
-app.use('/', serve('.', true))
+app.use(ssr.resolveUrl('/'), serve('.', true))
 
 // we extend the custom common dev & prod parts here
 extension.extendApp({ app, ssr })

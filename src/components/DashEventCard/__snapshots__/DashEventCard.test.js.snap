@@ -16,7 +16,7 @@ exports[`DashEventCard Snapshot cardTypeStyle Teste da quando prop de estilo é 
     >
       <span>
         <q-icon-stub
-          name="img:statics/ic_ocorrencia_1.svg"
+          name="img:ic_ocorrencia_1.svg"
           tag="i"
         />
       </span>
@@ -63,7 +63,7 @@ exports[`DashEventCard Snapshot cardTypeStyle Teste da quando prop de estilo é 
     >
       <span>
         <q-icon-stub
-          name="img:statics/ic_ocorrencia_1.svg"
+          name="img:ic_ocorrencia_1.svg"
           tag="i"
         />
       </span>
@@ -110,7 +110,7 @@ exports[`DashEventCard Snapshot cardTypeStyle Teste da quando prop de estilo é 
     >
       <span>
         <q-icon-stub
-          name="img:statics/ic_ocorrencia_1.svg"
+          name="img:ic_ocorrencia_1.svg"
           tag="i"
         />
       </span>
@@ -157,7 +157,7 @@ exports[`DashEventCard Snapshot cardTypeStyle Teste da quando prop de estilo é 
     >
       <span>
         <q-icon-stub
-          name="img:statics/ic_ocorrencia_1.svg"
+          name="img:ic_ocorrencia_1.svg"
           tag="i"
         />
       </span>

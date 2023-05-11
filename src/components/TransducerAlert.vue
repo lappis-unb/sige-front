@@ -1,15 +1,11 @@
 <template>
   <div class="occurrence">
-    <q-icon
-      :class="{'img-light': !serious}"
-      class="occurrence-img"
-      :name="getIcon(this.serious)"
-    />
-    <q-card class="my-card" :class="{'card-light': !serious}">
-      <q-card-section class="text-type" :class="{'text-type-light': !serious}">{{ occurrence.type }}</q-card-section>
+    <q-icon :class="{ 'img-light': !serious }" class="occurrence-img" :name="getIcon(this.serious)" />
+    <q-card class="my-card" :class="{ 'card-light': !serious }">
+      <q-card-section class="text-type" :class="{ 'text-type-light': !serious }">{{ occurrence.type }}</q-card-section>
       <div class="occurrence-content">
-        <div class="caption" :class="{'caption-light': !serious}">{{occurrence.info}}</div>
-        <div class="caption" :class="{'caption-light': !serious}">Desde {{occurrence.writtenStartTime}}</div>
+        <div class="caption" :class="{ 'caption-light': !serious }">{{ occurrence.info }}</div>
+        <div class="caption" :class="{ 'caption-light': !serious }">Desde {{ occurrence.writtenStartTime }}</div>
       </div>
     </q-card>
   </div>
@@ -18,10 +14,10 @@
 <script>
 export default {
   name: 'TransducerAlert',
-  data () {
+  data() {
     return {
-      serious_icon: 'img:statics/header_ocorrencia_critica_vertical.png',
-      light_icon: 'img:statics/header_ocorrencia_precaria_vertical.png'
+      serious_icon: 'img:header_ocorrencia_critica_vertical.png',
+      light_icon: 'img:header_ocorrencia_precaria_vertical.png'
     }
   },
   props: {
@@ -36,7 +32,7 @@ export default {
     /* eslint-enable */
   },
   methods: {
-    getIcon (serious) {
+    getIcon(serious) {
       if (serious) {
         return this.serious_icon
       } else {
@@ -119,6 +115,6 @@ export default {
   padding: 3%;
 }
 .card-light {
-    background-color: #f1c809;
+  background-color: #f1c809;
 }
 </style>

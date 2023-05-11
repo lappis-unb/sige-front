@@ -2,49 +2,31 @@
   <q-header class="q-pa-none unb-blue" elevated>
     <q-toolbar class="text-white">
       <a href="/">
-        <q-img
-          src="statics/logo_smi_horizontal_header.svg"
-          style="height: 30px; width: 140px"
-        />
+        <q-img src="logo_smi_horizontal_header.svg" style="height: 30px; width: 140px" />
       </a>
-      <q-toolbar-title class="text-bold text-center">{{
-        getPage
-      }}</q-toolbar-title>
+      <q-toolbar-title class="text-bold text-center">{{ getPage }}</q-toolbar-title>
       <div style="padding-left: 8%">
         <q-icon name="account_circle" class="float-right" size="sm">
-          <q-popup-edit
-            content-class="bg-white text-black q-mr-sm q-mt-sm popup"
-            v-model="username"
-          >
+          <q-popup-edit content-class="bg-white text-black q-mr-sm q-mt-sm popup" v-model="username">
             <div v-if="userIsLogged" class="col text-center">
               <div class="text-bold" style="font-size: 1.3em">
                 {{ username }}
               </div>
               <div>{{ useremail }}</div>
               <div class="q-pa-sm">
-                <q-btn outline style="color: #0055aa" @click="goToEdit"
-                  >Alterar dados</q-btn
-                >
+                <q-btn outline style="color: #0055aa" @click="goToEdit">Alterar dados</q-btn>
               </div>
               <div class="q-pa-sm">
-                <q-btn outline style="color: #0055aa" @click="logout"
-                  >Sair</q-btn
-                >
+                <q-btn outline style="color: #0055aa" @click="logout">Sair</q-btn>
               </div>
             </div>
             <div v-else class="col text-center">
-              <div class="text-bold" style="font-size: 1.3em">
-                Você não está autenticado
+              <div class="text-bold" style="font-size: 1.3em">Você não está autenticado</div>
+              <div class="q-pa-sm">
+                <q-btn outline style="color: #0055aa" @click="goToLogin">Login</q-btn>
               </div>
               <div class="q-pa-sm">
-                <q-btn outline style="color: #0055aa" @click="goToLogin"
-                  >Login</q-btn
-                >
-              </div>
-              <div class="q-pa-sm">
-                <q-btn outline style="color: #0055aa" @click="goToRegister"
-                  >Registro</q-btn
-                >
+                <q-btn outline style="color: #0055aa" @click="goToRegister">Registro</q-btn>
               </div>
             </div>
           </q-popup-edit>

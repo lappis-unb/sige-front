@@ -1,16 +1,12 @@
 <template>
-  <q-card-section
-    v-if="reports"
-    >
-    <div
-      class="col text-center ReportIconAlignCenter"
-      :class="countReports(reports) === 0 ? 'ReportIconInactive' : ''">
+  <q-card-section v-if="reports">
+    <div class="col text-center ReportIconAlignCenter" :class="countReports(reports) === 0 ? 'ReportIconInactive' : ''">
       <p class="ReportIconCounter q-mb-none" id="ReportIconEvents">
         {{ countReports(reports) }}
-        <q-icon :name="selectIcon(reports)"/>
+        <q-icon :name="selectIcon(reports)" />
       </p>
       <small class="text-center q-mb-none">
-        {{this.label}}
+        {{ this.label }}
       </small>
     </div>
   </q-card-section>
@@ -25,12 +21,16 @@ export default {
     critical: Boolean
   },
   methods: {
-    countReports (occurrences) {
-      if (this.critical) return (occurrences.critical_tension.length + occurrences.phase_drop.length) || 0
-      return (occurrences.precarious_tension.length + occurrences.transductor_connection_fail.length + occurrences.slave_connection_fail.length) || 0
+    countReports(occurrences) {
+      if (this.critical) return occurrences.critical_tension.length + occurrences.phase_drop.length || 0
+      return (
+        occurrences.precarious_tension.length +
+          occurrences.transductor_connection_fail.length +
+          occurrences.slave_connection_fail.length || 0
+      )
     },
-    selectIcon (reports) {
-      const path = 'img:statics/ic_ocorrencia_'
+    selectIcon(reports) {
+      const path = 'img:ic_ocorrencia_'
       const iconName = this.critical ? 'critica' : 'precaria'
       return this.countReports(reports) > 0 ? `${path}${iconName}_color.svg` : `${path}${iconName}_mono.svg`
     }
@@ -39,5 +39,5 @@ export default {
 </script>
 
 <style>
-  @import './ReportIcon.css';
+@import './ReportIcon.css';
 </style>

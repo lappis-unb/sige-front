@@ -1,9 +1,7 @@
 <template>
   <q-bar class="dash-bottom-bar-container">
-      <img src="statics/logo_smi.svg" style="height: 28px;"/>
-    <div id="alerts" >
-      {{ alerts }} ocorrências em andamento
-    </div>
+    <img src="logo_smi.svg" style="height: 28px" />
+    <div id="alerts">{{ alerts }} ocorrências em andamento</div>
     <div id="datetime">
       {{ date }}
     </div>
@@ -14,9 +12,8 @@
 export default {
   name: 'DashBottomBar',
 
-  data () {
-    return {
-    }
+  data() {
+    return {}
   },
 
   props: {
@@ -27,13 +24,12 @@ export default {
   },
 
   computed: {
-    date () {
+    date() {
       const currentDate = new Date()
       return currentDate.toLocaleDateString('pt-BR')
     }
   }
-
 }
 </script>
 
-<style lang="scss" scoped src='./styles.scss'/>
+<style lang="scss" scoped src="./styles.scss" />

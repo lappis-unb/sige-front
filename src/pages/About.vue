@@ -1,22 +1,27 @@
 <template>
   <div class="container">
-    <q-icon class="img q-mb-sm" name="img:statics/logo_smi_horizontal.svg" />
+    <q-icon class="img q-mb-sm" name="img:logo_smi_horizontal.svg" />
     <div class="text-1">Projeto de Eficiência Energética CEB/FUB/FINATEC</div>
-    <div class="subtitle-1">Eficiência energética em prédios públicos   da Universidade de Brasília</div>
-    <div class="body-2">Sistema de monitoramento e gestão de energética de edificações da Universidade de Brasília. </div>
-    <div class="body-2">Monitora, em tempo real, de 30 pontos da rede elétrica da UnB. Incluindo a produção de energia dos sistemas de geração fotovoltaica implantados na Universidade. </div>
-    <div class="body-2">Fornece informações de consumo, nível de tensão, fator de potência, demanda, dentre outros. </div>
+    <div class="subtitle-1">Eficiência energética em prédios públicos da Universidade de Brasília</div>
+    <div class="body-2">
+      Sistema de monitoramento e gestão de energética de edificações da Universidade de Brasília.
+    </div>
+    <div class="body-2">
+      Monitora, em tempo real, de 30 pontos da rede elétrica da UnB. Incluindo a produção de energia dos sistemas de
+      geração fotovoltaica implantados na Universidade.
+    </div>
+    <div class="body-2">
+      Fornece informações de consumo, nível de tensão, fator de potência, demanda, dentre outros.
+    </div>
     <div class="collaborators">
-      <q-icon class="logo-unb" name="img:statics/logo_unb.svg" />
-      <q-icon class="logo-unb" name="img:statics/logo_ceb.svg" />
-      <q-icon class="logo-unb" name="img:statics/logo_aneel.svg" />
-      <q-icon class="logo-unb" name="img:statics/logo_finatec@4x.png" />
+      <q-icon class="logo-unb" name="img:logo_unb.svg" />
+      <q-icon class="logo-unb" name="img:logo_ceb.svg" />
+      <q-icon class="logo-unb" name="img:logo_aneel.svg" />
+      <q-icon class="logo-unb" name="img:logo_finatec@4x.png" />
     </div>
     <div class="created">
-      <p>
-        Criação:
-      </p>
-      <q-icon class="lappis-logo" name="img:statics/logo_lappis.svg" />
+      <p>Criação:</p>
+      <q-icon class="lappis-logo" name="img:logo_lappis.svg" />
     </div>
   </div>
 </template>
@@ -26,7 +31,7 @@ import { mapActions } from 'vuex'
 
 export default {
   name: 'About',
-  created () {
+  created() {
     this.changePage('Sobre')
   },
   methods: {
