@@ -391,8 +391,16 @@
       await this.getCampi()
       await this.getGroups()
       await this.getSlaves()
-      this.getTransductors()
+      await this.getTransductors()
     },
+    watch: {
+    transductors: async function (newVal, oldVal) {
+      await this.getCampi()
+      await this.getGroups()
+      await this.getSlaves()
+      await this.getTransductors()
+  }
+},
     methods: {
       ...mapActions('userStore', ['changePage']),
       handlePressButton (type, id = null) {
@@ -435,7 +443,12 @@
           .get('energy-transductors/' + id, {})
           .then(res => {
             this.transductor = res.data
+            const groupId = this.transductor.grouping[0].match(/groups\/(?<groupId>\d+)/).groups.groupId
+            const transductorGroup = this.groups.find(group => group.id === parseInt(groupId))
+
+            this.transductor.grouping = transductorGroup.name
             this.isSelectedTransductor = true
+
           })
           .catch(err => {
             console.log(err)
@@ -443,6 +456,8 @@
       },
       putTransductor () {
         const { id } = this.transductor
+        const groupURL=(this.groups.find(group => this.transductor.grouping === group.name).url)
+        this.transductor.grouping= [groupURL]
         MASTER
           .put('energy-transductors/' + id + '/', this.transductor)
           .then(res => {
