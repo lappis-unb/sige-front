@@ -22,7 +22,8 @@
   </q-card>
 </template>
 <script>
-import MASTER from '../../services/masterApi/http-common'
+import Campi from '../../services/api/Campi'
+import EnergyTransductors from '../../services/api/EnergyTransductors'
 import mapModal from '../MapModal'
 import { mapActions } from 'vuex'
 
@@ -53,7 +54,7 @@ export default {
     },
     async getTransductors() {
       try {
-        const response = await MASTER.get(`/energy-transductors/${this.id}`)
+        const response = await EnergyTransductors.get(`/${this.id}`)
         if (response) {
           const { active, geolocation_latitude, geolocation_longitude, name } = response.data
           const campusId = response.data.campus.split('/')[4] //  response.data.campus ->  http://164.41.98.3:443/campi/1/
@@ -69,7 +70,7 @@ export default {
     },
     async getCampus() {
       try {
-        const response = await MASTER.get(`/campi/${this.campusId}`)
+        const response = await Campi.get(`/campi/${this.campusId}`)
         this.campusName = response.data.name
       } catch (error) {
         console.log(error)

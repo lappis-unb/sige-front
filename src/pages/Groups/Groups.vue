@@ -57,6 +57,7 @@
 import MASTER from '../../services/masterApi/http-common'
 import { mapActions } from 'vuex'
 import GroupDialog from '../../components/dialogs/GroupsDialog/GroupsDialog.vue'
+import Group from 'src/services/api/Group'
 
 export default {
   name: 'Groups',
@@ -128,24 +129,19 @@ export default {
       if (options[type]) options[type]()
     },
     async getGroups () {
-      await MASTER
-        .get('groups/', {})
+      Group.getGroups()
         .then(res => {
-          console.log(res.data)
           this.groups = res.data
         })
         .catch(err => {
-          this.err = err
-          console.log('err')
+          console.log(err)
         })
     },
-    getGroup (id) {
-      MASTER
-        .get('groups/' + id, {})
+    async getGroup (id) {
+      Group.getGroup(id)
         .then(res => {
-          console.log(res.data)
           this.group = res.data
-          this.isSelectedGroups = true
+          this.isSelectedGroup = true
         })
         .catch(err => {
           console.log(err)
@@ -175,9 +171,8 @@ export default {
         })
     },
     deleteGroup (id) {
-      MASTER
-        .delete('groups/' + id, {})
-        .then(res => {
+      Group.deleteGroup(id)
+        .then(() => {
           this.groups = this.groups.filter((group) => group.id !== id)
           this.$q.notify({
             type: 'positive',
@@ -185,15 +180,13 @@ export default {
           })
           this.isSelectedGroup = false
           this.group = {}
-          console.log(res.data)
         })
         .catch(err => {
           console.log(err)
         })
     },
     postGroup () {
-      MASTER
-        .post('groups/', this.newGroup)
+      Group.postGroup(this.newGroup)
         .then(res => {
           this.groups.push(res.data)
           this.newGroup = {}
@@ -203,8 +196,7 @@ export default {
         })
     },
     async getGroupTypes () {
-      await MASTER
-        .get('group-types/', this.groupTypes)
+      Group.getGroupTypes()
         .then(res => {
           this.groupTypes = res.data
         })
