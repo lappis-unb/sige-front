@@ -1,0 +1,26 @@
+html {
+    background-color: #00080f;
+}
+
+#base {
+    min-height: 100vh;
+    max-height: 100vh;
+}
+
+.card-bg {
+    background-color: #00101f;
+    color: white;
+}
+
+.card-base {
+    min-height: 100%;
+    max-height: 100%;
+}
+
+.card-title {
+    font-size: 24px;
+}
+
+#conn-error {
+    margin-top: 30vh;
+}
