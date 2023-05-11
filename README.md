@@ -23,6 +23,16 @@ All SIGE source code is licensed under [GPL v3](https://gitlab.com/lappis-unb/pr
 
 ## Locally installing
 
+### Node.js
+
+To run locally, **it is necessary to use version 12 of Node.js** (check with `node -v`). The recommended way to handle multiple versions of Node.js is to use [nvm](https://github.com/nvm-sh/nvm).
+
+If using `nvm`, run
+
+```bash
+nvm use
+```
+
 ### Install the dependencies
 
 Instal Yarn using [this link](https://classic.yarnpkg.com/lang/en/docs/install/#debian-stable), and:
@@ -63,19 +73,19 @@ After installing Docker, you can install Docker-Compose, also according to your 
 
 If you have already lifted up [SIGE Slave's API](https://gitlab.com/lappis-unb/projects/SMI/smi-slave). All you have to do is:
 
-``` bash
+```bash
 sudo docker-compose up
 ```
+
 If you haven't you must create the docker network needed for Master to connect. As:
 
-
-``` bash
+```bash
 sudo docker network create smi-network
 ```
 
 and you can lift up you Master environment with:
 
-``` bash
+```bash
 sudo docker-compose up
 ```
 
@@ -83,29 +93,29 @@ And, that's it! You have SIGE up and running!
 
 ### Team
 
-|        Member       |            E-mail            |     Contribution Period      |
-|:-------------------:|:----------------------------:|:----------------------------:|
-|   Alax Alves    | 	alaxallves@gmail.com   	|	        19 - 20           	|
-|	Andre Filho	|	andre.filho001@outlook.com	|	18	-	20	|
-|	Andre Lucas de Sousa Pinto	|	andrelucax@gmail.com	|	20	-	20	|
-|	Arthur Assis	|	arthur120496@gmail.com	|	19	-	19	|
-|	Caio Oliveira de Moraes	|	caiooliv97@gmail.com	|	21	-	21	|
-|	Clarissa Borges	|	clarissalimab08@gmail.com	|	20	-	20	|
-|	Elias Bernardo	|	ebmm01@gmail.com	|	21	-	21	|
-|	Ezequiel De Oliveira	|	ezequiel1de1oliveira@gmail.com	|	20	-	20	|
-|	Gabriela Barrozo Guedes	|	gabrielabguedes@gmail.com	|	19	-	20	|
-|	Guilherme Augusto	|	guilherme.francais@gmail.com	|	19	-	21	|
-|	João Vitor	|	joaovytor0@gmail.com	|	19	-	19	|
-|	Joberth Rogers	|	joberth.rogers18@gmail.com	|	20	-	20	|
-|	Larissa Sales	|	larissa.s.sales@outlook.com	|	20	-	20	|
-|	Leonardo Medeiros	|	leonardomedeiros.6@gmail.com	|	20	-	20	|
-|	Lucas Maciel Aguiar	|	lucasmacielaguiar@gmail.com	|	21	-	21	|
-|	Luciano Santos	|	luciano_z7@hotmail.com	|	21	-	21	|
-|	Mateus Nóbrega	|	mateus@nobrega.dev	|	20	-	20	|
-|	Murilo Loiola Dantas|	murilo.loiola.dan@gmail.com	|	21	-	21	|
-|	Rafael Makaha	|	rafael.makaha@gmail.com	|	20	-	20	|
-|	Rafaella Junqueira	|	rafaellafjunqueira@gmail.com	|	21	-	21	|
-|	Renato Coral Sampaio	|	renatocoral@gmail.com	|	20	-	21	|
-|	Renato Britto Araujo	|	renatomwbbritto@gmail.com	|	20	-	20	|
-|	Samuel de Souza Buters Pereira	|	sambuters@gmail.com	|	21	-	21	|
-|	Thalisson Melo	|	tallisonmelo46@gmail.com	|	19	-	19	|
+|             Member             |             E-mail             | Contribution Period |
+| :----------------------------: | :----------------------------: | :-----------------: |
+|           Alax Alves           |      alaxallves@gmail.com      |       19 - 20       |
+|          Andre Filho           |   andre.filho001@outlook.com   |       18 - 20       |
+|   Andre Lucas de Sousa Pinto   |      andrelucax@gmail.com      |       20 - 20       |
+|          Arthur Assis          |     arthur120496@gmail.com     |       19 - 19       |
+|    Caio Oliveira de Moraes     |      caiooliv97@gmail.com      |       21 - 21       |
+|        Clarissa Borges         |   clarissalimab08@gmail.com    |       20 - 20       |
+|         Elias Bernardo         |        ebmm01@gmail.com        |       21 - 21       |
+|      Ezequiel De Oliveira      | ezequiel1de1oliveira@gmail.com |       20 - 20       |
+|    Gabriela Barrozo Guedes     |   gabrielabguedes@gmail.com    |       19 - 20       |
+|       Guilherme Augusto        |  guilherme.francais@gmail.com  |       19 - 21       |
+|           João Vitor           |      joaovytor0@gmail.com      |       19 - 19       |
+|         Joberth Rogers         |   joberth.rogers18@gmail.com   |       20 - 20       |
+|         Larissa Sales          |  larissa.s.sales@outlook.com   |       20 - 20       |
+|       Leonardo Medeiros        |  leonardomedeiros.6@gmail.com  |       20 - 20       |
+|      Lucas Maciel Aguiar       |  lucasmacielaguiar@gmail.com   |       21 - 21       |
+|         Luciano Santos         |     luciano_z7@hotmail.com     |       21 - 21       |
+|         Mateus Nóbrega         |       mateus@nobrega.dev       |       20 - 20       |
+|      Murilo Loiola Dantas      |  murilo.loiola.dan@gmail.com   |       21 - 21       |
+|         Rafael Makaha          |    rafael.makaha@gmail.com     |       20 - 20       |
+|       Rafaella Junqueira       |  rafaellafjunqueira@gmail.com  |       21 - 21       |
+|      Renato Coral Sampaio      |     renatocoral@gmail.com      |       20 - 21       |
+|      Renato Britto Araujo      |   renatomwbbritto@gmail.com    |       20 - 20       |
+| Samuel de Souza Buters Pereira |      sambuters@gmail.com       |       21 - 21       |
+|         Thalisson Melo         |    tallisonmelo46@gmail.com    |       19 - 19       |
