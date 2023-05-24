@@ -24,7 +24,7 @@
 <script>
 import MASTER from '../../services/masterApi/http-common'
 import mapModal from '../MapModal'
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'ActiveBox',
@@ -46,14 +46,22 @@ export default {
     await this.getTransductors()
     await this.getCampus()
   },
+  computed: {
+    ...mapGetters('userStore', ['getUser'])
+  },
   methods: {
     ...mapActions('transductorStore', ['changeMapStatus']),
     map() {
       this.changeMapStatus()
     },
     async getTransductors() {
+      const user = this.getUser
       try {
-        const response = await MASTER.get(`/energy-transductors/${this.id}`)
+        const response = await MASTER.get(`/energy-transductors/${this.id}`, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         if (response) {
           const { active, geolocation_latitude, geolocation_longitude, name } = response.data
           const campusId = response.data.campus.split('/')[4] //  response.data.campus ->  http://164.41.98.3:443/campi/1/
@@ -68,8 +76,13 @@ export default {
       }
     },
     async getCampus() {
+      const user = this.getUser
       try {
-        const response = await MASTER.get(`/campi/${this.campusId}`)
+        const response = await MASTER.get(`/campi/${this.campusId}`, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         this.campusName = response.data.name
       } catch (error) {
         console.log(error)

@@ -16,6 +16,7 @@
 
 <script>
 import MASTER from '../../../services/masterApi/http-common'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'TriangularConsumptionChart',
@@ -50,7 +51,8 @@ export default {
         }
       ]
     },
-
+    ...mapGetters('userStore', ['getUser'])
+    ,
     chartOptions () {
       return {
         annotations: {
@@ -157,10 +159,18 @@ export default {
           '/graph/quarterly-consumption-off-peak/?start_date=2019-06-01 00:00&end_date=2019-06-30 23:59',
           '/graph/quarterly-consumption-peak/?start_date=2019-06-01 00:00&end_date=2019-06-30 23:59'
         ]
-
+        const user = this.getUser
         MASTER.all([
-          MASTER.get(consumption[0]),
-          MASTER.get(consumption[1])
+          MASTER.get(consumption[0], {
+            headers: {
+              'Authorization': `Token ${user.token}` 
+            }
+          }),
+          MASTER.get(consumption[1], {
+            headers: {
+              'Authorization': `Token ${user.token}` 
+            }
+          })
         ])
           .then(MASTER.spread((consA, consB) => {
             this.consumption = [...consA.data, ...consB.data]

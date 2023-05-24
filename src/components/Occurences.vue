@@ -39,6 +39,7 @@ import MASTER from '../services/masterApi/http-common'
 import { separateInDays } from '../utils/transductorStatus'
 import transducerAlert from './TransducerAlert'
 import occurencesList from './OccurencesList'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Occurences',
@@ -58,8 +59,16 @@ export default {
       seriousOccurrences: ['phase_drop', 'critical_tension']
     }
   },
+  computed: {
+    ...mapGetters('userStore', ['getUser'])
+  },
   created () {
-    MASTER.get('/occurences/?type=period&id=' + this.id)
+    const user = this.getUser;
+    MASTER.get('/occurences/?type=period&id=' + this.id, {
+      headers: {
+        'Authorization': `Token ${user.token}` 
+      }
+    })
       .then(async res => {
         await separateInDays({
           eventsArray: res.data.critical_tension,
