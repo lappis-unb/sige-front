@@ -1,3 +1,5 @@
+const Dotenv = require('dotenv-webpack');
+
 module.exports = cfg => {
   cfg.module.rules.push({
     enforce: 'pre',
@@ -8,4 +10,5 @@ module.exports = cfg => {
       formatter: require('eslint').CLIEngine.getFormatter('stylish')
     }
   })
+  cfg.plugins.push(new Dotenv());
 }
