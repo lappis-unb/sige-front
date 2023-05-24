@@ -30,6 +30,7 @@ import MASTER from '../services/masterApi/http-common'
 import DashCampusTab from 'components/dashboard/DashCampusTab/DashCampusTab'
 import DashBottomBar from 'components/dashboard/DashBottomBar/DashBottomBar.vue'
 import DashGeneralEventBar from 'components/dashboard/DashGeneralEventBar/DashGeneralEventBar'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'DashboardBase',
@@ -50,12 +51,18 @@ export default {
   computed: {
     alerts () {
       return this.eventsInProgress.count || 0
-    }
+    },
+    ...mapGetters('userStore', ['getUser'])
   },
 
   methods: {
     getAllCampi () {
-      MASTER.get('campi/')
+      const user = this.getUser
+      MASTER.get('campi/', {
+        headers: {
+          'Authorization': `Token ${user.token}` 
+        }
+      })
         .then((res) => {
           this.campiList = res.data
         })
@@ -66,7 +73,12 @@ export default {
     },
 
     getEventsInProgress () {
-      MASTER.get('occurences/')
+      const user = this.getUser
+      MASTER.get('occurences/', {
+        headers: {
+          'Authorization': `Token ${user.token}` 
+        }
+      })
         .then((res) => {
           this.eventsInProgress = res.data
         })

@@ -55,7 +55,7 @@
 
 <script>
 import MASTER from '../../services/masterApi/http-common'
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import GroupDialog from '../../components/dialogs/GroupsDialog/GroupsDialog.vue'
 
 export default {
@@ -89,6 +89,9 @@ export default {
     this.changePage('Gerenciar instalações > Agrupamentos')
     await this.getGroupTypes()
     await this.getGroups()
+  },
+  computed: {
+    ...mapGetters('userStore', ['getUser'])
   },
   methods: {
     ...mapActions('userStore', ['changePage']),
@@ -128,8 +131,13 @@ export default {
       if (options[type]) options[type]()
     },
     async getGroups () {
+      const user = this.getUser
       await MASTER
-        .get('groups/', {})
+        .get('groups/', {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           console.log(res.data)
           this.groups = res.data
@@ -140,8 +148,13 @@ export default {
         })
     },
     getGroup (id) {
+      const user = this.getUser
       MASTER
-        .get('groups/' + id, {})
+        .get('groups/' + id, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           console.log(res.data)
           this.group = res.data
@@ -153,8 +166,13 @@ export default {
     },
     putGroup () {
       const { id } = this.group
+      const user = this.getUser
       MASTER
-        .put('groups/' + id + '/', this.group)
+        .put('groups/' + id + '/', this.group, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           this.group = res.data
           this.groups = this.groups.map((group) => {
@@ -175,8 +193,13 @@ export default {
         })
     },
     deleteGroup (id) {
+      const user = this.getUser
       MASTER
-        .delete('groups/' + id, {})
+        .delete('groups/' + id, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           this.groups = this.groups.filter((group) => group.id !== id)
           this.$q.notify({
@@ -192,8 +215,13 @@ export default {
         })
     },
     postGroup () {
+      const user = this.getUser
       MASTER
-        .post('groups/', this.newGroup)
+        .post('groups/', this.newGroup, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           this.groups.push(res.data)
           this.newGroup = {}
@@ -203,8 +231,13 @@ export default {
         })
     },
     async getGroupTypes () {
+      const user = this.getUser
       await MASTER
-        .get('group-types/', this.groupTypes)
+        .get('group-types/', this.groupTypes, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           this.groupTypes = res.data
         })
