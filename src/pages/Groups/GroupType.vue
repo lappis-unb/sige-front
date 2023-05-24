@@ -137,7 +137,7 @@
 
 <script>
 import MASTER from '../../services/masterApi/http-common'
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'GroupTypes',
@@ -159,6 +159,9 @@ export default {
   created () {
     this.changePage('Gerenciar Instalações > Tipos de Agrupamentos')
     this.getGroupTypes()
+  },
+  computed: {
+    ...mapGetters('userStore', ['getUser'])
   },
   methods: {
     ...mapActions('userStore', ['changePage']),
@@ -183,8 +186,13 @@ export default {
       if (options[type]) options[type]()
     },
     getGroupTypes () {
+      const user = this.getUser
       MASTER
-        .get('group-types/', {})
+        .get('group-types/', {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           console.log(res.data)
           this.groupTypes = res.data
@@ -195,8 +203,13 @@ export default {
         })
     },
     getGroupType (id) {
+      const user = this.getUser
       MASTER
-        .get('group-types/' + id, {})
+        .get('group-types/' + id, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           console.log(res.data)
           this.groupType = res.data
@@ -208,8 +221,13 @@ export default {
     },
     putGroupType () {
       const { id } = this.groupType
+      const user = this.getUser
       MASTER
-        .put('group-types/' + id + '/', this.groupType)
+        .put('group-types/' + id + '/', this.groupType, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           this.groupType = res.data
           this.groupTypes = this.groupTypes.map((groupType) => {
@@ -230,8 +248,13 @@ export default {
         })
     },
     deleteGroupType (id) {
+      const user = this.getUser
       MASTER
-        .delete('group-types/' + id, {})
+        .delete('group-types/' + id, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           this.groupTypes = this.groupTypes.filter((groupType) => groupType.id !== id)
           this.$q.notify({
@@ -247,8 +270,13 @@ export default {
         })
     },
     postGroupType () {
+      const user = this.getUser
       MASTER
-        .post('group-types/', this.newGroupType)
+        .post('group-types/', this.newGroupType, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           this.groupTypes.push(res.data)
           this.newGroupType = {}

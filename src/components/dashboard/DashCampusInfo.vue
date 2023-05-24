@@ -60,6 +60,7 @@ import DashLastMeasurementCard from '../DashLastMeasurementCard/DashLastMeasurem
 import Occurence from '../../services/api/Occurence'
 import RealTimeMeasurement from '../../services/api/RealTimeMeasurement'
 import MASTER from '../../services/masterApi/http-common'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'DashCampusInfo',
@@ -98,9 +99,18 @@ export default {
     this.getApiInfo()
   },
 
+  computed: {
+    ...mapGetters('userStore', ['getUser'])
+  },
+
   methods: {
     getLast72hEvents (campus) {
-      MASTER.get(`/occurences/?type=period&campus=${campus.id}`)
+      const user = this.getUser
+      MASTER.get(`/occurences/?type=period&campus=${campus.id}`, {
+        headers: {
+          'Authorization': `Token ${user.token}` 
+        }
+      })
         .then((res) => {
           this.last72hEvents = res.data
           this.last72hEvents.campus_name = this.currentCampus.name

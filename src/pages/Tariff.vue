@@ -212,6 +212,7 @@
 
 <script>
 import MASTER from '../services/masterApi/http-common'
+import { mapGetters } from 'vuex'
 
 export default {
   data () {
@@ -238,10 +239,18 @@ export default {
     this.getTariffs()
     this.getCampus()
   },
+  computed: {
+    ...mapGetters('userStore', ['getUser'])
+  },
   methods: {
     getTariffs () {
+      const user = this.getUser
       MASTER
-        .get(`campi/${this.$route.params.id}/tariffs`, {})
+        .get(`campi/${this.$route.params.id}/tariffs`, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           this.tariffs = res.data
         })
@@ -251,8 +260,13 @@ export default {
         })
     },
     getTariff (id) {
+      const user = this.getUser
       MASTER
-        .get(`campi/${this.$route.params.id}/tariffs/${id}/`)
+        .get(`campi/${this.$route.params.id}/tariffs/${id}/`, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           this.tariff = res.data
         })
@@ -262,12 +276,17 @@ export default {
     },
     postTariff () {
       const that = this
+      const user = this.getUser
       MASTER
         .post(`campi/${this.$route.params.id}/tariffs/`, {
           campus: this.campus.url,
           start_date: this.newTariff.start_date,
           regular_tariff: parseFloat(this.newTariff.regular_tariff),
           high_tariff: parseFloat(this.newTariff.high_tariff)
+        }, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
         })
         .then(function () {
           that.newTariff = {}
@@ -287,8 +306,13 @@ export default {
         })
     },
     putTariff () {
+      const user = this.getUser
       MASTER
-        .put(`campi/${this.$route.params.id}/tariffs/${this.tariff.id}/`, this.tariff)
+        .put(`campi/${this.$route.params.id}/tariffs/${this.tariff.id}/`, this.tariff, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(function () {
           this.getTariffs()
           this.handleAction('togglePutModal')
@@ -306,8 +330,13 @@ export default {
         })
     },
     deleteTariff () {
+      const user = this.getUser
       MASTER
-        .delete(`campi/${this.$route.params.id}/tariffs/${this.targetId}/`)
+        .delete(`campi/${this.$route.params.id}/tariffs/${this.targetId}/`, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(function () {
           this.getTariffs()
           this.$q.notify({
@@ -346,8 +375,13 @@ export default {
       }
     },
     getCampus () {
+      const user = this.getUser
       MASTER
-        .get(`campi/${this.$route.params.id}`, {})
+        .get(`campi/${this.$route.params.id}`, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           this.campus = res.data
         })

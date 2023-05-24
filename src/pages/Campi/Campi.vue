@@ -153,7 +153,7 @@
 
 <script>
 import MASTER from '../../services/masterApi/http-common'
-import { mapActions } from 'vuex'
+import { mapGetters,  mapActions } from 'vuex'
 
 export default {
   name: 'Campi',
@@ -184,6 +184,9 @@ export default {
     this.changePage('Gerenciar Instalações - Lista de Campi')
     this.getCampi()
   },
+  computed: {
+    ...mapGetters('userStore', ['getUser'])
+  },
   methods: {
     ...mapActions('userStore', ['changePage']),
     handlePressButton(type, id = null) {
@@ -207,8 +210,13 @@ export default {
       if (options[type]) options[type]()
     },
     getCampi() {
+      const user = this.getUser
       MASTER
-        .get('campi/', {})
+        .get('campi/', {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           console.log(res.data)
           this.campi = res.data
@@ -219,8 +227,13 @@ export default {
         })
     },
     getCampus(id) {
+      const user = this.getUser
       MASTER
-        .get('campi/' + id, {})
+        .get('campi/' + id, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           console.log(res.data)
           this.campus = res.data
@@ -235,8 +248,13 @@ export default {
         this.campus.off_peak_demand = this.campus.peak_demand
       }
       const { id } = this.campus
+      const user = this.getUser
       MASTER
-        .put('campi/' + id + '/', this.campus)
+        .put('campi/' + id + '/', this.campus, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        } )
         .then(res => {
           this.campus = res.data
           this.campi = this.campi.map((campus) => {
@@ -256,8 +274,13 @@ export default {
         })
     },
     deleteCampus(id) {
+      const user = this.getUser
       MASTER
-        .delete('campi/' + id, {})
+        .delete('campi/' + id, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           this.campi = this.campi.filter((campus) => campus.id !== id)
           this.$q.notify({
@@ -279,8 +302,13 @@ export default {
       if (this.newCampus.contract_type == "Verde") {
         this.newCampus.off_peak_demand = this.newCampus.peak_demand
       }
+      const user = this.getUser
       MASTER
-        .post('campi/', this.newCampus)
+        .post('campi/', this.newCampus, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           this.campi.push(res.data)
           this.resetNewCampus()

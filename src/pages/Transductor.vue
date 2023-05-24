@@ -45,7 +45,7 @@ export default {
   },
   computed: {
     ...mapGetters('transductorStore', ['filterOptions']),
-    ...mapGetters('userStore', ['getPage']),
+    ...mapGetters('userStore', ['getUser', 'getPage']),
     exportOptions () {
       return {
         location: this.getPage,
@@ -66,8 +66,13 @@ export default {
   },
   created () {
     const id = this.$router.currentRoute.params.id
+    const user = this.getUser
     MASTER
-      .get('/energy-transductors/' + id)
+      .get('/energy-transductors/' + id, {
+        headers: {
+          'Authorization': `Token ${user.token}` 
+        }
+      })
       .then((res) => {
         this.model = res.data.model
         this.history = res.data.history
@@ -81,8 +86,13 @@ export default {
   methods: {
     ...mapActions('userStore', ['changePage']),
     groupRequest (url) {
+      const user = this.getUser
       MASTER
-        .get(url)
+        .get(url, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then((res) => {
           this.groups.push(res.data.name)
         })

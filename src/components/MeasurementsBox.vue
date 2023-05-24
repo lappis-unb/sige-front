@@ -32,6 +32,7 @@
 <script>
 import { getDateAndHourFormatted } from '../utils/transductorStatus'
 import MASTER from '../services/masterApi/http-common'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'MeasurementsBox',
@@ -48,9 +49,17 @@ export default {
       hasMeasurements: false
     }
   },
+  computed: {
+    ...mapGetters('userStore', ['getUser'])
+  },
   async created () {
+    const user = this.getUser
     await MASTER
-      .get('/realtime-measurements/?id=' + this.id)
+      .get('/realtime-measurements/?id=' + this.id, {
+        headers: {
+          'Authorization': `Token ${user.token}` 
+        }
+      })
       .then(res => {
         this.tension = {
           a: Math.round(res.data[0].voltage_a),

@@ -88,18 +88,26 @@
 
 <script>
 import MASTER from '../services/masterApi/http-common'
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   created () {
     this.changePage('Medidores')
     this.getTransductors()
   },
+  computed: {
+    ...mapGetters('userStore', ['getUser'])
+  },
   methods: {
     ...mapActions('userStore', ['changePage']),
     async getTransductors () {
+      const user = this.getUser
       await MASTER
-        .get('energy-transductors-list/')
+        .get('energy-transductors-list/', {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then((res) => {
           this.transductors = res.data
         })

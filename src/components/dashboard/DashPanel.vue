@@ -59,6 +59,7 @@
 import DashMap from './DashMap'
 import DashCampusInfo from './DashCampusInfo'
 import MASTER from '../../services/masterApi/http-common'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'DashPanel',
@@ -93,10 +94,19 @@ export default {
     this.interval = setInterval(this.selectTransductor, this.cycleTime)
   },
 
+  computed: {
+    ...mapGetters('userStore', ['getUser'])
+  },
+
   methods: {
     getTransductors () {
+      const user = this.getUser
       MASTER
-        .get(`/energy-transductors/?campus_id=${this.selectedCampus.id}`)
+        .get(`/energy-transductors/?campus_id=${this.selectedCampus.id}`, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then((res) => {
           this.transductors = res.data
           this.selectedTransductor = this.transductors[0]
@@ -105,8 +115,13 @@ export default {
     },
 
     getUnifilarDiagram () {
+      const user = this.getUser
       MASTER
-        .get(`/lines/?campus=${this.selectedCampus.id}`)
+        .get(`/lines/?campus=${this.selectedCampus.id}`, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then((res) => {
           this.unifilarDiagram = res.data
         })
@@ -114,8 +129,13 @@ export default {
     },
 
     getCampusOccurences () {
+      const user = this.getUser
       MASTER
-        .get(`/occurences/?type=active&campi_id=${this.selectedCampus.id}`)
+        .get(`/occurences/?type=active&campi_id=${this.selectedCampus.id}`, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then((res) => {
           this.occurences = [res.data.transductor_connection_fail, res.data.precarious_tension, res.data.phase_drop, res.data.critical_tension]
         })
