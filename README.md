@@ -23,6 +23,21 @@ All SIGE source code is licensed under [GPL v3](https://gitlab.com/lappis-unb/pr
 
 ## Locally installing
 
+### Environment Configuration
+
+Before running the project, make sure to perform the necessary environment configurations.
+
+1. Create a `.env` file in the project root directory.
+
+2. Open the `.env.dev` file and copy its contents.
+
+3. Paste the contents into the `.env` file you created.
+
+4. Make sure to set the SIGE_MASTER_URL variable in the `.env` file to the URL where the Master backend is running.
+
+**Note: Do not commit the `.env` file to version control. It is already added to the `.gitignore` file to ensure it remains local.**
+
+
 ### Install the dependencies
 
 Instal Yarn using [this link](https://classic.yarnpkg.com/lang/en/docs/install/#debian-stable), and:
@@ -80,6 +95,7 @@ sudo docker-compose up
 ```
 
 And, that's it! You have SIGE up and running!
+
 
 ### Team
 
