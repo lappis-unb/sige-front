@@ -23,6 +23,7 @@
 
 <script>
 import MASTER from '../services/masterApi/http-common'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Campi',
@@ -39,10 +40,18 @@ export default {
   created () {
     this.getCampi()
   },
+  computed: {
+    ...mapGetters('userStore', ['getUser'])
+  },
   methods: {
     getCampi () {
+      const user = this.getUser
       MASTER
-        .get('campi/', {})
+        .get('campi/', {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           console.log(res.data)
           this.campi = res.data

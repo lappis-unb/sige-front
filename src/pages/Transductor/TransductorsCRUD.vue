@@ -361,7 +361,7 @@
 
 <script>
   import MASTER from '../../services/masterApi/http-common'
-  import { mapActions } from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
 
   export default {
     name: 'Transductors',
@@ -393,6 +393,9 @@
       await this.getSlaves()
       this.getTransductors()
     },
+    computed: {
+      ...mapGetters('userStore', ['getUser'])
+    },
     methods: {
       ...mapActions('userStore', ['changePage']),
       handlePressButton (type, id = null) {
@@ -410,8 +413,13 @@
         if (options[type]) options[type]()
       },
       getTransductors () {
+        const user = this.getUser
         MASTER
-          .get('energy-transductors/', {})
+          .get('energy-transductors/', {
+            headers: {
+              'Authorization': `Token ${user.token}` 
+            }
+          })
           .then(res => {
             this.transductors = res.data
 
@@ -431,8 +439,13 @@
           })
       },
       getTransductor (id) {
+        const user = this.getUser
         MASTER
-          .get('energy-transductors/' + id, {})
+          .get('energy-transductors/' + id, {
+            headers: {
+              'Authorization': `Token ${user.token}` 
+            }
+          })
           .then(res => {
             this.transductor = res.data
             this.isSelectedTransductor = true
@@ -443,8 +456,13 @@
       },
       putTransductor () {
         const { id } = this.transductor
+        const user = this.getUser
         MASTER
-          .put('energy-transductors/' + id + '/', this.transductor)
+          .put('energy-transductors/' + id + '/', this.transductor, {
+            headers: {
+              'Authorization': `Token ${user.token}` 
+            }
+          })
           .then(res => {
             this.transductor = res.data
             this.transductors = this.transductors.map((transductor) => {
@@ -466,8 +484,13 @@
           })
       },
       deleteTransductor (id) {
+        const user = this.getUser
         MASTER
-          .delete('energy-transductors/' + id, {})
+          .delete('energy-transductors/' + id, {
+            headers: {
+              'Authorization': `Token ${user.token}` 
+            }
+          })
           .then(function () {
             this.transductors = this.transductors.filter((transductor) => transductor.id !== id)
             this.$q.notify({
@@ -483,8 +506,13 @@
       },
       postTransductor () {
         this.newTransductor.grouping = [this.newTransductor.grouping]
+        const user = this.getUser
         MASTER
-          .post('energy-transductors/', this.newTransductor)
+          .post('energy-transductors/', this.newTransductor, {
+            headers: {
+              'Authorization': `Token ${user.token}` 
+            }
+          })
           .then(res => {
             this.transductors.push(res.data)
             this.newTransductors = {}
@@ -504,9 +532,14 @@
       },
       getCampi () {
         const that = this
+        const user = this.getUser
         return new Promise((resolve) => {
           MASTER
-            .get('campi/', this.campi)
+            .get('campi/', this.campi, {
+              headers: {
+                'Authorization': `Token ${user.token}` 
+              }
+            })
             .then(res => {
               that.campi = res.data
               resolve()
@@ -519,9 +552,14 @@
       },
       getGroups () {
         const that = this
+        const user = this.getUser
         return new Promise((resolve) => {
           MASTER
-            .get('groups/')
+            .get('groups/', {
+              headers: {
+                'Authorization': `Token ${user.token}` 
+              }
+            })
             .then(res => {
               that.groups = res.data
               resolve()
@@ -534,9 +572,14 @@
       },
       getSlaves () {
         const that = this
+        const user = this.getUser
         return new Promise((resolve) => {
           MASTER
-            .get('slave/')
+            .get('slave/', {
+              headers: {
+                'Authorization': `Token ${user.token}` 
+              }
+            })
             .then(res => {
               that.slaves = res.data
               resolve()

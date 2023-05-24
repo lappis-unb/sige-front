@@ -163,7 +163,7 @@
 
 <script>
 import MASTER from '../../services/masterApi/http-common'
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'Slaves',
@@ -188,6 +188,9 @@ export default {
     this.changePage('Gerenciar Instalações - Servidores Distribuídos')
     this.getSlaves()
   },
+  computed: {
+    ...mapGetters('userStore', ['getUser'])
+  },
   methods: {
     ...mapActions('userStore', ['changePage']),
     handlePressButton (type, id = null) {
@@ -211,8 +214,13 @@ export default {
       if (options[type]) options[type]()
     },
     getSlaves () {
+      const user = this.getUser
       MASTER
-        .get('slave/', {})
+        .get('slave/', {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           console.log(res.data)
           this.slaves = res.data
@@ -223,8 +231,13 @@ export default {
         })
     },
     getSlave (id) {
+      const user = this.getUser
       MASTER
-        .get('slave/' + id, {})
+        .get('slave/' + id, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           console.log(res.data)
           this.slave = res.data
@@ -237,8 +250,13 @@ export default {
     putSlave () {
       const that = this
       const { id } = this.slave
+      const user = this.getUser
       MASTER
-        .put('slave/' + id + '/', that.slave)
+        .put('slave/' + id + '/', that.slave, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           that.slave = res.data
           that.slaves = that.slaves.map((slave) => {
@@ -261,8 +279,13 @@ export default {
     },
     deleteSlave (id) {
       const that = this
+      const user = this.getUser
       MASTER
-        .delete('slave/' + id, {})
+        .delete('slave/' + id, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(function () {
           that.slaves = that.slaves.filter((slave) => slave.id !== id)
           that.$q.notify({
@@ -278,8 +301,13 @@ export default {
     },
     postSlave () {
       const that = this
+      const user = this.getUser
       MASTER
-        .post('slave/', that.newSlave)
+        .post('slave/', that.newSlave, {
+          headers: {
+            'Authorization': `Token ${user.token}` 
+          }
+        })
         .then(res => {
           that.slaves.push(res.data)
           that.newSlaves = {}
