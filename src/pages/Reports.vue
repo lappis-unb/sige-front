@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <total-cost-filter />
+    <report-filter />
     <q-table
       title="Relatório por Período"
       :data="data"
@@ -17,13 +17,13 @@
 
 <script>
 // import MASTER from '../services/masterApi/http-common'
-import TotalCostFilter from '../components/TotalCostFilter/TotalCostFilter.vue'
+import ReportFilter from '../components/ReportFilter/ReportFilter.vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'Report',
   components: {
-    TotalCostFilter
+    ReportFilter
   },
   computed: {
     ...mapGetters('totalCostStore', ['totalCostChart'])
