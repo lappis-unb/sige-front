@@ -3,7 +3,7 @@
     <total-cost-filter />
     <q-table
       title="Relatório por Período"
-      :data="data"
+      :data="reports"
       :columns="columns"
       row-key="name"
       :pagination.sync="pagination"
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-// import MASTER from '../services/masterApi/http-common'
+import report from 'src/services/api/report'
 import TotalCostFilter from '../components/TotalCostFilter/TotalCostFilter.vue'
 import { mapGetters, mapActions } from 'vuex'
 
@@ -28,14 +28,18 @@ export default {
   computed: {
     ...mapGetters('totalCostStore', ['totalCostChart'])
   },
+  created () {
+    this.changePage('Relatório');
+    this.getReports();
+  },
   methods: {
     ...mapActions('userStore', ['changePage']),
     clickItem (row) {
       this.$router.push('transductor/' + row.serial_number)
+    },
+    async getReports(){
+      this.reports = await report.getReports();
     }
-  },
-  created () {
-    this.changePage('Relatório')
   },
   data () {
     return {
@@ -60,64 +64,9 @@ export default {
         { name: 'tarifa', label: 'Tarifa (R$ / kWh)', field: 'tarifa', sortable: true },
         { name: 'total', label: 'Total (R$)', field: 'total' }
       ],
-      data: [
-        {
-          name: 'Consumo (Ponta)',
-          valor_kwh: '6.966 kWh',
-          tarifa: '1,5612835',
-          total: '10.875,90'
-        },
-        {
-          name: 'Consumo (Fora de Ponta)',
-          valor_kwh: '47.856 kWh',
-          tarifa: '0,5354221',
-          total: '25.623,16'
-        },
-        {
-          name: 'Demanda Contratada',
-          valor_kwh: '188 kW',
-          tarifa: '12,2165430',
-          total: '2.296,71'
-        },
-        {
-          name: 'Demanda máxima',
-          valor_kwh: '226 kW',
-          tarifa: '-',
-          total: ''
-        },
-        {
-          name: 'Ultrapassagem de demanda',
-          valor_kwh: '38 kW',
-          tarifa: '24,4330860',
-          total: '928,25'
-        },
-        {
-          name: 'UFER (Ponta)',
-          valor_kwh: 113,
-          tarifa: '0.4017719',
-          total: '45,40'
-        },
-        {
-          name: 'UFER (Fora de Ponta)',
-          valor_kwh: 0,
-          tarifa: '-',
-          total: '0,00'
-        },
-        {
-          name: 'Energia Gerada',
-          valor_kwh: '18.930 kWh',
-          tarifa: '0,530000',
-          total: '- 10.032,90'
-        },
-        {
-          name: 'Total',
-          valor_kwh: '-',
-          tarifa: '-',
-          total: '29.736,52'
-        }
-      ]
+      reports: []
     }
-  }
+  },
 }
 </script>
 
