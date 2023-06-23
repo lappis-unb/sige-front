@@ -6,6 +6,7 @@
       :transductors="transductors"
       :occurences="occurences"
       :unifilarDiagram="unifilarDiagram"
+      :switches="switches"
       :selected-transductor="selectedTransductor"
       :current-campus="selectedCampus"/>
 
@@ -74,11 +75,12 @@ export default {
 
   data () {
     return {
-      cycleTime: 5000,
+      cycleTime: 1000,
       transductorCycleProgress: 0,
       transductors: [],
       occurences: [],
       unifilarDiagram: [],
+      switches:[],
       selectedTransductor: undefined,
       interval: undefined
     }
@@ -106,9 +108,17 @@ export default {
 
     getUnifilarDiagram () {
       MASTER
-        .get(`/lines/?campus=${this.selectedCampus.id}`)
+        .get(`/draw/?campus=${this.selectedCampus.id}`)
         .then((res) => {
           this.unifilarDiagram = res.data
+        })
+        .catch((err) => { console.error(err) })
+    },
+    getUnifilarSwitch () {
+      MASTER
+        .get(`/switch/?campus=${this.selectedCampus.id}`)
+        .then((res) => {
+          this.switches = res.data
         })
         .catch((err) => { console.error(err) })
     },
@@ -118,6 +128,7 @@ export default {
         .get(`/occurences/?type=active&campi_id=${this.selectedCampus.id}`)
         .then((res) => {
           this.occurences = [res.data.transductor_connection_fail, res.data.precarious_tension, res.data.phase_drop, res.data.critical_tension]
+          console.log(this.occurences)
         })
         .catch((err) => {
           console.error(err)
@@ -149,6 +160,7 @@ export default {
       await this.getTransductors()
       await this.getCampusOccurences()
       await this.getUnifilarDiagram()
+      await this.getUnifilarSwitch()
     }
   },
 

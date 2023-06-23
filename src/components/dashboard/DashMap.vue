@@ -4,6 +4,8 @@
       class="rounded-borders cursor-not-allowed map-dimension"
       :bounds="mapBounds"
       :options="mapOptions"
+      :zoom="zoom_ratio"
+      :center="center"
       id="region-map">
 
       <l-tile-layer
@@ -21,13 +23,22 @@
         </l-icon>
       </l-marker>
 
-      <l-line
-        v-for="line in lines"
-        :key="line.id"
-        :lat-lngs="line.coordinates"
-        :color="line.color"
-      />
+      <l-marker
+        v-for="switchh in switchesPoints"
+        :key="switchh.id"
+        :lat-lng="switchh.latLng">
+        <l-icon
+          :icon-size="[16, 16]">
+          <img src="../../statics/ic_ocorrencia_1.svg">
+        </l-icon>
+      </l-marker>
 
+      <l-line
+      v-for="item in unifilarDiagram"
+          :key="item.key"
+          :lat-lngs="item.points"
+          :color=getColorStatus(item.status)
+      />
     </l-map>
   </div>
 </template>
@@ -58,6 +69,10 @@ export default {
       type: Array,
       required: true
     },
+    switches: {
+      type: Array,
+      required: true
+    },
     currentCampus: Object,
     selectedTransductor: Object
   },
@@ -76,16 +91,17 @@ export default {
 
       center: [-15.7650, -47.8665],
       new_center: [-15.7658756, -47.8743207],
-      zoom_ratio: parseInt(this.currentCampus.zoom_ratio),
+      zoom_ratio: 16,
 
       mapOptions: {
-        zoomControl: false
+        zoomControl: true
       },
 
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       attribution:
         '© <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      selectedPeriod: 'DIA'
+      selectedPeriod: 'DIA',
+      
     }
   },
 
@@ -120,30 +136,22 @@ export default {
             name: t.name,
             coordinates: [t.geolocation_latitude, t.geolocation_longitude],
             img_src: 'statics/ic_sem_ocorrencia.svg'
-
           })
         }
       })
 
       return arr
     },
-    lines () {
-      let arr = []
-      arr = []
-      if (this.unifilarDiagram === 0) {
-        return []
-      }
 
-      this.unifilarDiagram.forEach(point => {
-        arr.push({
-          id: point.id,
-          coordinates: [[point.start_lat, point.start_lng], [point.end_lat, point.end_lng]],
-          color: '#98274d'
+    switchesPoints(){
+        return this.switches.map(item => {
+          return {
+            id:item.id,
+            latLng: [item.destination_station_latitude,item.destination_station_longitude]
+          };
         })
-      })
-
-      return arr
     },
+
     mapBounds () {
       const arr = []
       this.transductors.forEach((point) => {
@@ -157,8 +165,8 @@ export default {
   },
 
   methods: {
-    getColorStatus (isBroken) {
-      return isBroken ? 'text-red-9' : 'text-green-9'
+    getColorStatus (isWorking) {
+      return isWorking ? 'blue' : 'red'
     }
   }
 }
@@ -184,16 +192,13 @@ export default {
     .map-wrapper {
       padding-right: 0 !important;
     }
-
     .map-dimension {
       height: 53.9vh !important;
     }
   }
-
   ::v-deep .leaflet-layer {
     filter: invert(100%) hue-rotate(180deg) brightness(100%) contrast(85%);
   }
-
   .vue2leaflet-map {
     background: #23201C;
   }
