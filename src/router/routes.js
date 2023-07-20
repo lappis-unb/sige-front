@@ -28,7 +28,8 @@ export default function (ssrContext) {
         { path: '/slaves', name: 'slaves', component: () => import('pages/Slave/Slaves.vue') },
         { path: '/transductors', name: 'transductors', component: () => import('pages/Transductor/TransductorsCRUD.vue') },
         { path: '/tariffs', name: 'tariffs', component: () => import('pages/Tariffs.vue') },
-        { path: '/tariffs/:id', name: 'tariff', component: () => import('pages/Tariff.vue') }
+        { path: '/tariffs/:id', name: 'tariff', component: () => import('pages/Tariff.vue') },
+        { path: '/lines', name: 'lines', component: () => import('pages/Lines.vue') },
       ]
     },
     {

@@ -24,12 +24,12 @@
       </l-marker>
 
       <l-marker
-        v-for="switchh in switchesPoints"
-        :key="switchh.id"
-        :lat-lng="switchh.latLng">
+        v-for="switchPoint in switchesPoints"
+        :key="switchPoint.id"
+        :lat-lng="switchPoint.latLng">
         <l-icon
           :icon-size="[16, 16]">
-          <img src="../../statics/ic_ocorrencia_1.svg">
+          <img src="../../statics/ic_ocorrencia_4.svg">
         </l-icon>
       </l-marker>
 
@@ -101,7 +101,6 @@ export default {
       attribution:
         '© <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       selectedPeriod: 'DIA',
-      
     }
   },
 
@@ -166,7 +165,7 @@ export default {
 
   methods: {
     getColorStatus (isWorking) {
-      return isWorking ? 'blue' : 'red'
+      return isWorking ? 'green' : 'red'
     }
   }
 }
