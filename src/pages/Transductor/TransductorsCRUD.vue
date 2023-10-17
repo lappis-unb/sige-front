@@ -108,6 +108,24 @@
               </div>
 
               <div class="inputDiv">
+                <label>Potência: </label>
+                <q-input
+                class="inputField"
+                outlined
+                v-model="newTransductor.power"
+                label="Potência"/>
+              </div>
+
+              <div class="inputDiv">
+                <label>Medidor é de geração?: </label>
+                <q-input
+                class="inputField"
+                outlined
+                v-model="newTransductor.is_generator"
+                label="Medidor é de geração?"/>
+              </div>
+
+              <div class="inputDiv">
                 <label>Campus: </label>
                 <q-select
                 class="inputField"
@@ -258,6 +276,24 @@
                 outlined
                 v-model="transductor.geolocation_longitude"
                 label="Longitude"/>
+              </div>
+
+              <div class="inputDiv">
+                <label>Potência: </label>
+                <q-input
+                class="inputField"
+                outlined
+                v-model="transductor.power"
+                label="Potência"/>
+              </div>
+
+              <div class="inputDiv">
+                <label>Medidor é de geração?: </label>
+                <q-input
+                class="inputField"
+                outlined
+                v-model="transductor.is_generator"
+                label="Medidor é de geração?"/>
               </div>
 
               <div class="inputDiv">
