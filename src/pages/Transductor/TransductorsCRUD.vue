@@ -115,7 +115,7 @@
                 v-model="newTransductor.power"
                 label="Potência"/>
               </div>
-
+              
               <div class="inputDiv">
                 <label>Medidor é de geração?: </label>
                 <q-input
