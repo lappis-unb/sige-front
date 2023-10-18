@@ -108,19 +108,20 @@
               </div>
 
               <div class="inputDiv">
-                <label>Potência: </label>
+                <label>Potência Máxima em Watts: </label>
                 <q-input
                 class="inputField"
                 outlined
                 v-model="newTransductor.power"
-                label="Potência"/>
+                label="Potência Máxima em Watts"/>
               </div>
               
               <div class="inputDiv">
                 <label>Medidor é de geração?: </label>
-                <q-input
+                <q-select
                 class="inputField"
                 outlined
+                :options="[{ label: 'Sim', value: true }, { label: 'Não', value: false }]"
                 v-model="newTransductor.is_generator"
                 label="Medidor é de geração?"/>
               </div>
@@ -279,19 +280,20 @@
               </div>
 
               <div class="inputDiv">
-                <label>Potência: </label>
+                <label>Potência Máxima em Watts: </label>
                 <q-input
                 class="inputField"
                 outlined
                 v-model="transductor.power"
-                label="Potência"/>
+                label="Potência Máxima em Watts"/>
               </div>
-
+              
               <div class="inputDiv">
                 <label>Medidor é de geração?: </label>
-                <q-input
+                <q-select
                 class="inputField"
                 outlined
+                :options="[{ label: 'Sim', value: true }, { label: 'Não', value: false }]"
                 v-model="transductor.is_generator"
                 label="Medidor é de geração?"/>
               </div>
