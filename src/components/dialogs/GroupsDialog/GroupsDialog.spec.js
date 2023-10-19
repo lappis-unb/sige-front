@@ -24,8 +24,8 @@ describe('GroupsDialog', () => {
     propsData: {
       dialog: 'dialog',
       types: [
-        { id: 2, name: 'Gleba', url: 'http://164.41.98.3:443/group-types/2/' },
-        { id: 1, name: 'Prédio', url: 'http://164.41.98.3:443/group-types/1/' }
+        { id: 2, name: 'Gleba', url: 'http://164.41.98.17:443/group-types/2/' },
+        { id: 1, name: 'Prédio', url: 'http://164.41.98.17:443/group-types/1/' }
       ],
       groups: {}
     }

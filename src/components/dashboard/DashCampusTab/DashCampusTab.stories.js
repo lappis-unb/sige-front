@@ -36,7 +36,7 @@ DashCampusTabComponent.args = {
         "name":"UED"
         }
       ],
-      "url":"http://164.41.98.3:443/campi/2/"
+      "url":"http://164.41.98.17:443/campi/2/"
     },
     {
       "id":1,
@@ -92,7 +92,7 @@ DashCampusTabComponent.args = {
         "name":"CEU"
         }
       ],
-      "url":"http://164.41.98.3:443/campi/1/"
+      "url":"http://164.41.98.17:443/campi/1/"
     }
   ] ,
 }

@@ -1,0 +1,6 @@
+{
+    "email_ipt": "[aria-label='Email']",
+    "senha_ipt": "[aria-label='Senha']",
+    "entrar_btn": "button:contains(Entrar)"
+
+}
