@@ -452,8 +452,9 @@
           .get('energy-transductors/', {})
           .then(res => {
             this.transductors = res.data
-
+            
             this.transductors.forEach((transductor) => {
+              transductor.is_generator = transductor.is_generator === true ? "Sim" : "Não";
               const campusId = transductor.campus.match(/campi\/(?<campusId>\d+)/).groups.campusId
               const transductorCampus = this.campi.find(campus => campus.id === parseInt(campusId))
 
@@ -473,6 +474,7 @@
           .get(`energy-transductors/${id}/`, {})
           .then(res => {
             this.transductor = res.data
+            this.transductor.is_generator = res.data.is_generator == true ? "Sim" : "Não" 
             this.isSelectedTransductor = true
           })
           .catch(err => {
@@ -480,11 +482,15 @@
           })
       },
       putTransductor () {
+        this.transductor.is_generator = this.transductor.is_generator.value
+
         const { id } = this.transductor
         MASTER
           .put('energy-transductors/' + id + '/', this.transductor)
           .then(res => {
             this.transductor = res.data
+            this.transductor.is_generator = res.data.is_generator == true ? "Sim" : "Não" 
+
             this.transductors = this.transductors.map((transductor) => {
               if (transductor.id === id) return res.data
               return transductor
@@ -521,9 +527,12 @@
       },
       postTransductor () {
         this.newTransductor.grouping = [this.newTransductor.grouping]
+        this.newTransductor.is_generator = this.newTransductor.is_generator.value
+        
         MASTER
           .post('energy-transductors/', this.newTransductor)
           .then(res => {
+            res.data.is_generator = res.data.is_generator == true ? "Sim" : "Não" 
             this.transductors.push(res.data)
             this.newTransductors = {}
             this.isCreatingNew = false
