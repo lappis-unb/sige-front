@@ -471,11 +471,12 @@
           })
       },
       putTransductor () {
-        this.transductor.is_generator = this.transductor.is_generator.value
-
-        const { id } = this.transductor
+        const { id, is_generator } = this.transductor;
+        const transductorCopy = { ...this.transductor };
+        transductorCopy.is_generator = is_generator.value;
+        
         MASTER
-          .put('energy-transductors/' + id + '/', this.transductor)
+          .put('energy-transductors/' + id + '/', transductorCopy)
           .then(res => {
             this.transductor = res.data
             this.transductor.is_generator = res.data.is_generator == true ? "Sim" : "Não" 
@@ -516,10 +517,13 @@
       },
       postTransductor () {
         this.newTransductor.grouping = [this.newTransductor.grouping]
-        this.newTransductor.is_generator = this.newTransductor.is_generator.value
+
+        const { id, is_generator } = this.newTransductor;
+        const newTransductorCopy = { ...this.newTransductor };
+        newTransductorCopy.is_generator = is_generator.value;
         
         MASTER
-          .post('energy-transductors/', this.newTransductor)
+          .post('energy-transductors/', newTransductorCopy)
           .then(res => {
             res.data.is_generator = res.data.is_generator == true ? "Sim" : "Não" 
             this.transductors.push(res.data)
