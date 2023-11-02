@@ -14,7 +14,7 @@
             v-model="fullname"
             label="Nome completo"
             lazy-rules
-            :rules="[  val => !!val || 'Insira seu nome completo.']"/>
+            :rules="[  val => !!val && val.length >= 3|| 'Insira seu nome completo, com ao menos 3 caracteres.']"/>
           <q-input
             outlined
             v-model="email"
