@@ -62,7 +62,6 @@
                 <q-date
                   minimal
                   mask="MM/YYYY"
-                  emit-immediately
                   default-view="Years"
                   v-model="startDate"
                   @input="verifyClearInput"
