@@ -66,6 +66,7 @@
                   default-view="Years"
                   v-model="startDate"
                   @input="verifyClearInput"
+                  :options="date => date >= '2023/01/01' && date <= '2023/12/31'"
                 />
               </q-popup-proxy>
             </q-icon>
@@ -95,6 +96,7 @@ import { mapActions, mapGetters } from "vuex";
 import CampiService from "../../services/CampiService";
 import report from "../../services/api/report";
 import moment from "moment";
+import { ref } from 'vue';
 
 export default {
   name: "ReportFilter",
@@ -105,9 +107,9 @@ export default {
       optionsCampus: [],
       optionsModel: null,
       optionsGroup: [],
+      adjustValue: false,
       startDate: "06/2023", // Valor padrão por enquanto(unico mes com dados)
       mask: "##/####",
-      adjustValue: false,
     };
   },
   async created() {
@@ -126,7 +128,7 @@ export default {
       "filterByCampus",
       "filterByGroup",
       "clearStartDate",
-      "updateChart",
+      "updateChart"
     ]),
     async applyFilter() {
       await this.getReports();

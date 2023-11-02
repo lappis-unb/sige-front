@@ -24,7 +24,7 @@
           @row-click='(evt,row) => {clickItem(row)}'
         >
           <template v-slot:top-right>
-            <q-input dark dense debounce="300" v-model="filter" placeholder="Filtrar">
+            <q-input dark dense debounce="300" v-model="filter" placeholder="Busca por nome">
               <q-icon slot="append" name="search" />
             </q-input>
           </template>
