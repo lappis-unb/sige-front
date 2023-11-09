@@ -17,6 +17,7 @@
           <q-card-section class="q-pt-none">
             <q-form
             class="q-gutter-md"
+            greedy
             @submit="postSlave()"
             id="post-form"
             >
@@ -26,6 +27,8 @@
                 class="inputField"
                 outlined
                 v-model="newSlave.ip_address"
+                lazy-rules
+                :rules="[val => isValidIp(val) || 'Endereço IP inválido']"
                 label="Endereço IP"/>
               </div>
 
@@ -35,6 +38,8 @@
                 class="inputField"
                 outlined
                 v-model="newSlave.port"
+                lazy-val
+                :rules="[ val => val?.length || 'Campo Obrigatório', val => val.length <= 5 || 'Porta inválida']"
                 label="Porta de Acesso IP"/>
               </div>
 
@@ -44,6 +49,8 @@
                 class="inputField"
                 outlined
                 v-model="newSlave.name"
+                lazy-rules
+                :rules="[ val => val?.length || 'Campo Obrigatório']"
                 label="Endereço"/>
               </div>
             </q-form>
@@ -164,6 +171,7 @@
 <script>
 import MASTER from '../../services/masterApi/http-common'
 import { mapActions } from 'vuex'
+import net from 'net'
 
 export default {
   name: 'Slaves',
@@ -190,6 +198,10 @@ export default {
   },
   methods: {
     ...mapActions('userStore', ['changePage']),
+    isValidIp(ip) {
+      const ipv4Regex = /^(\d{1,3}\.){3}\d{1,3}$/;
+      return ipv4Regex.test(ip);
+    },
     handlePressButton (type, id = null) {
       const options = {
         new: () => {
