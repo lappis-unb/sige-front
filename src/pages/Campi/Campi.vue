@@ -1,5 +1,11 @@
 <template>
-  <div>
+  <div v-if="loading" class="text-center q-pa-lg">
+    <q-spinner
+        color="primary"
+        size="3em"
+    />
+  </div>
+  <div v-else>
     <div class="btn q-px-md">
       <q-btn size="1rem" label="Adicionar" color="primary" @click="handlePressButton('new')" />
     </div>
@@ -159,6 +165,7 @@ export default {
   name: 'Campi',
   data() {
     return {
+      loading: true,
       campi: [],
       campus: {},
       isSelectedCampus: false,
@@ -215,6 +222,9 @@ export default {
         .catch(err => {
           this.err = err
           console.log('err')
+        })
+        .finally(() => {
+          this.loading = false
         })
     },
     getCampus(id) {

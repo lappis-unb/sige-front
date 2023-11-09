@@ -1,5 +1,11 @@
 <template>
-  <div>
+  <div v-if="loading" class="text-center q-pa-lg">
+    <q-spinner
+        color="primary"
+        size="3em"
+    />
+  </div>
+  <div v-else>
     <div class="btn q-px-md">
       <q-btn
         size="1rem"
@@ -143,6 +149,7 @@ export default {
   name: 'GroupTypes',
   data () {
     return {
+      loading: true,
       groupTypes: [],
       groupType: {},
       isSelectedGroupType: false,
@@ -191,6 +198,9 @@ export default {
         .catch(err => {
           this.err = err
           console.log('err')
+        })
+        .finally(() => {
+          this.loading = false
         })
     },
     getGroupType (id) {

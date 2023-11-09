@@ -1,5 +1,11 @@
 <template>
-  <div>
+  <div v-if="loading" class="text-center q-pa-lg">
+    <q-spinner
+        color="primary"
+        size="3em"
+    />
+  </div>
+  <div v-else>
     <div class="btn">
       <q-btn
         size="1rem"
@@ -7,7 +13,7 @@
         color="primary"
         @click="handlePressButton('new')"/>
     </div>
-    <div class="container">
+    <div class="container" >
 
       <div class="q-pa-md table">
         <q-table
@@ -367,6 +373,7 @@
     name: 'Transductors',
     data () {
       return {
+        loading: true,
         transductors: [],
         transductor: {},
         isSelectedTransductor: false,
@@ -418,6 +425,8 @@
           })
           .catch((err) => {
             console.log(err)
+          }).finally(() => {
+            this.loading = false
           })
       },
       getTransductor (id) {
