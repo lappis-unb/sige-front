@@ -26,6 +26,7 @@ export default function (ssrContext) {
         { path: '/group_type', name: 'group_type', component: () => import('pages/Groups/GroupType.vue') },
         { path: '/groups', name: 'groups', component: () => import('pages/Groups/Groups.vue') },
         { path: '/slaves', name: 'slaves', component: () => import('pages/Slave/Slaves.vue') },
+        { path: '/lines', name: 'lines', component: () => import('pages/Line/Line.vue') },
         { path: '/transductors', name: 'transductors', component: () => import('pages/Transductor/TransductorsCRUD.vue') },
         { path: '/tariffs', name: 'tariffs', component: () => import('pages/Tariffs.vue') },
         { path: '/tariffs/:id', name: 'tariff', component: () => import('pages/Tariff.vue') }
