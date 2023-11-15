@@ -62,6 +62,10 @@ export default {
           image: '/statics/Relatorios.png',
           link: '/tariffs',
           name: 'Tarifas'
+        },
+        {
+          link: '/lines',
+          name: 'Linhas'
         }
       ]
     }
