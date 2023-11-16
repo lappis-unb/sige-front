@@ -28,6 +28,7 @@
     "quasar": "^1.0.0",
     "vue-apexcharts": "^1.6.2",
     "vue2-leaflet": "^2.7.1",
+    "vuelidate": "^0.7.7",
     "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
