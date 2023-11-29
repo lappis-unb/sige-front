@@ -10,7 +10,7 @@
           <q-list>
             <q-item clickable>
               <q-item-section avatar>
-                <q-icon color="primary" :name="`fas ${item.icon}`" />
+                <Icons :name="item.name" ></Icons>
               </q-item-section>
 
               <q-item-section>
@@ -33,30 +33,25 @@ export default {
     return {
       graphData: [
         {
-          icon: 'fa-landmark',
           link: '/campi',
           name: 'Campi'
         },
         {
           link: '/group_type',
-          name: 'Tipos de Agrupamento',
-          icon: 'fa-object-group'
+          name: 'Tipos de Agrupamento'
         },
         {
           link: '/groups',
-          name: 'Agrupamentos',
-          icon: 'fa-object-ungroup'
+          name: 'Agrupamentos'
         },
         {
           link: '/slaves',
-          name: 'Servidores Distribuídos',
-          icon: 'fa-server'
+          name: 'Servidores Distribuídos'
 
         },
         {
           link: '/transductors',
-          name: 'Medidores',
-          icon: 'fa-weight'
+          name: 'Medidores'
         },
         {
           image: '/statics/Relatorios.png',
