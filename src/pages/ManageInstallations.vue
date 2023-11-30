@@ -26,6 +26,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import Icons from 'src/components/Icons.vue'
 
 export default {
   name: 'ManageInstallations',
@@ -54,7 +55,6 @@ export default {
           name: 'Medidores'
         },
         {
-          image: '/statics/Relatorios.png',
           link: '/tariffs',
           name: 'Tarifas'
         }
@@ -63,6 +63,9 @@ export default {
   },
   created () {
     this.changePage('Gerenciar Instalações')
+  },
+  components:{
+    Icons
   },
   methods: {
     ...mapActions('userStore', ['changePage'])
