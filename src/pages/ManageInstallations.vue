@@ -1,4 +1,5 @@
 <template>
+  <!-- Cards da pagina de administrador -->
   <q-page class="flex flex-start column q-pa-md">
     <div
       class="q-pa-sm"
@@ -10,6 +11,7 @@
           <q-list>
             <q-item clickable>
               <q-item-section avatar>
+              <!-- A partir do nome do item um icone e carregado -->
                 <Icons :name="item.name" ></Icons>
               </q-item-section>
 
@@ -34,6 +36,7 @@ export default {
     return {
       graphData: [
         {
+          // rota e nome do card
           link: '/campi',
           name: 'Campi'
         },

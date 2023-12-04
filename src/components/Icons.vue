@@ -1,5 +1,5 @@
 <template>
-
+    <!-- Carrega um svg dependendo do nome do card na pagina de admin (ManageInstallations) -->
     <svg v-if=" name === 'Campi' " width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M11 3v-3h4v2h-3v1h6v3h2v2h3v14h1v2h-24v-2h1v-14h3v-2h2v-3h5zm3 20v-5l-2-1-2 1v5h4zm2-18h-8v3h-2v2h-3v12h5v-5l4-2.336 4 2.336v5h5v-12h-3v-2h-2v-3zm2 13h2v2h-2v-2zm-14 0h2v2h-2v-2zm14-3h2v2h-2v-2zm-14 0h2v2h-2v-2zm14-3h2v2h-2v-2zm-14 0h2v2h-2v-2zm8-5c1.656 0 3 1.344 3 3s-1.344 3-3 3-3-1.344-3-3 1.344-3 3-3zm0 1h-1v3h3v-1h-2v-2z"/></svg>
     
     <svg v-else-if=" name === 'Tipos de Agrupamento' " width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 2h2v2h2v3.702l7 2.618v12.68h1v1h-24v-1h1v-11h6v-8h2v-2h2v-2h1v2zm3 3h-7v18h1v-2h5v2h1v-18zm-2 17h-3v1h3v-1zm8 1h1v-11.987l-6-2.243v14.23h1v-2h4v2zm-14-10h-5v10h1v-2h3v2h1v-10zm-2 9h-1v1h1v-1zm15 0h-2v1h2v-1zm-16-5v2h-1v-2h1zm2 0v2h-1v-2h1zm5-10v12h-1v-12h1zm10 11v1h-4v-1h4zm-8-11v12h-1v-12h1zm8 9v1h-4v-1h4zm-17-2v2h-1v-2h1zm2 0v2h-1v-2h1zm15 0v1h-4v-1h4zm0-2v1h-4v-1h4zm-8-9h-3v1h3v-1z"/></svg>
