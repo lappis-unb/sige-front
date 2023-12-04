@@ -1,7 +1,9 @@
 <template>
+  <!-- Filtro da pagina de relatorios/reports -->
   <div class="containerFilter">
     <div class="adjust">
       <div class="filter">
+        <!-- Filtro de selecao do campus -->
         <q-select
           v-model="campusModel"
           use-input
@@ -23,6 +25,7 @@
           </template>
         </q-select>
 
+        <!-- Filtro de selecao da unidade -->
         <q-select
           v-model="optionsModel"
           use-input
@@ -53,6 +56,7 @@
           @input="handleStartDateChange"
         >
           <template v-slot:append>
+            <!-- Calendario -->
             <q-icon name="event" class="cursor-pointer calendar">
               <q-popup-proxy
                 ref="monthPicker"
