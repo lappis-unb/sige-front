@@ -1,7 +1,7 @@
 import { mount, createLocalVue } from '@vue/test-utils'
 import DashPanel from './DashPanel.vue'
 import DashMap from './DashMap'
-import DashCampusInfo from './DashCampusInfo'
+import DashCampusInfo from './DashPanel.vue'
 import MASTER from '../../services/masterApi/http-common'
 
 // Mock para a chamada da API MASTER
