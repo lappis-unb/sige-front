@@ -1,4 +1,5 @@
 <template>
+  <!-- Cards da pagina de administrador -->
   <q-page class="flex flex-start column q-pa-md">
     <div
       class="q-pa-sm"
@@ -10,7 +11,8 @@
           <q-list>
             <q-item clickable>
               <q-item-section avatar>
-                <q-icon color="primary" :name="`fas ${item.icon}`" />
+              <!-- A partir do nome do item um icone e carregado -->
+                <Icons :name="item.name" ></Icons>
               </q-item-section>
 
               <q-item-section>
@@ -26,6 +28,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import Icons from 'src/components/Icons.vue'
 
 export default {
   name: 'ManageInstallations',
@@ -33,33 +36,28 @@ export default {
     return {
       graphData: [
         {
-          icon: 'fa-landmark',
+          // rota e nome do card
           link: '/campi',
           name: 'Campi'
         },
         {
           link: '/group_type',
-          name: 'Tipos de Agrupamento',
-          icon: 'fa-object-group'
+          name: 'Tipos de Agrupamento'
         },
         {
           link: '/groups',
-          name: 'Agrupamentos',
-          icon: 'fa-object-ungroup'
+          name: 'Agrupamentos'
         },
         {
           link: '/slaves',
-          name: 'Servidores Distribuídos',
-          icon: 'fa-server'
+          name: 'Servidores Distribuídos'
 
         },
         {
           link: '/transductors',
-          name: 'Medidores',
-          icon: 'fa-weight'
+          name: 'Medidores'
         },
         {
-          image: '/statics/Relatorios.png',
           link: '/tariffs',
           name: 'Tarifas'
         }
@@ -68,6 +66,9 @@ export default {
   },
   created () {
     this.changePage('Gerenciar Instalações')
+  },
+  components:{
+    Icons
   },
   methods: {
     ...mapActions('userStore', ['changePage'])

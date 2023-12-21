@@ -27,6 +27,7 @@
     "leaflet": "^1.9.4",
     "quasar": "^1.0.0",
     "vue-apexcharts": "^1.6.2",
+    "vue-svg-loader": "^0.16.0",
     "vue2-leaflet": "^2.7.1",
     "vuex-persistedstate": "^4.1.0"
   },
