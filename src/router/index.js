@@ -29,12 +29,17 @@ export default function (ssrContext) {
   const { store } = ssrContext
 
   Router.beforeEach((to, from, next) => {
-    if (!store.getters['userStore/authStatus'] &&
-      to.path !== '/login' &&
-      to.path !== '/register' &&
-      to.path !== '/forgotten_password' &&
-      to.name !== 'reset_password' &&
-      to.path !== '/dashboard') {
+    const pathsThatRequireLogin = [
+      '/login',
+      '/register',
+      '/forgotten_password',
+      'reset_password',
+      '/dashboard'
+    ]
+    const isPathThatRequireLogin = pathsThatRequireLogin.includes(to.path)
+    const logged = store.getters['userStore/authStatus']
+
+    if (!logged && isPathThatRequireLogin) {
       next('/login')
     } else {
       next()
