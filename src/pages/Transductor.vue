@@ -2,19 +2,19 @@
   <div class="row">
     <div class="col-9">
       <div class="row">
-        <measurements-box class="col-8" :id="id"/>
-        <active-box class="col-3" :id="id"/>
+        <measurements-box class="col-8" :id="id" />
+        <active-box class="col-3" :id="id" />
       </div>
-      <graph :transductorId='id' :exportOptions="exportOptions"/>
-      <q-separator spaced inset/>
+      <graph :transductorId='id' :exportOptions="exportOptions" />
+      <q-separator spaced inset />
       <div class="row">
         <div class="transductor-info col-3">
           <p class="title">Dados do medidor</p>
-          <a class="data-label">MODELO</a><br/>
-          <a class="data-body">{{model}}</a><br/>
-          <a class="data-label">NÚM. DE SÉRIE</a><br/>
-          <a class="data-body">{{serial_number}}</a><br/>
-          <a class="data-label">GRUPOS</a><br/>
+          <a class="data-label">MODELO</a><br />
+          <a class="data-body">{{model}}</a><br />
+          <a class="data-label">NÚM. DE SÉRIE</a><br />
+          <a class="data-body">{{serial_number}}</a><br />
+          <a class="data-label">GRUPOS</a><br />
           <a class="data-body" v-for="(group, i) in groups" v-bind:key="i"> {{group}}, </a>
         </div>
         <div class="transductor-info col-9">
@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-    <occurences :id="id" class="col-3"/>
+    <OcurrencesTab class="col-3"  :occurrences="formatedOcurrences" />
   </div>
 </template>
 
@@ -32,16 +32,21 @@ import MASTER from '../services/masterApi/http-common'
 import measurementsBox from '../components/MeasurementsBox'
 import activeBox from '../components/ActiveBox/ActiveBox'
 import occurences from '../components/Occurences'
+import OcurrencesTab from '../components/OccurrencesTab.vue'
 import graph from '../components/Graph'
+import TransducerEventList from '../components/TransducerEventList.vue'
 import { mapGetters, mapActions } from 'vuex'
+import { separateInDays } from '../utils/transductorStatus'
+import noThisBeforeSuper from 'eslint/lib/rules/no-this-before-super'
+
 
 export default {
   name: 'Transductor',
   components: {
     measurementsBox: measurementsBox,
     activeBox: activeBox,
-    occurences: occurences,
-    graph: graph
+    OcurrencesTab,
+    graph: graph,
   },
   computed: {
     ...mapGetters('transductorStore', ['filterOptions']),
@@ -61,7 +66,13 @@ export default {
       model: '',
       serial_number: '',
       groups: [],
-      history: ''
+      history: '',
+      today: [],
+      yesterday: [],
+      beforeYesterday: [],
+      formatedOcurrences: [],
+      occurrences: [],
+      seriousOccurrences: ['phase_drop', 'critical_tension']
     }
   },
   created () {
@@ -77,6 +88,54 @@ export default {
         })
         this.changePage(res.data.name)
       })
+    MASTER.get('/occurences/?type=period&id=' + id)
+      .then(async res => {
+        await separateInDays({
+          eventsArray: res.data.critical_tension,
+          type: 'critical_tension',
+          today: this.today,
+          yesterday: this.yesterday,
+          beforeYesterday: this.beforeYesterday,
+          occurrences: this.occurrences
+        })
+        await separateInDays({
+          eventsArray: res.data.precarious_tension,
+          type: 'precarious_tension',
+          today: this.today,
+          yesterday: this.yesterday,
+          beforeYesterday: this.beforeYesterday,
+          occurrences: this.occurrences
+        })
+        await separateInDays({
+          eventsArray: res.data.phase_drop,
+          type: 'phase_drop',
+          today: this.today,
+          yesterday: this.yesterday,
+          beforeYesterday: this.beforeYesterday,
+          occurrences: this.occurrences
+        })
+        await separateInDays ({
+          eventsArray: res.data.transductor_connection_fail,
+          type: 'conection_fail',
+          today: this.today,
+          yesterday: this.yesterday,
+          beforeYesterday: this.beforeYesterday,
+          occurrences: this.occurrences
+        })
+        await separateInDays ({
+          eventsArray: res.data.slave_connection_fail,
+          type: 'conection_fail',
+          today: this.today,
+          yesterday: this.yesterday,
+          beforeYesterday: this.beforeYesterday,
+          occurrences: this.occurrences
+        })
+        await this.formatOccs(this.occurrences)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    
   },
   methods: {
     ...mapActions('userStore', ['changePage']),
@@ -86,7 +145,23 @@ export default {
         .then((res) => {
           this.groups.push(res.data.name)
         })
-    }
+    },
+    formatDate(input) {
+    var datePart = input.match(/\d+/g),
+    year = datePart[0].substring(),
+    month = datePart[1], day = datePart[2];
+
+    return day + '/' + month + '/' + year;
+    },
+    formatOccs(occurences) {
+      occurences.map((occ) => {
+        if (occ.start_time) {
+          occ.start_time = this.formatDate(occ.start_time.split('T')[0])
+        }
+        return this.formatedOcurrences.push(occ)
+      })
+      return this.formatedOcurrences
+    },
   }
 }
 </script>
