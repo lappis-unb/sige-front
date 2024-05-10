@@ -87,8 +87,7 @@
       </div>
     </div>
     <div class="adjust-toggle">
-      <q-toggle v-model="value" />
-      <a class="subtitle">Ajustar para datas de faturamento</a>
+      <q-toggle v-model="value" class="subtitle" label="Ajustar para datas de faturamento"/>
     </div>
   </div>
 </template>
