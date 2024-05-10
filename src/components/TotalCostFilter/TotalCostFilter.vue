@@ -23,7 +23,7 @@
           </template>
         </q-select>
 
-          <q-select
+        <q-select
           v-model="optionsModel"
           use-input
           map-options
@@ -58,24 +58,25 @@
         @input="changePeriodicity(model);"
           />
         </div>
-      <div class="dateFilter">
-        <q-input v-model="filteredDate.from" outlined :mask="mask" label="Período: Início" class="elem input" :error="errorStartDate" @input="verifyClearInput">
-          <template v-slot:prepend>
-            <q-icon name="event" class="cursor-pointer calendar">
-              <q-popup-proxy transition-show="scale" transition-hide="scale">
-                <q-date @input="changeStartDate(filteredDate.from);" v-model="filteredDate" mask="DD/MM/YYYY" range/>
-              </q-popup-proxy>
-            </q-icon>
-          </template>
-        </q-input>
-        <q-input v-model="filteredDate.to" outlined :mask="mask" label="Período: Fim" class="elem input" :error="errorEndDate" @input="verifyClearInput">
-          <q-popup-proxy transition-show="scale" transition-hide="scale">
-            <q-date @input="changeEndDate(filteredDate.to);" v-model="filteredDate" mask="DD/MM/YYYY" range/>
-          </q-popup-proxy>
-            </q-icon>
-          </template>
-        </q-input>
-      </div>
+        <div class="dateFilter">
+          <q-input v-model="filteredDate.from" outlined :mask="mask" label="Período: Início" class="elem input" :error="errorStartDate" @input="verifyClearInput">
+            <template v-slot:prepend>
+              <q-icon name="event" class="cursor-pointer calendar">
+                <q-popup-proxy transition-show="scale" transition-hide="scale">
+                  <q-date @input="changeStartDate(filteredDate.from);" v-model="filteredDate" mask="DD/MM/YYYY" range/>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+            <template v-slot:append>
+              <q-icon v-if="filteredDate.from !== ''" name="close" @click="filteredDate= {from: '', to: ''}" class="cursor-pointer" />
+            </template>
+          </q-input>
+          <q-input v-model="filteredDate.to" outlined :mask="mask" label="Período: Fim" class="elem input" :error="errorEndDate" @input="verifyClearInput">
+            <q-popup-proxy transition-show="scale" transition-hide="scale">
+              <q-date @input="changeEndDate(filteredDate.to);" v-model="filteredDate" mask="DD/MM/YYYY" range/>
+            </q-popup-proxy>
+          </q-input>
+        </div>
         <q-btn
             class="apply_button"
             size="1rem"
