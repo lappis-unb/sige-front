@@ -58,24 +58,24 @@
         @input="changePeriodicity(model);"
           />
         </div>
-        <q-input v-model="startDate" :mask="mask" label="Período: Início" class="elem input" :error="errorStartDate" @input="verifyClearInput">
-          <template v-slot:append>
+      <div class="dateFilter">
+        <q-input v-model="filteredDate.from" outlined :mask="mask" label="Período: Início" class="elem input" :error="errorStartDate" @input="verifyClearInput">
+          <template v-slot:prepend>
             <q-icon name="event" class="cursor-pointer calendar">
               <q-popup-proxy transition-show="scale" transition-hide="scale">
-                <q-date @input="changeStartDate(startDate);" v-model="startDate" mask="DD/MM/YYYY" />
+                <q-date @input="changeStartDate(filteredDate.from);" v-model="filteredDate" mask="DD/MM/YYYY" range/>
               </q-popup-proxy>
             </q-icon>
           </template>
         </q-input>
-        <q-input v-model="endDate" :mask="mask" label="Período: Fim" class="elem input" :error="errorEndDate" @input="verifyClearInput">
-          <template v-slot:append>
-            <q-icon name="event" class="cursor-pointer calendar">
-              <q-popup-proxy transition-show="scale" transition-hide="scale">
-                <q-date @input="changeEndDate(endDate);" v-model="endDate" mask="DD/MM/YYYY" />
-              </q-popup-proxy>
+        <q-input v-model="filteredDate.to" outlined :mask="mask" label="Período: Fim" class="elem input" :error="errorEndDate" @input="verifyClearInput">
+          <q-popup-proxy transition-show="scale" transition-hide="scale">
+            <q-date @input="changeEndDate(filteredDate.to);" v-model="filteredDate" mask="DD/MM/YYYY" range/>
+          </q-popup-proxy>
             </q-icon>
           </template>
         </q-input>
+      </div>
         <q-btn
             class="apply_button"
             size="1rem"
@@ -113,8 +113,10 @@ export default {
       optionsCampus: allCampus,
       optionsModel: null,
       optionsGroup: [],
-      startDate: '',
-      endDate: '',
+      filteredDate: {
+        from: '',
+        to: ''
+      },
       mask: '##/##/####',
       value: false
     }
@@ -161,22 +163,22 @@ export default {
     },
 
     verifyClearInput () {
-      if (!this.startDate) {
+      if (!this.filteredDate.from) {
         this.clearStartDate()
         this.getChart()
       } else {
-        if (moment(this.startDate, 'DD-MM-YYYY').isValid()) {
-          this.changeStartDate(this.startDate)
+        if (moment(this.filteredDate.from, 'DD-MM-YYYY').isValid()) {
+          this.changeStartDate(this.filteredDate.from)
           this.getChart()
         }
       }
 
-      if (!this.endDate) {
+      if (!this.filteredDate.to) {
         this.clearEndDate()
         this.getChart()
       } else {
-        if (moment(this.endDate, 'DD-MM-YYYY').isValid()) {
-          this.changeEndDate(this.endDate)
+        if (moment(this.filteredDate.to, 'DD-MM-YYYY').isValid()) {
+          this.changeEndDate(this.filteredDate.to)
           this.getChart()
         }
       }
