@@ -63,7 +63,11 @@
             <template v-slot:prepend>
               <q-icon name="event" class="cursor-pointer calendar" size="xs">
                 <q-popup-proxy transition-show="scale" transition-hide="scale">
-                  <q-date @input="changeStartDate(filteredDate.from);" v-model="filteredDate" mask="DD/MM/YYYY" range/>
+                  <q-date @input="changeStartDate(filteredDate.from);" v-model="filteredDate" mask="DD/MM/YYYY" range>
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="ok" color="primary" flat />
+                    </div>
+                  </q-date>
                 </q-popup-proxy>
               </q-icon>
             </template>
@@ -73,7 +77,11 @@
           </q-input>
           <q-input v-model="filteredDate.to" dense outlined :mask="mask" label="Período: Fim" class="elem input" :error="errorEndDate" @input="verifyClearInput">
             <q-popup-proxy transition-show="scale" transition-hide="scale">
-              <q-date @input="changeEndDate(filteredDate.to);" v-model="filteredDate" mask="DD/MM/YYYY" range/>
+              <q-date @input="changeEndDate(filteredDate.to);" v-model="filteredDate" mask="DD/MM/YYYY" range>
+                <div class="row items-center justify-end">
+                  <q-btn v-close-popup label="ok" color="primary" flat />
+                </div>
+              </q-date>
             </q-popup-proxy>
           </q-input>
         </div>
