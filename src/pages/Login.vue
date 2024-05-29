@@ -92,16 +92,15 @@ export default {
     },
     login () {
       MASTER
-        .post('login/', {
+        .post('api/accounts/login/', {
           email: this.email,
-          password: this.password
+          password: this.password,
+          confirm_password: this.password
         })
         .then(res => {
           this.saveUserInfo({
-            userToken: res.data.token,
-            userID: res.data.user.id,
-            username: res.data.user.name,
-            useremail: res.data.user.email
+            access: res.data.access,
+            refresh: res.data.refresh,
           })
           this.$q.notify({
             type: 'positive',
@@ -110,6 +109,7 @@ export default {
           this.$router.push('/')
         })
         .catch(err => {
+          
           console.log(err)
           this.$q.notify({
             type: 'negative',
