@@ -89,10 +89,10 @@ export default {
             })
             .then(res => {
               this.saveUserInfo({
-                userToken: res.data.token,
-                userID: res.data.user.id,
-                username: res.data.user.name,
-                useremail: res.data.user.email
+                userToken: res.data.access,
+                userID: res.data.access,
+                username: res.data.access,
+                useremail: res.data.access
               })
               this.$router.push('/')
               this.$q.notify({

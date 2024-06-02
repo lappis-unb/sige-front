@@ -98,9 +98,12 @@ export default {
           confirm_password: this.password
         })
         .then(res => {
+          
           this.saveUserInfo({
-            access: res.data.access,
-            refresh: res.data.refresh,
+              userToken: res.data.access,
+                userID: res.data.access,
+                username: res.data.access,
+                useremail: res.data.access
           })
           this.$q.notify({
             type: 'positive',
