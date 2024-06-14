@@ -53,9 +53,7 @@ export default {
   methods: {
     ...mapActions('userStore', ['changePage']),
     fetchData() {
-      // Simulando uma chamada de API ou alguma lógica para determinar se os dados estão prontos
-      // Isso deve ser substituído pelo código real para buscar e preparar os dados
-      this.isDataReady = true;  // Altere isso para false e depois para true quando os dados estiverem prontos
+      this.isDataReady = true;  
     }
   },
   data () {
@@ -64,7 +62,7 @@ export default {
         campus: '',
         group: ''
       },
-      isDataReady: false  // Novo estado para rastrear se os dados estão prontos
+      isDataReady: false  
     }
   },
   created () {
