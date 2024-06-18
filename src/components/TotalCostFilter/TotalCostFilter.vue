@@ -116,6 +116,8 @@ const chartService = new ChartService()
 export default {
   name: 'TotalCostFilter',
   data () {
+
+     
     return {
       model: 'daily',
       campusModel: null,
@@ -134,6 +136,8 @@ export default {
   async created () {
     allCampus = await campiService.getAllCampiInfo()
     this.optionsCampus = allCampus
+    this.startDate =  moment().startOf('month').format('DD/MM/YYYY')
+    this.endDate = moment().format('DD/MM/YYYY')
     this.getChart()
   },
   computed: {
