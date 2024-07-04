@@ -109,7 +109,7 @@ export default {
       optionsCampus: [],
       optionsModel: null,
       optionsGroup: [],
-      startDate: "06/2023", // Valor padrão por enquanto(unico mes com dados)
+      startDate: "05/2024", // Valor padrão por enquanto(unico mes com dados)
       mask: "##/####",
       adjustValue: false,
     };

@@ -59,80 +59,55 @@ export default {
 
       try {
         const {
-          consumption_off_peak_time,
-          consumption_peak_time,
-          generated_energy_off_peak_time,
-          generated_energy_peak_time,
-          tariff_peak,
-          tariff_off_peak,
-          total_consumption_off_peak_time = tariff_off_peak *
-            consumption_off_peak_time,
-        } = response;
-
-        const total_consumption_peak_time = tariff_peak * consumption_peak_time;
-        const total_generated_energy_off_peak_time = undefined;
-        const total_generated_energy_peak_time = undefined;
-        const total_valuekwh =
-          consumption_off_peak_time +
-          consumption_peak_time -
-          (generated_energy_off_peak_time + generated_energy_peak_time);
-        const total_coast =
-          total_consumption_off_peak_time + total_consumption_peak_time;
-
+          active_consumption,
+          active_generated,
+          reactive_inductive,
+          reactive_capacitive
+        } = response.results;
+      
         this.data = [
           {
-            name: "Consumo (Ponta)",
-            valor_kwh: Intl.NumberFormat("pt-BR").format(consumption_peak_time),
-            tarifa: Intl.NumberFormat("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            }).format(tariff_peak),
-            total: Intl.NumberFormat("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            }).format(total_consumption_peak_time),
+            name: "Consumo (ponta)",
+            //valor_kwh: Intl.NumberFormat("pt-BR").format(active_consumption),
+            valor_kwh: 0,
+            tarifa: undefined,
+            total: undefined,
           },
           {
             name: "Consumo (Fora de Ponta)",
-            valor_kwh: Intl.NumberFormat("pt-BR").format(
-              consumption_off_peak_time
-            ),
-            tarifa: Intl.NumberFormat("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            }).format(tariff_off_peak),
-
-            total: Intl.NumberFormat("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            }).format(total_consumption_off_peak_time),
+            //valor_kwh: Intl.NumberFormat("pt-BR").format(active_consumption),
+            valor_kwh: 0,
+            tarifa: undefined,
+            total: undefined,
           },
           {
-            name: "Energia Gerada (Ponta)",
-            valor_kwh: Intl.NumberFormat("pt-BR").format(
-              generated_energy_peak_time
-            ),
+            name: "Energia gerada (Ponta)",
+            //valor_kwh: Intl.NumberFormat("pt-BR").format(active_generated),
+            valor_kwh: 0,
             tarifa: undefined,
-            total: total_generated_energy_peak_time,
+            total: undefined,
           },
           {
-            name: "Energia Gerada (Fora de Ponta)",
-            valor_kwh: Intl.NumberFormat("pt-BR").format(
-              generated_energy_off_peak_time
-            ),
+            name: "Energia gerada (Fora de Ponta)",
+            //valor_kwh: Intl.NumberFormat("pt-BR").format(active_generated),
+            valor_kwh: 0,
             tarifa: undefined,
-            total: total_generated_energy_off_peak_time,
+            total: undefined,
           },
           {
-            name: "Total",
-            valor_kwh:
-              Intl.NumberFormat("pt-BR").format(total_valuekwh) + " kWh",
+            name: "reactive_inductive",
+            //valor_kwh: Intl.NumberFormat("pt-BR").format(reactive_inductive),
+            valor_kwh: 0,
             tarifa: undefined,
-            total: Intl.NumberFormat("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            }).format(total_coast),
+            total: undefined,
           },
+          {
+            name: "reactive_capacitive",
+            //valor_kwh: Intl.NumberFormat("pt-BR").format(reactive_capacitive),
+            valor_kwh: 0,
+            tarifa: undefined,
+            total: undefined,
+          } 
         ];
       } catch (error) {
         console.error("Error creating reports chart:", error);
@@ -143,11 +118,11 @@ export default {
       const response = this.updatedPowerFactorData;
 
       try {
-        this.powerFactorData = response.map((item) => ({
-          medidor: item.transductor_name,
-          faseA: Intl.NumberFormat("pt-BR").format(item.phase_a * 100),
-          faseB: Intl.NumberFormat("pt-BR").format(item.phase_b * 100),
-          faseC: Intl.NumberFormat("pt-BR").format(item.phase_c * 100),
+        this.powerFactorData = response.results.map((item) => ({
+          medidor: item.located,
+          faseA: Intl.NumberFormat("pt-BR").format(item.pf_phase_a * 100),
+          faseB: Intl.NumberFormat("pt-BR").format(item.pf_phase_b * 100),
+          faseC: Intl.NumberFormat("pt-BR").format(item.pf_phase_c * 100),
         }));
       } catch (error) {
         console.error("Error creating power factor chart:", error);
