@@ -34,7 +34,8 @@ export default function (ssrContext) {
       to.path !== '/register' &&
       to.path !== '/forgotten_password' &&
       to.name !== 'reset_password' &&
-      to.path !== '/dashboard') {
+      to.path !== '/dashboard' &&
+      to.path !== '/'){
       next('/login')
     } else {
       next()

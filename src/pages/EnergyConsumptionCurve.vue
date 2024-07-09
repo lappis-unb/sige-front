@@ -3,15 +3,19 @@
     <ConsumptionFilter />
     <div class="full-height chart-container">
       <line-chart
+        v-if="isDataReady"
         unit="Wh"
         chart-title="Curva de carga"
         :exportOptions="exportOptions"
       />
+      <div v-else class="loading-placeholder">
+        Carregando...
+      </div>
     </div>
   </div>
 </template>
 
-<script >
+<script>
 import ConsumptionFilter from '../components/ConsumptionFilter/ConsumptionFilter.vue'
 // import BarChart from '../components/charts/BarChart'
 import LineChart from '../components/charts/LineChartConsumption.vue'
@@ -47,30 +51,42 @@ export default {
     }
   },
   methods: {
-    ...mapActions('userStore', ['changePage'])
+    ...mapActions('userStore', ['changePage']),
+    fetchData() {
+      this.isDataReady = true;  
+    }
   },
   data () {
     return {
       location: {
         campus: '',
         group: ''
-      }
+      },
+      isDataReady: false  
     }
   },
   created () {
     this.changePage('Curva de Carga')
+    this.fetchData();  // Busque os dados quando o componente for criado
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-  }
-  .chart-container {
-    width: 80%;
-  }
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.chart-container {
+  width: 80%;
+}
+.loading-placeholder {
+  width: 100%;
+  text-align: center;
+  padding: 50px;
+  font-size: 18px;
+  color: #999;
+}
 </style>

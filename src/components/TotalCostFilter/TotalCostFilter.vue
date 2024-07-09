@@ -23,7 +23,7 @@
           </template>
         </q-select>
 
-          <q-select
+        <q-select
           v-model="optionsModel"
           use-input
           map-options
@@ -58,24 +58,33 @@
         @input="changePeriodicity(model);"
           />
         </div>
-        <q-input v-model="startDate" :mask="mask" label="Período: Início" class="elem input" :error="errorStartDate" @input="verifyClearInput">
-          <template v-slot:append>
-            <q-icon name="event" class="cursor-pointer calendar">
-              <q-popup-proxy transition-show="scale" transition-hide="scale">
-                <q-date @input="changeStartDate(startDate);" v-model="startDate" mask="DD/MM/YYYY" />
-              </q-popup-proxy>
-            </q-icon>
-          </template>
-        </q-input>
-        <q-input v-model="endDate" :mask="mask" label="Período: Fim" class="elem input" :error="errorEndDate" @input="verifyClearInput">
-          <template v-slot:append>
-            <q-icon name="event" class="cursor-pointer calendar">
-              <q-popup-proxy transition-show="scale" transition-hide="scale">
-                <q-date @input="changeEndDate(endDate);" v-model="endDate" mask="DD/MM/YYYY" />
-              </q-popup-proxy>
-            </q-icon>
-          </template>
-        </q-input>
+        <div class="dateFilter">
+          <q-input v-model="filteredDate.from" dense outlined :mask="mask" label="Período: Início" class="elem input" :error="errorStartDate" @input="verifyClearInput">
+            <template v-slot:prepend>
+              <q-icon name="event" class="cursor-pointer calendar" size="xs">
+                <q-popup-proxy transition-show="scale" transition-hide="scale">
+                  <q-date @input="changeStartDate(filteredDate.from);" v-model="filteredDate" mask="DD/MM/YYYY" range>
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="ok" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+            <template v-slot:append>
+              <q-icon v-if="filteredDate.from !== ''" name="close" @click="filteredDate= {from: '', to: ''}" class="cursor-pointer" />
+            </template>
+          </q-input>
+          <q-input v-model="filteredDate.to" dense outlined :mask="mask" label="Período: Fim" class="elem input" :error="errorEndDate" @input="verifyClearInput">
+            <q-popup-proxy transition-show="scale" transition-hide="scale">
+              <q-date @input="changeEndDate(filteredDate.to);" v-model="filteredDate" mask="DD/MM/YYYY" range>
+                <div class="row items-center justify-end">
+                  <q-btn v-close-popup label="ok" color="primary" flat />
+                </div>
+              </q-date>
+            </q-popup-proxy>
+          </q-input>
+        </div>
         <q-btn
             class="apply_button"
             size="1rem"
@@ -87,8 +96,7 @@
       </div>
     </div>
     <div class="adjust-toggle">
-      <q-toggle v-model="value" />
-      <a class="subtitle">Ajustar para datas de faturamento</a>
+      <q-toggle v-model="value" class="subtitle" label="Ajustar para datas de faturamento"/>
     </div>
   </div>
 </template>
@@ -108,14 +116,18 @@ const chartService = new ChartService()
 export default {
   name: 'TotalCostFilter',
   data () {
+
+     
     return {
       model: 'daily',
       campusModel: null,
       optionsCampus: allCampus,
       optionsModel: null,
       optionsGroup: [],
-      startDate: '',
-      endDate: '',
+      filteredDate: {
+        from: '',
+        to: ''
+      },
       mask: '##/##/####',
       value: false
     }
@@ -124,6 +136,8 @@ export default {
   async created () {
     allCampus = await campiService.getAllCampiInfo()
     this.optionsCampus = allCampus
+    this.startDate =  moment().startOf('month').format('DD/MM/YYYY')
+    this.endDate = moment().format('DD/MM/YYYY')
     this.getChart()
   },
   computed: {
@@ -162,22 +176,22 @@ export default {
     },
 
     verifyClearInput () {
-      if (!this.startDate) {
+      if (!this.filteredDate.from) {
         this.clearStartDate()
         this.getChart()
       } else {
-        if (moment(this.startDate, 'DD-MM-YYYY').isValid()) {
-          this.changeStartDate(this.startDate)
+        if (moment(this.filteredDate.from, 'DD-MM-YYYY').isValid()) {
+          this.changeStartDate(this.filteredDate.from)
           this.getChart()
         }
       }
 
-      if (!this.endDate) {
+      if (!this.filteredDate.to) {
         this.clearEndDate()
         this.getChart()
       } else {
-        if (moment(this.endDate, 'DD-MM-YYYY').isValid()) {
-          this.changeEndDate(this.endDate)
+        if (moment(this.filteredDate.to, 'DD-MM-YYYY').isValid()) {
+          this.changeEndDate(this.filteredDate.to)
           this.getChart()
         }
       }
