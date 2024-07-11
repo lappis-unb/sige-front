@@ -36,7 +36,7 @@ const changeStartDate = (state, startDate) => {
 
 const changeEndDate = (state, endDate) => {
   endDate = moment(endDate, 'DD-MM-YYYY')
-  if (endDate.isAfter(moment()) || endDate.isSameOrBefore(state.startDate)) {
+  if (endDate.isSameOrBefore(state.startDate)) {
     clearEndDate(state)
     state.errorEndDate = true
   } else {

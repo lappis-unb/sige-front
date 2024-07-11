@@ -51,19 +51,35 @@
             toggle-color="primary"
             class="elem toggle"
             :options="[
-          {label: 'DIA', value: 'daily'},
-          {label: 'MÊS', value: 'monthly'},
-          {label: 'ANO', value: 'yearly'}
-        ]"
-        @input="changePeriodicity(model);"
+              {label: 'DIA', value: 'daily'},
+              {label: 'MÊS', value: 'monthly'},
+              {label: 'ANO', value: 'yearly'}
+            ]"
+            @input="changePeriodicity(model);"
           />
         </div>
         <div class="dateFilter">
-          <q-input v-model="filteredDate.from" dense outlined :mask="mask" label="Período: Início" class="elem input" :error="errorStartDate" @input="verifyClearInput">
+          <q-input
+            v-model="filteredDate.from"
+            dense
+            outlined
+            :mask="mask"
+            label="Período: Início"
+            class="elem input"
+            :error="errorStartDate"
+            :rules="[() => !errorStartDate || 'Data inválida']"
+            @input="verifyClearInput"
+          >
             <template v-slot:prepend>
               <q-icon name="event" class="cursor-pointer calendar" size="xs">
                 <q-popup-proxy transition-show="scale" transition-hide="scale">
-                  <q-date @input="changeStartDate(filteredDate.from);" v-model="filteredDate" mask="DD/MM/YYYY" range>
+                  <q-date
+                    v-model="filteredDate"
+                    mask="DD/MM/YYYY"
+                    range
+                    @input="changeStartDate(filteredDate.from)"
+                    :locale="ptBR_Locale"
+                  >
                     <div class="row items-center justify-end">
                       <q-btn v-close-popup label="ok" color="primary" flat />
                     </div>
@@ -72,26 +88,51 @@
               </q-icon>
             </template>
             <template v-slot:append>
-              <q-icon v-if="filteredDate.from !== ''" name="close" @click="filteredDate= {from: '', to: ''}" class="cursor-pointer" />
+              <q-icon
+                v-if="filteredDate.from !== ''"
+                name="close"
+                @click="filteredDate = { from: '', to: '' }"
+                class="cursor-pointer"
+              />
             </template>
           </q-input>
-          <q-input v-model="filteredDate.to" dense outlined :mask="mask" label="Período: Fim" class="elem input" :error="errorEndDate" @input="verifyClearInput">
-            <q-popup-proxy transition-show="scale" transition-hide="scale">
-              <q-date @input="changeEndDate(filteredDate.to);" v-model="filteredDate" mask="DD/MM/YYYY" range>
-                <div class="row items-center justify-end">
-                  <q-btn v-close-popup label="ok" color="primary" flat />
-                </div>
-              </q-date>
-            </q-popup-proxy>
+          <q-input
+            v-model="filteredDate.to"
+            dense
+            outlined
+            :mask="mask"
+            label="Período: Fim"
+            class="elem input"
+            :error="errorEndDate"
+            :rules="[() => !errorEndDate || 'Data inválida']"
+            @input="verifyClearInput"
+          >
+            <template v-slot:prepend>
+              <q-icon name="event" class="cursor-pointer calendar" size="xs">
+                <q-popup-proxy transition-show="scale" transition-hide="scale">
+                  <q-date
+                    v-model="filteredDate"
+                    mask="DD/MM/YYYY" 
+                    range
+                    @input="changeEndDate(filteredDate.to)" 
+                    :locale="ptBR_Locale"
+                  >
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="ok" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
           </q-input>
         </div>
         <q-btn
-            class="apply_button"
-            size="1rem"
-            label="Aplicar"
-            type="button"
-            @click="getChart()"
-            color="primary"
+          class="apply_button"
+          size="1rem"
+          label="Aplicar"
+          type="button"
+          @click="getChart()"
+          color="primary"
         />
       </div>
     </div>
@@ -116,8 +157,6 @@ const chartService = new ChartService()
 export default {
   name: 'TotalCostFilter',
   data () {
-
-     
     return {
       model: 'daily',
       campusModel: null,
@@ -128,6 +167,15 @@ export default {
         from: '',
         to: ''
       },
+      ptBR_Locale: {
+        days: 'Domingo_Segunda-Feira_Terça-Feira_Quarta-Feira_Quinta-Feira_Sexta-Feira_Sábado'.split('_'),
+        daysShort: 'Dom_Seg_Ter_Qua_Qui_Sex_Sáb'.split('_'),
+        months: 'Janeiro_Fevereiro_Março_Abril_Maio_Junho_Julho_Agosto_Setembro_Outubro_Novembro_Dezembo'.split('_'),
+        monthsShort: 'Jan_Fev_Mar_Abr_Mai_Jun_Jul_Ago_Set_Out_Nov_Dez'.split('_'),
+        firstDayOfWeek: 0, // 0-6, 0 - Domingo, 1 Segunda, ...
+        format24h: true,
+        pluralDay: 'dias'
+      },
       mask: '##/##/####',
       value: false
     }
@@ -136,8 +184,8 @@ export default {
   async created () {
     allCampus = await campiService.getAllCampiInfo()
     this.optionsCampus = allCampus
-    this.filteredDate.from =  moment().startOf('month').format('DD/MM/YYYY')
-    this.filteredDate.to = moment().format('DD/MM/YYYY')
+    this.filteredDate.from = moment().startOf('month').format('DD-MM-YYYY')
+    this.filteredDate.to = moment().format('DD-MM-YYYY')
     this.getChart()
   },
   computed: {
@@ -161,7 +209,6 @@ export default {
         )
       })
     },
-
     getGroups () {
       const updatedGroups = []
       const selectedCampus = allCampus.find(campus => campus.id === this.campusModel)
@@ -197,6 +244,14 @@ export default {
       }
     },
     getChart () {
+      if (moment(this.filteredDate.from, 'DD-MM-YYYY').isAfter(moment(this.filteredDate.to, 'DD-MM-YYYY'))) {
+        this.$q.notify({
+          type: 'negative',
+          message: 'A data final não pode ser menor que a data inicial',
+          position: 'top'
+        })
+        return
+      }
       chartService.getChartData(this.getUrl, 'R$', dimensions[1])
         .then((chart) => {
           this.updateChart(chart)
