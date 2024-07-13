@@ -43,7 +43,6 @@
             </q-item>
           </template>
         </q-select>
-
         <div class="vision">
           <a class="caption">Visão</a>
           <br />
@@ -138,8 +137,7 @@
       </div>
     </div>
     <div class="adjust-toggle">
-      <q-toggle v-model="value" />
-      <a class="subtitle">Ajustar para datas de faturamento</a>
+      <q-toggle v-model="value" class="subtitle" label="Ajustar para datas de faturamento"/>
     </div>
   </div>
 </template>
@@ -195,7 +193,6 @@ export default {
   },
   methods: {
     ...mapActions('totalCostStore', ['changePeriodicity', 'changeStartDate', 'changeEndDate', 'filterByCampus', 'filterByGroup', 'clearStartDate', 'clearEndDate', 'updateChart']),
-    
     filterFn (val, update) {
       update(() => {
         const needle = val.toLowerCase()
@@ -224,44 +221,27 @@ export default {
       this.optionsModel = null
       this.optionsGroup = updatedGroups
     },
+
     verifyClearInput () {
-      if (!this.startDate) {
+      if (!this.filteredDate.from) {
         this.clearStartDate()
+        this.getChart()
       } else {
-        if (moment(this.startDate, 'DD/MM/YYYY').isValid()) {
-          this.changeStartDate(this.startDate)
-        } else {
-          this.$q.notify({
-            type: 'negative',
-            message: 'Data inicial inválida'
-          })
-          return
+        if (moment(this.filteredDate.from, 'DD-MM-YYYY').isValid()) {
+          this.changeStartDate(this.filteredDate.from)
+          this.getChart()
         }
       }
 
-      if (!this.endDate) {
+      if (!this.filteredDate.to) {
         this.clearEndDate()
+        this.getChart()
       } else {
-        if (moment(this.endDate, 'DD/MM/YYYY').isValid()) {
-          this.changeEndDate(this.endDate)
-        } else {
-          this.$q.notify({
-            type: 'negative',
-            message: 'Data final inválida'
-          })
-          return
+        if (moment(this.filteredDate.to, 'DD-MM-YYYY').isValid()) {
+          this.changeEndDate(this.filteredDate.to)
+          this.getChart()
         }
       }
-
-      if (moment(this.startDate, 'DD/MM/YYYY').isAfter(moment(this.endDate, 'DD/MM/YYYY'))) {
-        this.$q.notify({
-          type: 'negative',
-          message: 'A data final não pode ser menor que a data inicial'
-        })
-        return
-      }
-
-      this.getChart()
     },
     getChart () {
       if (moment(this.filteredDate.from, 'DD-MM-YYYY').isAfter(moment(this.filteredDate.to, 'DD-MM-YYYY'))) {
