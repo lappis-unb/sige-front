@@ -1,7 +1,14 @@
 <template>
   <div class="retangle">
+    <p v-if="loading" class="table-title">
+      <q-spinner
+        color="primary"
+        size="3em"
+        :thickness="2"
+      />
+    </p>
+    <p v-else-if="!hasMeasurements" class="table-title">Não há leituras salvas</p>
     <p v-if="hasMeasurements" class="table-title">Última leitura - {{lastReading}}.</p>
-    <p v-if="!hasMeasurements" class="table-title">Não há leituras salvas</p>
     <table v-if="hasMeasurements" align="center" class="readings">
       <tr>
         <th>TENSÃO</th>
@@ -45,10 +52,12 @@ export default {
       current: {},
       power: {},
       generation: 'não disponível',
-      hasMeasurements: false
+      hasMeasurements: false,
+      loading: false
     }
   },
   async created () {
+    this.loading = true;
     await MASTER
       .get(`/measurements/instant/?transductor=${this.id}`)
       .then(res => {
@@ -76,6 +85,7 @@ export default {
       .catch(err => {
         console.log(err)
       })
+    this.loading = false;
   },
   methods: {
     getTime (d) {
@@ -128,3 +138,4 @@ export default {
   color: $primary;
 }
 </style>
+
