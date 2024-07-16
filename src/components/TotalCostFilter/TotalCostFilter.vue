@@ -131,7 +131,7 @@
           size="1rem"
           label="Aplicar"
           type="button"
-          @click="getChart()"
+          @click="getChart(1)"
           color="primary"
         />
       </div>
@@ -186,7 +186,7 @@ export default {
     this.optionsCampus = allCampus
     this.filteredDate.from = moment().startOf('month').format('DD-MM-YYYY')
     this.filteredDate.to = moment().format('DD-MM-YYYY')
-    this.getChart()
+    this.getChart(0)
   },
   computed: {
     ...mapGetters('totalCostStore', ['errorStartDate', 'errorEndDate', 'getUrl'])
@@ -225,25 +225,25 @@ export default {
     verifyClearInput () {
       if (!this.filteredDate.from) {
         this.clearStartDate()
-        this.getChart()
+        this.getChart(0)
       } else {
         if (moment(this.filteredDate.from, 'DD-MM-YYYY').isValid()) {
           this.changeStartDate(this.filteredDate.from)
-          this.getChart()
+          this.getChart(0)
         }
       }
 
       if (!this.filteredDate.to) {
         this.clearEndDate()
-        this.getChart()
+        this.getChart(0)
       } else {
         if (moment(this.filteredDate.to, 'DD-MM-YYYY').isValid()) {
           this.changeEndDate(this.filteredDate.to)
-          this.getChart()
+          this.getChart(0)
         }
       }
     },
-    getChart () {
+    getChart (clicked) {
       if (moment(this.filteredDate.from, 'DD-MM-YYYY').isAfter(moment(this.filteredDate.to, 'DD-MM-YYYY'))) {
         this.$q.notify({
           type: 'negative',
@@ -251,6 +251,16 @@ export default {
           position: 'top'
         })
         return
+      }
+      if(clicked){
+        if (!this.filteredDate.from || !this.filteredDate.to) {
+          this.$q.notify({
+            type: 'negative',
+            message: 'Selecione uma data de início e de fim',
+            position: 'top'
+          })
+          return
+        }
       }
       chartService.getChartData(this.getUrl, 'R$', dimensions[1])
         .then((chart) => {
