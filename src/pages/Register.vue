@@ -88,24 +88,23 @@ export default {
     ...mapActions('userStore', ['changePage', 'saveUserInfo']),
     register () {
       MASTER
-        .post('users/', {
+        .post('accounts/', {
           email: this.email,
           password: this.password,
-          name: this.fullname,
-          user_type: this.user_type
+          confirm_password: this.password_confirmation,
         })
         .then(res => {
           MASTER
-            .post('login/', {
+            .post('accounts/login/', {
               email: this.email,
               password: this.password
             })
             .then(res => {
               this.saveUserInfo({
-                userToken: res.data.token,
-                userID: res.data.user.id,
-                username: res.data.user.name,
-                useremail: res.data.user.email
+                userToken: res.data.access,
+                userID: res.data.access,
+                username: res.data.access,
+                useremail: res.data.access
               })
               this.$router.push('/')
               this.$q.notify({
