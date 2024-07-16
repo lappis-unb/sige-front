@@ -126,7 +126,7 @@ export default {
           console.log(err)
           this.$q.notify({
             type: 'negative',
-            message: 'Falha ao criar sua conta. Tente novamente.'
+            message: 'Falha ao criar sua conta. Tente novamente, por favor.'
           })
         })
     }
