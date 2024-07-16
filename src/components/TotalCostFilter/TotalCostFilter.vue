@@ -11,6 +11,7 @@
           option-label="name"
           input-debounce="0"
           label="Campus"
+          clearable
           :options="optionsCampus"
           @filter="filterCampus"
           class="col-4 elem select"
@@ -18,7 +19,7 @@
         >
           <template v-slot:no-option>
             <q-item>
-              <q-item-section class="text-grey">No results</q-item-section>
+              <q-item-section class="text-grey">Nenhum dado encontrado</q-item-section>
             </q-item>
           </template>
         </q-select>
@@ -29,9 +30,9 @@
           map-options
           emit-value
           option-value="id"
-          option-label="name"
+          option-label="acronym"
           input-debounce="0"
-          label="Filtro"
+          label="Unidade"
           :options="optionsGroup"
           @filter="filterFn"
           class="col-4 elem select"
@@ -39,7 +40,8 @@
         >
           <template v-slot:no-option>
             <q-item>
-              <q-item-section class="text-grey">No results</q-item-section>
+              <q-item-section v-if="!campusModel" class="text-grey">Selecione o campus</q-item-section>
+              <q-item-section v-else class="text-grey">Nenhum dado encontrado</q-item-section>
             </q-item>
           </template>
         </q-select>
@@ -212,12 +214,14 @@ export default {
     getGroups () {
       const updatedGroups = []
       const selectedCampus = allCampus.find(campus => campus.id === this.campusModel)
-      selectedCampus.groups_related.forEach(group => {
-        const alreadyInUpdatedGroups = updatedGroups.find(subGroup => subGroup.name === group.name)
-        if (!alreadyInUpdatedGroups) {
-          updatedGroups.push(group)
-        }
-      })
+      if(selectedCampus){
+        selectedCampus.children.forEach(group => {
+          const alreadyInUpdatedGroups = updatedGroups.find(subGroup => subGroup.name === group.name)
+          if (!alreadyInUpdatedGroups) {
+            updatedGroups.push(group)
+          }
+        })
+      }
       this.optionsModel = null
       this.optionsGroup = updatedGroups
     },

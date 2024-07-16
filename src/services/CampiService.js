@@ -7,8 +7,8 @@ class ChartService {
 
   async getAllCampiInfo () {
     try {
-      const response = await this.client.get('campi/')
-      return response.data
+      const response = await this.client.get('/entities/')
+      return response.data[0].children
     } catch (error) {
       console.log(error)
       return []
