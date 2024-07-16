@@ -9,7 +9,7 @@ class Report {
         const params = {
             start_date: `${startDate} 00:00:00`,
             end_date: `${endDate} 23:59:59`,
-            campus: campus
+            entity: campus
         };
 
         if (group) {
@@ -17,7 +17,7 @@ class Report {
         }
 
         try {
-            const response = await MASTER.get('/report/', { params: params });
+            const response = await MASTER.get('/reports/energy', { params: params });
             return response.data;
         } catch (err) {
             console.error("Error fetching reports:", err);
@@ -31,7 +31,7 @@ class Report {
         const params = {
             start_date: `${startDate} 00:00:00`,
             end_date: `${endDate} 23:59:59`,
-            campus: campus
+            entity: campus
         };
 
         if (group) {
@@ -39,7 +39,7 @@ class Report {
         }
 
         try {
-            const response = await MASTER.get('/ufer/', { params: params });
+            const response = await MASTER.get('/reports/ufer/', { params: params });
             return response.data;
         } catch (err) {
             console.error("Error fetching ufer:", err);
