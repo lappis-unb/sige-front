@@ -120,9 +120,10 @@ export default {
       try {
         this.powerFactorData = response.results.map((item) => ({
           medidor: item.located,
-          faseA: Intl.NumberFormat("pt-BR").format(item.pf_phase_a * 100),
-          faseB: Intl.NumberFormat("pt-BR").format(item.pf_phase_b * 100),
-          faseC: Intl.NumberFormat("pt-BR").format(item.pf_phase_c * 100),
+          transductor:item.transductor,
+          faseA: Intl.NumberFormat("pt-BR").format(item.pf_phase_a),
+          faseB: Intl.NumberFormat("pt-BR").format(item.pf_phase_b),
+          faseC: Intl.NumberFormat("pt-BR").format(item.pf_phase_c),
         }));
       } catch (error) {
         console.error("Error creating power factor chart:", error);
@@ -162,6 +163,7 @@ export default {
       data: [],
       powerFactorColumns: [
         { name: "medidor", align: "left", label: "Medidor", field: "medidor" },
+        { name: "transductor", label: "Transdutor", field: "transductor" },
         { name: "faseA", label: "Fase A (%)", field: "faseA", sortable: true },
         { name: "faseB", label: "Fase B (%)", field: "faseB", sortable: true },
         { name: "faseC", label: "Fase C (%)", field: "faseC", sortable: true },

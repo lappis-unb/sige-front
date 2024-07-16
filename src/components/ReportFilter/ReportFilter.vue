@@ -12,7 +12,7 @@
           option-value="id"
           option-label="name"
           input-debounce="0"
-          label="Campus"
+          label="Faculdade"
           :options="optionsCampus"
           @filter="filterCampus"
           class="col-4 elem select"
@@ -24,6 +24,7 @@
             </q-item>
           </template>
         </q-select>
+        
 
         <!-- Filtro de selecao da unidade -->
         <q-select
@@ -32,7 +33,7 @@
           map-options
           emit-value
           option-value="id"
-          option-label="name"
+          option-label="acronym"
           input-debounce="0"
           label="Unidade Consumidora"
           :options="optionsGroup"
@@ -99,6 +100,7 @@ import { mapActions, mapGetters } from "vuex";
 import CampiService from "../../services/CampiService";
 import report from "../../services/api/report";
 import moment from "moment";
+import ConsumptionFilter from "../ConsumptionFilter/ConsumptionFilter.vue";
 
 export default {
   name: "ReportFilter",
@@ -116,7 +118,12 @@ export default {
   },
   async created() {
     const campiService = new CampiService();
-    this.optionsCampus = await campiService.getAllCampiInfo();
+    const allCampiInfo = await campiService.getAllCampiInfo();
+    const gamaCampus = allCampiInfo.find(campus => campus.name === "Fundação Universidade de Brasília").children;
+    this.optionsCampus = gamaCampus;
+    if (gamaCampus.length > 0) {
+    this.campusModel = gamaCampus[0].id;
+    }
     this.applyFilter();
     this.getGroups();
   },
@@ -185,7 +192,7 @@ export default {
         (campus) => campus.id === this.campusModel
       );
       if (selectedCampus) {
-        const updatedGroups = selectedCampus.groups_related.filter(
+        const updatedGroups = selectedCampus.children.filter(
           (group, index, self) => {
             return index === self.findIndex((g) => g.name === group.name);
           }
