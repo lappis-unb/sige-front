@@ -19,8 +19,15 @@
   justify-content: space-around;
   flex-direction: row;
   margin-top: 1%;
+  margin-bottom: 0.5%;
   width: 100%;
   padding: 0;
+}
+.dateFilter{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 10px 20px 0;
 }
 .input {
   padding-bottom: 0;

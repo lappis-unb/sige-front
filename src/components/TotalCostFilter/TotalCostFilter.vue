@@ -23,7 +23,7 @@
           </template>
         </q-select>
 
-          <q-select
+        <q-select
           v-model="optionsModel"
           use-input
           map-options
@@ -51,44 +51,93 @@
             toggle-color="primary"
             class="elem toggle"
             :options="[
-          {label: 'DIA', value: 'daily'},
-          {label: 'MÊS', value: 'monthly'},
-          {label: 'ANO', value: 'yearly'}
-        ]"
-        @input="changePeriodicity(model);"
+              {label: 'DIA', value: 'daily'},
+              {label: 'MÊS', value: 'monthly'},
+              {label: 'ANO', value: 'yearly'}
+            ]"
+            @input="changePeriodicity(model);"
           />
         </div>
-        <q-input v-model="startDate" :mask="mask" label="Período: Início" class="elem input" :error="errorStartDate" @input="verifyClearInput">
-          <template v-slot:append>
-            <q-icon name="event" class="cursor-pointer calendar">
-              <q-popup-proxy transition-show="scale" transition-hide="scale">
-                <q-date @input="changeStartDate(startDate);" v-model="startDate" mask="DD/MM/YYYY" />
-              </q-popup-proxy>
-            </q-icon>
-          </template>
-        </q-input>
-        <q-input v-model="endDate" :mask="mask" label="Período: Fim" class="elem input" :error="errorEndDate" @input="verifyClearInput">
-          <template v-slot:append>
-            <q-icon name="event" class="cursor-pointer calendar">
-              <q-popup-proxy transition-show="scale" transition-hide="scale">
-                <q-date @input="changeEndDate(endDate);" v-model="endDate" mask="DD/MM/YYYY" />
-              </q-popup-proxy>
-            </q-icon>
-          </template>
-        </q-input>
+        <div class="dateFilter">
+          <q-input
+            v-model="filteredDate.from"
+            dense
+            outlined
+            :mask="mask"
+            label="Período: Início"
+            class="elem input"
+            :error="errorStartDate"
+            :rules="[() => !errorStartDate || 'Data inválida']"
+            @input="verifyClearInput"
+          >
+            <template v-slot:prepend>
+              <q-icon name="event" class="cursor-pointer calendar" size="xs">
+                <q-popup-proxy transition-show="scale" transition-hide="scale">
+                  <q-date
+                    v-model="filteredDate"
+                    mask="DD/MM/YYYY"
+                    range
+                    @input="changeStartDate(filteredDate.from)"
+                    :locale="ptBR_Locale"
+                  >
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="ok" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+            <template v-slot:append>
+              <q-icon
+                v-if="filteredDate.from !== ''"
+                name="close"
+                @click="filteredDate = { from: '', to: '' }"
+                class="cursor-pointer"
+              />
+            </template>
+          </q-input>
+          <q-input
+            v-model="filteredDate.to"
+            dense
+            outlined
+            :mask="mask"
+            label="Período: Fim"
+            class="elem input"
+            :error="errorEndDate"
+            :rules="[() => !errorEndDate || 'Data inválida']"
+            @input="verifyClearInput"
+          >
+            <template v-slot:prepend>
+              <q-icon name="event" class="cursor-pointer calendar" size="xs">
+                <q-popup-proxy transition-show="scale" transition-hide="scale">
+                  <q-date
+                    v-model="filteredDate"
+                    mask="DD/MM/YYYY" 
+                    range
+                    @input="changeEndDate(filteredDate.to)" 
+                    :locale="ptBR_Locale"
+                  >
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="ok" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
+        </div>
         <q-btn
-            class="apply_button"
-            size="1rem"
-            label="Aplicar"
-            type="button"
-            @click="getChart()"
-            color="primary"
+          class="apply_button"
+          size="1rem"
+          label="Aplicar"
+          type="button"
+          @click="getChart()"
+          color="primary"
         />
       </div>
     </div>
     <div class="adjust-toggle">
-      <q-toggle v-model="value" />
-      <a class="subtitle">Ajustar para datas de faturamento</a>
+      <q-toggle v-model="value" class="subtitle" label="Ajustar para datas de faturamento"/>
     </div>
   </div>
 </template>
@@ -114,8 +163,19 @@ export default {
       optionsCampus: allCampus,
       optionsModel: null,
       optionsGroup: [],
-      startDate: '',
-      endDate: '',
+      filteredDate: {
+        from: '',
+        to: ''
+      },
+      ptBR_Locale: {
+        days: 'Domingo_Segunda-Feira_Terça-Feira_Quarta-Feira_Quinta-Feira_Sexta-Feira_Sábado'.split('_'),
+        daysShort: 'Dom_Seg_Ter_Qua_Qui_Sex_Sáb'.split('_'),
+        months: 'Janeiro_Fevereiro_Março_Abril_Maio_Junho_Julho_Agosto_Setembro_Outubro_Novembro_Dezembo'.split('_'),
+        monthsShort: 'Jan_Fev_Mar_Abr_Mai_Jun_Jul_Ago_Set_Out_Nov_Dez'.split('_'),
+        firstDayOfWeek: 0, // 0-6, 0 - Domingo, 1 Segunda, ...
+        format24h: true,
+        pluralDay: 'dias'
+      },
       mask: '##/##/####',
       value: false
     }
@@ -124,6 +184,8 @@ export default {
   async created () {
     allCampus = await campiService.getAllCampiInfo()
     this.optionsCampus = allCampus
+    this.filteredDate.from = moment().startOf('month').format('DD-MM-YYYY')
+    this.filteredDate.to = moment().format('DD-MM-YYYY')
     this.getChart()
   },
   computed: {
@@ -147,7 +209,6 @@ export default {
         )
       })
     },
-
     getGroups () {
       const updatedGroups = []
       const selectedCampus = allCampus.find(campus => campus.id === this.campusModel)
@@ -162,27 +223,35 @@ export default {
     },
 
     verifyClearInput () {
-      if (!this.startDate) {
+      if (!this.filteredDate.from) {
         this.clearStartDate()
         this.getChart()
       } else {
-        if (moment(this.startDate, 'DD-MM-YYYY').isValid()) {
-          this.changeStartDate(this.startDate)
+        if (moment(this.filteredDate.from, 'DD-MM-YYYY').isValid()) {
+          this.changeStartDate(this.filteredDate.from)
           this.getChart()
         }
       }
 
-      if (!this.endDate) {
+      if (!this.filteredDate.to) {
         this.clearEndDate()
         this.getChart()
       } else {
-        if (moment(this.endDate, 'DD-MM-YYYY').isValid()) {
-          this.changeEndDate(this.endDate)
+        if (moment(this.filteredDate.to, 'DD-MM-YYYY').isValid()) {
+          this.changeEndDate(this.filteredDate.to)
           this.getChart()
         }
       }
     },
     getChart () {
+      if (moment(this.filteredDate.from, 'DD-MM-YYYY').isAfter(moment(this.filteredDate.to, 'DD-MM-YYYY'))) {
+        this.$q.notify({
+          type: 'negative',
+          message: 'A data final não pode ser menor que a data inicial',
+          position: 'top'
+        })
+        return
+      }
       chartService.getChartData(this.getUrl, 'R$', dimensions[1])
         .then((chart) => {
           this.updateChart(chart)

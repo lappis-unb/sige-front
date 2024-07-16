@@ -76,14 +76,14 @@ export default {
     ...mapActions('userStore', ['changePage', 'saveUserInfo']),
     register () {
       MASTER
-        .post('api/accounts/', {
+        .post('accounts/', {
           email: this.email,
           password: this.password,
           confirm_password: this.password_confirmation
         })
         .then(res => {
           MASTER
-            .post('api/accounts/login/', {
+            .post('accounts/login/', {
               email: this.email,
               password: this.password
             })
