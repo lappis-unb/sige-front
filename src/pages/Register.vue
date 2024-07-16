@@ -14,13 +14,13 @@
             v-model="fullname"
             label="Nome completo"
             lazy-rules
-            :rules="[ val => !!val || 'Insira seu nome completo.', val => /^[a-zA-ZÀ-ÖØ-öø-ÿ\s]+$/.test(val) || 'Nome inválido. Use apenas letras e espaços.']"/>
+            :rules="[  val => !!val || 'Insira seu nome completo.']"/>
           <q-input
             outlined
             v-model="email"
             label="Email"
             lazy-rules
-            :rules="[ val => val.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/) || 'Insira um email válido.']"/>
+            :rules="[  val => val.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/) || 'Insira um email válido.']"/>
           <q-input
             outlined
             v-model="password"
@@ -28,7 +28,7 @@
             lazy-rules
             password
             type="password"
-            :rules="passwordRules"/>
+            :rules="[ val => val && val.length >= 8 || 'Insira uma senha com ao menos 8 caracteres.']"/>
           <q-input
             outlined
             v-model="password_confirmation"
@@ -36,7 +36,7 @@
             lazy-rules
             password
             type="password"
-            :rules="[ val => val && val.length >= 8 || 'Insira uma senha com ao menos 8 caracteres.', val => val === this.password || 'Confirmação deve ser igual à senha informada']"/>
+            :rules="[ val => val && val.length >= 8 || 'Insira uma senha com ao menos 8 caracteres.', val => val === this.password || 'Confirmação deve ser iqual a senha informada']"/>
           <div class="text-center q-mt-lg">
             <q-btn
               size="1rem"
@@ -72,18 +72,6 @@ export default {
       user_type: 'general'
     }
   },
-  computed: {
-    passwordRules() {
-      return [
-        val => !!val || 'Insira uma senha.',
-        val => val.length >= 8 || 'Insira uma senha com ao menos 8 caracteres.',
-        val => /[0-9]/.test(val) || 'A senha deve conter pelo menos um número.',
-        val => /[a-z]/.test(val) || 'A senha deve conter pelo menos uma letra minúscula.',
-        val => /[A-Z]/.test(val) || 'A senha deve conter pelo menos uma letra maiúscula.',
-        val => !this.fullname || !val.includes(this.fullname) || 'A senha não pode conter o nome de usuário.'
-      ]
-    }
-  },
   methods: {
     ...mapActions('userStore', ['changePage', 'saveUserInfo']),
     register () {
@@ -91,7 +79,7 @@ export default {
         .post('accounts/', {
           email: this.email,
           password: this.password,
-          confirm_password: this.password_confirmation,
+          confirm_password: this.password_confirmation
         })
         .then(res => {
           MASTER
@@ -125,7 +113,7 @@ export default {
           console.log(err)
           this.$q.notify({
             type: 'negative',
-            message: 'Falha ao criar sua conta. Tente novamente, por favor.'
+            message: 'Falha ao criar sua conta. Tente novamente.'
           })
         })
     }
