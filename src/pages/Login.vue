@@ -92,7 +92,7 @@ export default {
     },
     login () {
       MASTER
-        .post('/accounts/login/', {
+        .post('accounts/login/', {
           email: this.email,
           password: this.password,
           confirm_password: this.password
