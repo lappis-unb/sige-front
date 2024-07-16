@@ -63,10 +63,7 @@
 
           <template v-slot:body-cell-grouping="props">
             <q-td :props="props">
-              <div v-if="props.value.length == 0"> - </div>
-              <div v-else class="" v-for="group in props.value" v-bind:key="group">
-                {{ group }}
-              </div>
+              
             </q-td>
           </template>
 
@@ -100,7 +97,7 @@ export default {
     ...mapActions('userStore', ['changePage']),
     async getTransductors () {
       await MASTER
-        .get('energy-transductors-list/')
+        .get('energy-transductors')
         .then((res) => {
           this.transductors = res.data
         })
@@ -115,7 +112,7 @@ export default {
   },
   data () {
     return {
-      dataLoaded: false,
+      dataLoaded: true,
       transductors: [],
       filter: '',
       pagination: {
@@ -124,17 +121,17 @@ export default {
       },
       columns: [
         {
-          name: 'campus',
+          name: 'located',
           label: 'Campus',
           align: 'left',
-          field: 'campus',
+          field: 'located',
           sortable: true
         },
         {
           name: 'name',
-          label: 'Nome',
+          label: 'Nome(Serial)',
           align: 'left',
-          field: 'name',
+          field: 'serial_number',
           sortable: true,
           style: 'font-weight:bold'
         },
@@ -171,10 +168,10 @@ export default {
           sortable: true
         },
         {
-          name: 'active',
+          name: 'status',
           align: 'center',
           label: 'Ativo',
-          field: 'active',
+          field: 'status',
           sortable: true,
           sort: (a, b) => parseInt(a, 10) - parseInt(b, 10)
         },
