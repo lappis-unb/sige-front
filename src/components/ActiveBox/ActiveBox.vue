@@ -21,6 +21,7 @@
     <map-modal :center="[latitude, longitude]" />
   </q-card>
 </template>
+
 <script>
 import MASTER from '../../services/masterApi/http-common'
 import mapModal from '../MapModal'
@@ -34,7 +35,7 @@ export default {
   props: ['id'],
   data() {
     return {
-      active: false,
+      active: '',
       latitude: null,
       longitude: null,
       name: '',
@@ -55,23 +56,21 @@ export default {
       try {
         const response = await MASTER.get(`/energy-transductors/${this.id}/`)
         if (response) {
-          const { active, broken, geolocation_latitude, geolocation_longitude, name } = response.data
-          const campusId = response.data.campus //  response.data.campus ->  http://164.41.98.3:443/campi/1/
-          this.active = active
-          this.broken = broken
-          this.latitude = geolocation_latitude
-          this.longitude = geolocation_longitude
-          this.name = name
-          this.campusId = parseInt(campusId, 10)
+          this.active = response.data.is_generator
+          this.latitude = response.data.geo_location.latitude
+          this.longitude = response.data.geo_location.longitude
+          this.name = response.data.name
+          this.campusId = response.data.campus
         }
       } catch (error) {
-        console.log(error)
+        console.log("deu merda", error)
       }
     },
     async getCampus() {
       try {
-        const response = await MASTER.get(`/campi/${this.campusId}/`)
-        this.campusName = response.data.name
+        const response = await MASTER.get(`/entities/`)
+        console.log("RESPOSTA DAHORA", response.data[0].children[0].name)
+        this.campusName = response.data[0].children[0].name
       } catch (error) {
         console.log(error)
       }
