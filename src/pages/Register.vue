@@ -14,7 +14,10 @@
             v-model="fullname"
             label="Nome completo"
             lazy-rules
-            :rules="[ val => !!val || 'Insira seu nome completo.', val => /^[a-zA-ZÀ-ÖØ-öø-ÿ\s]+$/.test(val) || 'Nome inválido. Use apenas letras e espaços.']"/>
+            :rules="[ 
+              val => !!val || 'Insira seu nome completo.', 
+              val => /^[a-zA-ZÀ-ÖØ-öø-ÿ\s]+$/.test(val) || 'Nome inválido. Use apenas letras e espaços.',
+              val => val.length >= 3 || 'O nome deve ter no mínimo 3 caracteres.' ]"/>
           <q-input
             outlined
             v-model="email"
