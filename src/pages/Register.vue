@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <div class="row justify-center q-pa-xl">
+    <div class="row justify-center q-pa-xl">R
       <div class="col-9 col-lg-5 bg-white q-pa-md shadow-1">
         <q-form
           class="q-gutter-md form-box"
@@ -14,7 +14,8 @@
             v-model="fullname"
             label="Nome completo"
             lazy-rules
-            :rules="[  val => !!val || 'Insira seu nome completo.']"/>
+            :rules="[ val => !!val && val.length >= 3 && /[a-zA-Z]/.test(val) || 'Insira seu nome completo, com ao menos 3 caracteres e pelo menos um caractere alfabético.']"/>
+
           <q-input
             outlined
             v-model="email"
