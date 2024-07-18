@@ -1,7 +1,14 @@
 <template>
   <div class="retangle">
+    <p v-if="loading" class="table-title">
+      <q-spinner
+        color="primary"
+        size="3em"
+        :thickness="2"
+      />
+    </p>
+    <p v-else-if="!hasMeasurements" class="table-title">Não há leituras salvas</p>
     <p v-if="hasMeasurements" class="table-title">Última leitura - {{lastReading}}.</p>
-    <p v-if="!hasMeasurements" class="table-title">Não há leituras salvas</p>
     <table v-if="hasMeasurements" align="center" class="readings">
       <tr>
         <th>TENSÃO</th>
@@ -45,37 +52,40 @@ export default {
       current: {},
       power: {},
       generation: 'não disponível',
-      hasMeasurements: false
+      hasMeasurements: false,
+      loading: false
     }
   },
   async created () {
+    this.loading = true;
     await MASTER
-      .get('/realtime-measurements/?id=' + this.id)
+      .get(`/measurements/instant/?transductor=${this.id}`)
       .then(res => {
         this.tension = {
-          a: Math.round(res.data[0].voltage_a),
-          b: Math.round(res.data[0].voltage_b),
-          c: Math.round(res.data[0].voltage_c)
+          a: Math.round(res.data.results[0].voltage_a),
+          b: Math.round(res.data.results[0].voltage_b),
+          c: Math.round(res.data.results[0].voltage_c)
         }
         this.current = {
-          a: Math.round(res.data[0].current_a),
-          b: Math.round(res.data[0].current_b),
-          c: Math.round(res.data[0].current_c)
+          a: Math.round(res.data.results[0].current_a),
+          b: Math.round(res.data.results[0].current_b),
+          c: Math.round(res.data.results[0].current_c)
         }
         this.power = {
-          a: Math.round(res.data[0].total_active_power),
-          r: Math.round(res.data[0].total_reactive_power),
-          t: Math.round(res.data[0].total_power_factor)
+          a: Math.round(res.data.results[0].total_active_power),
+          r: Math.round(res.data.results[0].total_reactive_power),
+          t: Math.round(res.data.results[0].total_power_factor)
         }
-        this.lastReading = this.getTime(res.data[0].collection_date)
-        if (res.data[0].consumption) {
-          this.generation = (Math.floor((res.data[0].consumption) / 1000)).toString() + ' kW'
+        this.lastReading = this.getTime(res.data.results[0].collection_date)
+        if (res.data.results[0].consumption) {
+          this.generation = (Math.floor((res.data.results[0].consumption) / 1000)).toString() + ' kW'
         }
         this.hasMeasurements = true
       })
       .catch(err => {
         console.log(err)
       })
+    this.loading = false;
   },
   methods: {
     getTime (d) {
@@ -128,3 +138,4 @@ export default {
   color: $primary;
 }
 </style>
+

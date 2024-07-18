@@ -67,7 +67,7 @@ export default {
     },
     getUsers (user) {
       MASTER
-        .post('/api/accounts/payload/', {
+        .post('/accounts/payload/', {
             token: user.token
         })
         .then(res => {
