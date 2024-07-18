@@ -63,10 +63,7 @@
 
           <template v-slot:body-cell-grouping="props">
             <q-td :props="props">
-              <div v-if="props.value.length == 0"> - </div>
-              <div v-else class="" v-for="group in props.value" v-bind:key="group">
-                {{ group }}
-              </div>
+              
             </q-td>
           </template>
 
@@ -100,7 +97,7 @@ export default {
     ...mapActions('userStore', ['changePage']),
     async getTransductors () {
       await MASTER
-        .get('energy-transductors-list/')
+        .get('energy-transductors')
         .then((res) => {
           this.transductors = res.data
         })
@@ -124,17 +121,27 @@ export default {
       },
       columns: [
         {
-          name: 'campus',
+          name: 'located',
           label: 'Campus',
           align: 'left',
-          field: 'campus',
+          field: row => {
+            const words = row.located.split(' ');
+            if(words[0] == "UAC" || words[0] == "UED" ||words[0] == "LDTEA")
+              return "FGA"
+            else
+              return "NDF"
+          },
           sortable: true
         },
         {
           name: 'name',
-          label: 'Nome',
+          label: 'Nome(Serial)',
           align: 'left',
-          field: 'name',
+          field: row => {
+            const sn = row.serial_number
+            const words = row.located.split(' ');
+            return words[0] + "-"+ sn
+          },
           sortable: true,
           style: 'font-weight:bold'
         },
@@ -164,17 +171,24 @@ export default {
           sort: (a, b) => parseInt(a, 10) - parseInt(b, 10)
         },
         {
-          name: 'grouping',
+          name: 'located',
           align: 'left',
           label: 'Grupos',
-          field: 'grouping',
+          field: row => {
+            const words = row.located.split(' ');
+            return words[0]
+          },
           sortable: true
         },
         {
           name: 'active',
           align: 'center',
           label: 'Ativo',
-          field: 'active',
+          field: row => {
+            if(row.status === "Active")
+              return true
+            return false
+          },
           sortable: true,
           sort: (a, b) => parseInt(a, 10) - parseInt(b, 10)
         },
@@ -190,6 +204,7 @@ export default {
   }
 }
 </script>
+
 
 <style>
   .q-table__top,
