@@ -67,17 +67,16 @@ export default {
     },
     getUsers (user) {
       MASTER
-        .get('users/' + user.id + '/', {
-          headers: {
-            authorization: 'Token ' + user.token
-          }
+        .post('/api/accounts/payload/', {
+            token: user.token
         })
         .then(res => {
-          this.username = res.data.name
+          this.username = res.data.email
           this.useremail = res.data.email
+
           this.saveUserInfo({
-            username: this.username,
-            useremail: this.useremail
+            username: this.email,
+            useremail: this.email
           })
         })
         .catch(err => {

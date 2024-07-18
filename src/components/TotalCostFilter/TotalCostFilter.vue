@@ -23,7 +23,7 @@
           </template>
         </q-select>
 
-          <q-select
+        <q-select
           v-model="optionsModel"
           use-input
           map-options
@@ -43,6 +43,7 @@
             </q-item>
           </template>
         </q-select>
+
         <div class="vision">
           <a class="caption">Visão</a>
           <br />
@@ -51,13 +52,14 @@
             toggle-color="primary"
             class="elem toggle"
             :options="[
-          {label: 'DIA', value: 'daily'},
-          {label: 'MÊS', value: 'monthly'},
-          {label: 'ANO', value: 'yearly'}
-        ]"
-        @input="changePeriodicity(model);"
+              {label: 'DIA', value: 'daily'},
+              {label: 'MÊS', value: 'monthly'},
+              {label: 'ANO', value: 'yearly'}
+            ]"
+            @input="changePeriodicity(model);"
           />
         </div>
+
         <q-input v-model="startDate" :mask="mask" label="Período: Início" class="elem input" :error="errorStartDate" @input="verifyClearInput">
           <template v-slot:append>
             <q-icon name="event" class="cursor-pointer calendar">
@@ -67,6 +69,7 @@
             </q-icon>
           </template>
         </q-input>
+
         <q-input v-model="endDate" :mask="mask" label="Período: Fim" class="elem input" :error="errorEndDate" @input="verifyClearInput">
           <template v-slot:append>
             <q-icon name="event" class="cursor-pointer calendar">
@@ -76,13 +79,14 @@
             </q-icon>
           </template>
         </q-input>
+
         <q-btn
-            class="apply_button"
-            size="1rem"
-            label="Aplicar"
-            type="button"
-            @click="getChart()"
-            color="primary"
+          class="apply_button"
+          size="1rem"
+          label="Aplicar"
+          type="button"
+          @click="getChart()"
+          color="primary"
         />
       </div>
     </div>
@@ -124,6 +128,8 @@ export default {
   async created () {
     allCampus = await campiService.getAllCampiInfo()
     this.optionsCampus = allCampus
+    this.startDate = moment().startOf('month').format('DD/MM/YYYY')
+    this.endDate = moment().format('DD/MM/YYYY')
     this.getChart()
   },
   computed: {
@@ -131,6 +137,7 @@ export default {
   },
   methods: {
     ...mapActions('totalCostStore', ['changePeriodicity', 'changeStartDate', 'changeEndDate', 'filterByCampus', 'filterByGroup', 'clearStartDate', 'clearEndDate', 'updateChart']),
+    
     filterFn (val, update) {
       update(() => {
         const needle = val.toLowerCase()
@@ -147,7 +154,6 @@ export default {
         )
       })
     },
-
     getGroups () {
       const updatedGroups = []
       const selectedCampus = allCampus.find(campus => campus.id === this.campusModel)
@@ -160,29 +166,70 @@ export default {
       this.optionsModel = null
       this.optionsGroup = updatedGroups
     },
-
     verifyClearInput () {
       if (!this.startDate) {
         this.clearStartDate()
-        this.getChart()
       } else {
-        if (moment(this.startDate, 'DD-MM-YYYY').isValid()) {
+        if (moment(this.startDate, 'DD/MM/YYYY').isValid()) {
           this.changeStartDate(this.startDate)
-          this.getChart()
+        } else {
+          this.$q.notify({
+            type: 'negative',
+            message: 'Data inicial inválida'
+          })
+          return
         }
       }
 
       if (!this.endDate) {
         this.clearEndDate()
-        this.getChart()
       } else {
-        if (moment(this.endDate, 'DD-MM-YYYY').isValid()) {
+        if (moment(this.endDate, 'DD/MM/YYYY').isValid()) {
           this.changeEndDate(this.endDate)
-          this.getChart()
+        } else {
+          this.$q.notify({
+            type: 'negative',
+            message: 'Data final inválida'
+          })
+          return
         }
       }
+
+      if (moment(this.startDate, 'DD/MM/YYYY').isAfter(moment(this.endDate, 'DD/MM/YYYY'))) {
+        this.$q.notify({
+          type: 'negative',
+          message: 'A data final não pode ser menor que a data inicial'
+        })
+        return
+      }
+
+      this.getChart()
     },
     getChart () {
+      if (!moment(this.startDate, 'DD/MM/YYYY').isValid()) {
+        this.$q.notify({
+          type: 'negative',
+          message: 'Data inicial inválida'
+        })
+        return
+      }
+
+      if (!moment(this.endDate, 'DD/MM/YYYY').isValid()) {
+        this.$q.notify({
+          type: 'negative',
+          message: 'Data final inválida'
+        })
+        return
+      }
+
+      if (moment(this.startDate, 'DD/MM/YYYY').isAfter(moment(this.endDate, 'DD/MM/YYYY'))) {
+        this.$q.notify({
+          type: 'negative',
+          message: 'A data final não pode ser menor que a data inicial'
+        })
+        return
+      }
+
       chartService.getChartData(this.getUrl, 'R$', dimensions[1])
         .then((chart) => {
           this.updateChart(chart)

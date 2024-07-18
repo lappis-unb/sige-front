@@ -1,6 +1,12 @@
 <template>
   <div class="row">
     <div class="col-9">
+      <div class="back-arrow" @click="goBack"> 
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#00417e" width="36px" height="36px">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M19 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H19v-2z"/>
+        </svg>
+      </div>
       <div class="row">
         <measurements-box class="col-8" :id="id"/>
         <active-box class="col-3" :id="id"/>
@@ -86,12 +92,15 @@ export default {
         .then((res) => {
           this.groups.push(res.data.name)
         })
+    },
+    goBack () {
+      this.$router.go(-1)
     }
   }
 }
 </script>
 
-<style lang="scss" scopped>
+<style lang="scss" scoped>
 .transductor-info {
   padding: 20px;
 }
@@ -121,5 +130,16 @@ export default {
 
 .history {
   text-align: justify;
+}
+
+.back-arrow {
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: 20px;
+  transition: transform 0.2s;
+}
+
+.back-arrow:hover {
+  transform: scale(1.2);
 }
 </style>
