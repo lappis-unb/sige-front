@@ -19,8 +19,9 @@
             outlined
             v-model="email"
             label="Email"
-            lazy-rules
-            :rules="[  val => val.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/) || 'Insira um email válido.']"/>
+            error-message="Insira um email válido."
+            :error="!$v.email.$pending && !$v.email.email"
+            @blur="$v.email.$touch()"/>
           <q-input
             outlined
             v-model="password"
@@ -70,6 +71,12 @@ export default {
       password: '',
       password_confirmation: '',
       user_type: 'general'
+    }
+  },
+  validations: {
+    email: {
+      required,
+      email
     }
   },
   methods: {
