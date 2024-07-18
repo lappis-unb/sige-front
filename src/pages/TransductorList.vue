@@ -56,8 +56,8 @@
 
           <template v-slot:body-cell-events_last72h="props">
             <q-td :props="props">
-              <template v-if="props.value > 0">{{ props.value }}</template>
-              <template v-else>-</template>
+              <template v-if="props.value > 0">Houve {{ props.value }} eventos nas últimas 72h</template>
+              <template v-else>Não houve eventos nas últimas 72h</template>
             </q-td>
           </template>
 
@@ -158,7 +158,7 @@ export default {
         {
           name: 'events_last72h',
           align: 'center',
-          label: 'Últ. 72h',
+          label: 'Últimas 72h',
           field: 'events_last72h',
           sortable: true,
           sort: (a, b) => parseInt(a, 10) - parseInt(b, 10)
