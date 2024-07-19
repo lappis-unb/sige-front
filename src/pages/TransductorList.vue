@@ -97,7 +97,7 @@ export default {
     ...mapActions('userStore', ['changePage']),
     async getTransductors () {
       await MASTER
-        .get('energy-transductors')
+        .get('transductors')
         .then((res) => {
           this.transductors = res.data
         })
@@ -126,21 +126,18 @@ export default {
           align: 'left',
           field: row => {
             const words = row.located.split(' ');
-            if(words[0] == "UAC" || words[0] == "UED" ||words[0] == "LDTEA")
-              return "FGA"
-            else
-              return "NDF"
+            return words[0]
           },
           sortable: true
         },
         {
           name: 'name',
-          label: 'Nome(Serial)',
+          label: 'Nome',
           align: 'left',
           field: row => {
-            const sn = row.serial_number
-            const words = row.located.split(' ');
-            return words[0] + "-"+ sn
+            const id = row.id
+            const words = row.located.split('(');
+            return words[1].split(')')[0] + "-"+ id
           },
           sortable: true,
           style: 'font-weight:bold'
