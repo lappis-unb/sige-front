@@ -143,6 +143,17 @@ export default {
           style: 'font-weight:bold'
         },
         {
+          name: 'ip',
+          label: 'End. IP',
+          align: 'left',
+          field: row => {
+            const ip = row.ip_address
+            return ip
+          },
+          sortable: true,
+          style: 'font-weight:bold'
+        },
+        {
           name: 'current_critical_events_count',
           align: 'center',
           label: 'Graves',
