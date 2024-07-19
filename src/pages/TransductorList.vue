@@ -31,7 +31,7 @@
 
           <template v-slot:header="props">
             <q-tr class="meter-header-group">
-              <q-th colspan="2"></q-th>
+              <q-th colspan="3"></q-th>
               <q-th colspan="3" class="meter-table-header-group-cell-grouped">Ocorrências</q-th>
               <q-th colspan="3"></q-th>
             </q-tr>
