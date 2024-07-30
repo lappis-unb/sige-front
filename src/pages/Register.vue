@@ -4,8 +4,8 @@
       <div class="col-9 col-lg-5 bg-white q-pa-md shadow-1">
         <q-form
           class="q-gutter-md form-box"
-          @validation-success="register()"
-          @submit.prevent>
+          @validation-success="register"
+          @submit.prevent="register">
           <div class="text-center helper-text">
             Cadastro reservado para servidores e colaboradores da Universidade de Brasília
           </div>
@@ -24,22 +24,28 @@
             label="Email"
             lazy-rules
             :rules="[ val => val.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/) || 'Insira um email válido.']"/>
-          <q-input
-            outlined
-            v-model="password"
-            label="Senha"
-            lazy-rules
-            password
-            type="password"
-            :rules="passwordRules"/>
-          <q-input
-            outlined
-            v-model="password_confirmation"
-            label="Confirme a senha"
-            lazy-rules
-            password
-            type="password"
-            :rules="[ val => val && val.length >= 8 || 'Insira uma senha com ao menos 8 caracteres.', val => val === this.password || 'Confirmação deve ser igual à senha informada']"/>
+          <div class="password-container">
+            <div class="password-fields">
+              <q-input
+                outlined
+                v-model="password"
+                label="Senha"
+                lazy-rules
+                password
+                type="password"
+                :rules="passwordRules"
+                class="password-input"/>
+              <q-input
+                outlined
+                v-model="password_confirmation"
+                label="Confirme a senha"
+                lazy-rules
+                password
+                type="password"
+                :rules="[ val => val === password || 'Confirmação deve ser igual à senha informada']"/>
+            </div>
+            <PasswordRequirements :password="password" :fullname="fullname" />
+          </div>
           <div class="text-center q-mt-lg">
             <q-btn
               size="1rem"
@@ -49,20 +55,24 @@
           </div>
         </q-form>
       </div>
-    <div class="col-12 q-pa-md text-center">
-      Já tem uma conta?
-      <a href="/login">Acesse agora</a>
+      <div class="col-12 q-pa-md text-center">
+        Já tem uma conta?
+        <a href="/login">Acesse agora</a>
+      </div>
     </div>
-  </div>
   </q-page>
 </template>
 
 <script>
 import MASTER from '../services/masterApi/http-common'
 import { mapActions } from 'vuex'
+import PasswordRequirements from './PasswordRequirements.vue'
 
 export default {
   name: 'Register',
+  components: {
+    PasswordRequirements
+  },
   created () {
     this.changePage('Cadastro')
   },
@@ -72,98 +82,116 @@ export default {
       email: '',
       password: '',
       password_confirmation: '',
-      user_type: 'general'
-    }
-  },
-  computed: {
-    passwordRules() {
-      return [
-        val => !!val || 'Insira uma senha.',
-        val => val.length >= 8 || 'Insira uma senha com ao menos 8 caracteres.',
-        val => /[0-9]/.test(val) || 'A senha deve conter pelo menos um número.',
-        val => /[a-z]/.test(val) || 'A senha deve conter pelo menos uma letra minúscula.',
-        val => /[A-Z]/.test(val) || 'A senha deve conter pelo menos uma letra maiúscula.',
-        val => !this.fullname || !val.includes(this.fullname) || 'A senha não pode conter o nome de usuário.'
+      user_type: 'general',
+      passwordRules: [
+        val => val && val.length >= 8,
+        val => /[A-Z]/.test(val) ,
+        val => /[a-z]/.test(val) ,
+        val => /[0-9]/.test(val) ,
+        val => !val.includes(this.fullname)
       ]
     }
   },
   methods: {
     ...mapActions('userStore', ['changePage', 'saveUserInfo']),
     register () {
-      MASTER
-        .post('users/', {
-          email: this.email,
-          password: this.password,
-          name: this.fullname,
-          user_type: this.user_type
-        })
-        .then(res => {
+      this.$refs.form.validate().then(success => {
+        if (success) {
           MASTER
-            .post('login/', {
+            .post('users/', {
               email: this.email,
-              password: this.password
+              password: this.password,
+              name: this.fullname,
+              user_type: this.user_type
             })
             .then(res => {
-              this.saveUserInfo({
-                userToken: res.data.token,
-                userID: res.data.user.id,
-                username: res.data.user.name,
-                useremail: res.data.user.email
-              })
-              this.$router.push('/')
-              this.$q.notify({
-                type: 'positive',
-                message: 'Sua conta foi criada com sucesso.'
-              })
+              MASTER
+                .post('login/', {
+                  email: this.email,
+                  password: this.password
+                })
+                .then(res => {
+                  this.saveUserInfo({
+                    userToken: res.data.token,
+                    userID: res.data.user.id,
+                    username: res.data.user.name,
+                    useremail: res.data.user.email
+                  })
+                  this.$router.push('/')
+                  this.$q.notify({
+                    type: 'positive',
+                    message: 'Sua conta foi criada com sucesso.'
+                  })
+                })
+                .catch(err => {
+                  console.log(err)
+                  this.$router.push('/login')
+                  this.$q.notify({
+                    type: 'positive',
+                    message: 'Acesse sua conta.'
+                  })
+                })
             })
             .catch(err => {
               console.log(err)
-              this.$router.push('/login')
               this.$q.notify({
-                type: 'positive',
-                message: 'Acesse sua conta.'
+                type: 'negative',
+                message: 'Falha ao criar sua conta. Tente novamente, por favor.'
               })
             })
-        })
-        .catch(err => {
-          console.log(err)
+        } else {
           this.$q.notify({
             type: 'negative',
-            message: 'Falha ao criar sua conta. Tente novamente, por favor.'
+            message: 'Por favor, preencha todos os campos corretamente.'
           })
-        })
+        }
+      })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .secondary-text {
-    font-size: 1.3em;
-  }
-  .primary-text {
-    // font-family: ?
-    font-size: 2em;
-  }
-  .driver-text {
-    color: rgba(0, 64, 126, 100%);
-    font-size: 2em;
-    text-align: center;
-    padding-left: 5%;
-    padding-right: 5%;
-  }
-  .login-text {
-    color: rgba(100, 100, 100, 100%);
-  }
-  .helper-text {
-    font-family: Roboto;
-    font-size: 20px;
-    font-weight: 500;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: 0.25px;
-    text-align: center;
-    color: rgba(0, 0, 0, 0.6);
-  }
+.secondary-text {
+  font-size: 1.3em;
+}
+.primary-text {
+  font-size: 2em;
+}
+.driver-text {
+  color: rgba(0, 64, 126, 100%);
+  font-size: 2em;
+  text-align: center;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+.login-text {
+  color: rgba(100, 100, 100, 100%);
+}
+.helper-text {
+  font-family: Roboto;
+  font-size: 20px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.25px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.6);
+}
+</style>
+
+<style scoped>
+.password-container {
+  display: flex;
+  align-items: flex-start;
+}
+
+.password-fields {
+  flex: 1;
+}
+
+.password-input {
+  margin-bottom: 1rem; 
+}
 </style>
