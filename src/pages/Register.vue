@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex flex-center">
-    <div class="row justify-center q-pa-xl">
-      <div class="col-9 col-lg-5 bg-white q-pa-md shadow-1">
+    <div class="row justify-center q-pa-md q-pa-xl-md-up">
+      <div class="col-12 col-md-8 col-lg-5 bg-white q-pa-md shadow-1">
         <q-form
           class="q-gutter-md form-box"
           @validation-success="register"
@@ -42,9 +42,12 @@
                 lazy-rules
                 password
                 type="password"
-                :rules="[ val => val === password || 'Confirmação deve ser igual à senha informada']"/>
+                :rules="[ val => val === password || 'Confirmação deve ser igual à senha informada']"
+                class="confirm-password-input"/>
             </div>
-            <PasswordRequirements :password="password" :fullname="fullname" />
+            <div class="password-requirements-wrapper">
+              <PasswordRequirements class="password-requirements" :password="password" :fullname="fullname" />
+            </div>
           </div>
           <div class="text-center q-mt-lg">
             <q-btn
@@ -85,9 +88,9 @@ export default {
       user_type: 'general',
       passwordRules: [
         val => val && val.length >= 8,
-        val => /[A-Z]/.test(val) ,
-        val => /[a-z]/.test(val) ,
-        val => /[0-9]/.test(val) ,
+        val => /[A-Z]/.test(val),
+        val => /[a-z]/.test(val),
+        val => /[0-9]/.test(val),
         val => !val.includes(this.fullname)
       ]
     }
@@ -179,19 +182,34 @@ export default {
   text-align: center;
   color: rgba(0, 0, 0, 0.6);
 }
-</style>
-
-<style scoped>
 .password-container {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
 }
-
 .password-fields {
   flex: 1;
 }
-
 .password-input {
-  margin-bottom: 1rem; 
+  margin-bottom: 1rem;
+}
+.password-requirements-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem; /* Espaço entre critérios e confirmação de senha */
+}
+.confirm-password-input {
+  margin-top: 1rem;
+}
+@media (min-width: 600px) {
+  .password-container {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .password-requirements-wrapper {
+    margin-top: 0;
+    margin-left: 1rem;
+    justify-content: flex-start;
+  }
 }
 </style>
