@@ -162,8 +162,8 @@ export default {
       ],
       data: [],
       powerFactorColumns: [
-        { name: "medidor", align: "left", label: "Medidor", field: "medidor" },
-        { name: "transductor", label: "Transdutor", field: "transductor" },
+        { name: "medidor", align: "left", label: "Localização", field: "medidor" },
+        { name: "transductor", label: "Medidor", field: "transductor" },
         { name: "faseA", label: "Fase A (%)", field: "faseA", sortable: true },
         { name: "faseB", label: "Fase B (%)", field: "faseB", sortable: true },
         { name: "faseC", label: "Fase C (%)", field: "faseC", sortable: true },
