@@ -179,7 +179,25 @@ export default {
                 filename: filename
               }
             }
-          }
+          },
+          locales: [{
+            name: 'pt-BR',
+            options: {
+              shortMonths: [
+                'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+                'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
+              ],
+              toolbar: {
+                selection: 'Selecionar',
+                selectionZoom: 'Zoom de seleção',
+                zoomIn: 'Aproximar',
+                zoomOut: 'Afastar',
+                pan: 'Navegação',
+                reset: 'Redefinir Zoom',
+              }
+            }
+          }],
+          defaultLocale: 'pt-BR'
         },
 
         legend: {
