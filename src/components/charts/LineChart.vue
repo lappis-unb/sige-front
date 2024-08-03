@@ -140,29 +140,20 @@ export default {
     ...mapGetters('transductorStore', ['chartOptions', 'filterOptions', 'getPhaseChartLoadingStatus']),
     ...mapGetters('userStore', ['getPage']),
     series () {
-      if (this.graphic_type === '1') {
-        return [
-          {
-            name: 'asdfadsf',
-            data: this.chartOptions.phase_a
-          }
-        ]
-      } else {
-        return [
-          {
-            name: 'Fase A',
-            data: this.chartOptions.phase_a
-          },
-          {
-            name: 'Fase B',
-            data: this.chartOptions.phase_b
-          },
-          {
-            name: 'Fase C',
-            data: this.chartOptions.phase_c
-          }
-        ]
-      }
+      return [
+        {
+          name: 'Fase A',
+          data: this.chartOptions.phase_a
+        },
+        {
+          name: 'Fase B',
+          data: this.chartOptions.phase_b
+        },
+        {
+          name: 'Fase C',
+          data: this.chartOptions.phase_c
+        }
+      ]
     },
 
     chartConf () {
@@ -249,9 +240,11 @@ export default {
 
         xaxis: {
           type: 'datetime',
+          categories: this.chartOptions.timestamp,
           show: true,
           labels: {
-            datetimeUTC: false,
+            datetimeUTC: true,
+            hideOverlappingLabels: true,
             style: {
               fontSize: '.8rem'
             }

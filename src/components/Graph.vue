@@ -8,7 +8,7 @@
     />
     <line-chart
       v-if="graphIs('linechart') && mounted"
-      :transductorId="transductorId"
+      :id="transductorId"
       :exportOptions="exportOptions"
       :chart-title="filterOptions.dimension || ''"
     />

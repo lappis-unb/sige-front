@@ -17,10 +17,9 @@ import MASTER from '../services/masterApi/http-common'
 
 export async function getGraph (filter) {
   const graphOptions = await getGraphOptions(filter.dimension)
-  const startDate = await getDate(filter.startDate)
-  const endDate = await getDate(filter.endDate)
-  const type = graphOptions.url === 'cost-consumption' ? 'daily' : 'hourly'
-  const url = `/graph/${graphOptions.url}/?id=${filter.transductor}&start_date=${startDate}&end_date=${endDate}&type=${type}&is_filtered=True`
+  const startDate = await getDate(filter.startDate, true)
+  const endDate = await getDate(filter.endDate, false)
+  const url = `/graph/instant/?transductor=${filter.transductor}&fields=${graphOptions.fields}&start_date=${startDate}&end_date=${endDate}&threshold=20`
   const graph = {
     unit: graphOptions.unit,
     dimension: filter.dimension,
@@ -28,6 +27,8 @@ export async function getGraph (filter) {
     phase_a: [],
     phase_b: [],
     phase_c: [],
+
+    timestamp: [],
 
     // Barchart options
     values: [],
@@ -45,11 +46,12 @@ export async function getGraph (filter) {
         await MASTER
           .get(url)
           .then((res) => {
-            const measurements = res.data[0]
-            graph.phase_a = measurements.phase_a
-            graph.phase_b = measurements.phase_b
-            graph.phase_c = measurements.phase_c
+            const measurements = res.data
+            graph.phase_a = measurements.traces[0].values.reverse()
+            graph.phase_b = measurements.traces[1].values.reverse()
+            graph.phase_c = measurements.traces[2].values.reverse()
             graph.status = true
+            graph.timestamp = formatTimestamp(measurements.timestamp)
           })
           .catch((err) => {
             console.log('catch', err)
@@ -88,15 +90,21 @@ export function hasAllData (filter, options) {
   }
 }
 
-export function getDate (date) {
+export function getDate (date, isStartDate) {
   if (date) {
     const dateParts = date.split('/')
-    const res = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0] + ' ' + '23:59:00'
+    const res = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0] + 'T' + (isStartDate ? '00:00:00' : '23:59:00')
 
     return res
   } else {
     return undefined
   }
+}
+
+function formatTimestamp(timestampList){
+  const c = timestampList.map((t) => new Date(t).toUTCString())
+
+  return c.reverse()
 }
 
 export function getGraphOptions (dimension) {
@@ -183,7 +191,8 @@ export function getGraphOptions (dimension) {
       return {
         url: 'minutely-threephase-voltage',
         unit: 'V',
-        graphType: 'linechart'
+        graphType: 'linechart',
+        fields: 'voltage_a,voltage_b,voltage_c'
       }
     default:
       return {
