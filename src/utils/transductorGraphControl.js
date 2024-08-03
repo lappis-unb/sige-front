@@ -16,9 +16,9 @@ export const dimensions = [
 import MASTER from '../services/masterApi/http-common'
 
 export async function getGraph (filter) {
-  const graphOptions = await getGraphOptions(filter.dimension)
-  const startDate = await getDate(filter.startDate, true)
-  const endDate = await getDate(filter.endDate, false)
+  const graphOptions = getGraphOptions(filter.dimension)
+  const startDate = getDate(filter.startDate, true)
+  const endDate = getDate(filter.endDate, false)
   const url = `/graph/instant/?transductor=${filter.transductor}&fields=${graphOptions.fields}&start_date=${startDate}&end_date=${endDate}&threshold=20`
   const graph = {
     unit: graphOptions.unit,
@@ -47,11 +47,11 @@ export async function getGraph (filter) {
           .get(url)
           .then((res) => {
             const measurements = res.data
+            graph.timestamp = formatTimestamp(measurements.timestamp)
             graph.phase_a = measurements.traces[0].values.reverse()
             graph.phase_b = measurements.traces[1].values.reverse()
             graph.phase_c = measurements.traces[2].values.reverse()
             graph.status = true
-            graph.timestamp = formatTimestamp(measurements.timestamp)
           })
           .catch((err) => {
             console.log('catch', err)
