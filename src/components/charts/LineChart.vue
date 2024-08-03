@@ -42,7 +42,7 @@ export default {
     'exportOptions'
   ],
 
-  data () {
+  data() {
     const USED_VOLTAGE = 220
     return {
       measurements: [],
@@ -120,7 +120,7 @@ export default {
   },
 
   methods: {
-    updateAnnotations () {
+    updateAnnotations() {
       const dimensionAnnotations = this.annotations[this.filterOptions.dimension.toLowerCase()]
       this.$refs.chart.clearAnnotations()
 
@@ -132,14 +132,14 @@ export default {
     }
   },
 
-  mounted () {
+  mounted() {
     this.mounted = true
   },
 
   computed: {
     ...mapGetters('transductorStore', ['chartOptions', 'filterOptions', 'getPhaseChartLoadingStatus']),
     ...mapGetters('userStore', ['getPage']),
-    series () {
+    series() {
       return [
         {
           name: 'Fase A',
@@ -156,7 +156,7 @@ export default {
       ]
     },
 
-    chartConf () {
+    chartConf() {
       const filename = (this.exportOptions.location ? (this.exportOptions.location + ' - ') : ('')) +
       (this.exportOptions.dimension ? (this.exportOptions.dimension + ' - ') : ('')) + this.exportOptions.startDate + '-' + this.exportOptions.endDate
 
@@ -241,9 +241,12 @@ export default {
         xaxis: {
           type: 'datetime',
           categories: this.chartOptions.timestamp,
-          show: true,
           labels: {
-            datetimeUTC: true,
+            show: true,
+            datetimeUTC: false,
+            datetimeFormatter: {
+              month: 'MMM',
+            },
             hideOverlappingLabels: true,
             style: {
               fontSize: '.8rem'

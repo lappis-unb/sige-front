@@ -102,7 +102,7 @@ export function getDate (date, isStartDate) {
 }
 
 function formatTimestamp(timestampList){
-  const c = timestampList.map((t) => new Date(t).toUTCString())
+  const c = timestampList.map((t) => new Date(t).toString())
 
   return c.reverse()
 }

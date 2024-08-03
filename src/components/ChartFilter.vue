@@ -48,7 +48,14 @@
       </template>
     </q-input>
     <div class="col-1 elem">
-    <q-btn color="primary" text-color="white" label="Aplicar" v-bind:loading="getPhaseChartLoadingStatus" lass="apply-button" v-on:click="applyFilter()"/>
+      <q-btn
+        color="primary"
+        text-color="white"
+        label="Aplicar"
+        v-bind:loading="getPhaseChartLoadingStatus"
+        lass="apply-button"
+        v-on:click="applyFilter()"
+      />
     </div>
   </div>
 </template>
@@ -75,14 +82,14 @@ export default {
     }
   },
 
-  created () {
+  async created () {
     this.vision = this.visionOptions[0].value
     this.options = this.filterList
     this.option = this.filterOptions.dimension
     this.startDate = getDateNowSelectFormat(1)
     this.endDate = getDateNowSelectFormat()
 
-    this.applyFilter()
+    await this.applyFilter()
   },
 
   computed: {
