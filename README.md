@@ -81,6 +81,21 @@ sudo docker-compose up
 
 And, that's it! You have SIGE up and running!
 
+### After running the project
+
+after you finished testing the project please drop the container 
+
+``` bash
+sudo docker ps
+```
+
+to check if there is any container still running docker ps will list containers active you can get the container ID and then execute:
+
+``` bash
+sudo docker stop (container-id)
+```
+and then it should be dropped
+
 ### Team
 
 |        Member       |            E-mail            |     Contribution Period      |
