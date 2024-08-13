@@ -155,6 +155,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.col-12.col-md-8.col-lg-5.bg-white.q-pa-md.shadow-1 {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto; 
+  padding: 20px;
+}
+
+@media (min-width: 1440px) {
+  .col-12.col-md-8.col-lg-5.bg-white.q-pa-md.shadow-1{
+    max-width: 800px;
+  }
+}
+
 .secondary-text {
   font-size: 1.3em;
 }
