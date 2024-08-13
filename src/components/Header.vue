@@ -1,14 +1,16 @@
 <template>
   <q-header class="q-pa-none unb-blue" elevated>
-    <q-toolbar class="text-white">
-      <a href="/">
+    <q-toolbar class="text-white q-toolbar">
+      <a href="/" class="logo-container">
         <q-img
           src="/statics/logo_smi_horizontal_header.svg"
           style="height: 30px; width: 140px"
         />
       </a>
-      <q-toolbar-title class="text-bold text-center">{{ getPage }}</q-toolbar-title>
-      <div>
+      <div class="toolbar-content">
+        <q-toolbar-title class="text-bold text-center">{{ getPage }}</q-toolbar-title>
+      </div>
+      <div class="user-icon-container">
         <q-icon name="account_circle" class="float-right" size="sm">
           <q-popup-edit content-class="bg-white text-black popup" v-model="username">
             <div v-if="userIsLogged" class="col text-center">
@@ -119,4 +121,24 @@ export default {
   width: 150px;
   color: #0055aa
 }
+
+.q-toolbar {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.toolbar-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  margin-right: 116px;
+
+}
+
+.user-icon-container {
+  display: flex;
+  align-items: center;
+}
+
 </style>
