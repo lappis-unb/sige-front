@@ -73,7 +73,7 @@ export default {
   created () {
     const id = this.$router.currentRoute.params.id
     MASTER
-      .get(`energy-transductors/${id}/`)
+      .get(`transductors/${id}/`)
       .then((res) => {
         this.model = res.data.model
         this.history = res.data.history

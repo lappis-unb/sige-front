@@ -54,12 +54,12 @@ export default {
     },
     async getTransductors() {
       try {
-        const response = await MASTER.get(`/energy-transductors/${this.id}/`)
+        const response = await MASTER.get(`/transductors/${this.id}/`)
         if (response) {
           this.active = response.data.is_generator
           this.latitude = response.data.geo_location.latitude
           this.longitude = response.data.geo_location.longitude
-          this.name = response.data.name
+          this.name = response.data.model
           this.campusId = response.data.campus
         }
       } catch (error) {
