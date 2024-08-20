@@ -1,7 +1,8 @@
 <template>
   <div class="row">
     <div class="col-9">
-      <div class="back-arrow" @click="goBack"> 
+      <div class="back-arrow" @click="goBack">
+        <!-- Ícone de seta para voltar -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#00417e" width="36px" height="36px">
           <path d="M0 0h24v24H0z" fill="none"/>
           <path d="M19 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H19v-2z"/>
@@ -40,6 +41,7 @@ import activeBox from '../components/ActiveBox/ActiveBox'
 import occurences from '../components/Occurences'
 import graph from '../components/Graph'
 import { mapGetters, mapActions } from 'vuex'
+import moment from 'moment'
 
 export default {
   name: 'Transductor',
@@ -70,6 +72,12 @@ export default {
       history: ''
     }
   },
+  watch: {
+    filterOptions: {
+      handler: 'validateDates',
+      deep: true
+    }
+  },
   created () {
     const id = this.$router.currentRoute.params.id
     MASTER
@@ -95,51 +103,36 @@ export default {
     },
     goBack () {
       this.$router.go(-1)
+    },
+    validateDates () {
+      const startDate = this.filterOptions.startDate
+      const endDate = this.filterOptions.endDate
+
+      if (startDate && !moment(startDate, 'DD/MM/YYYY', true).isValid()) {
+        this.$q.notify({
+          type: 'negative',
+          message: 'Data inicial inválida'
+        })
+        return
+      }
+
+      if (endDate && !moment(endDate, 'DD/MM/YYYY', true).isValid()) {
+        this.$q.notify({
+          type: 'negative',
+          message: 'Data final inválida'
+        })
+        return
+      }
+
+      if (startDate && endDate && moment(startDate, 'DD/MM/YYYY').isAfter(moment(endDate, 'DD/MM/YYYY'))) {
+        this.$q.notify({
+          type: 'negative',
+          message: 'A data final não pode ser menor que a data inicial'
+        })
+        return
+      }
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-.transductor-info {
-  padding: 20px;
-}
-
-.title {
-  font-family: Roboto;
-  font-size: 24px;
-  font-weight: 300;
-  font-stretch: normal;
-  font-style: italic;
-  line-height: normal;
-  letter-spacing: normal;
-  text-align: center;
-  color: #00417e;
-}
-
-.data-label {
-  font-family: Roboto;
-  font-size: 12px;
-  font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.33;
-  letter-spacing: 2px;
-  color: #00417e;
-}
-
-.history {
-  text-align: justify;
-}
-
-.back-arrow {
-  cursor: pointer;
-  display: inline-block;
-  margin-bottom: 20px;
-  transition: transform 0.2s;
-}
-
-.back-arrow:hover {
-  transform: scale(1.2);
-}
-</style>
