@@ -31,7 +31,7 @@
 
           <template v-slot:header="props">
             <q-tr class="meter-header-group">
-              <q-th colspan="2"></q-th>
+              <q-th colspan="3"></q-th>
               <q-th colspan="3" class="meter-table-header-group-cell-grouped">Ocorrências</q-th>
               <q-th colspan="3"></q-th>
             </q-tr>
@@ -56,17 +56,14 @@
 
           <template v-slot:body-cell-events_last72h="props">
             <q-td :props="props">
-              <template v-if="props.value > 0">{{ props.value }}</template>
-              <template v-else>-</template>
+              <template v-if="props.value > 0">Houve {{ props.value }} eventos nas últimas 72h</template>
+              <template v-else>Não houve eventos nas últimas 72h</template>
             </q-td>
           </template>
 
           <template v-slot:body-cell-grouping="props">
             <q-td :props="props">
-              <div v-if="props.value.length == 0"> - </div>
-              <div v-else class="" v-for="group in props.value" v-bind:key="group">
-                {{ group }}
-              </div>
+              
             </q-td>
           </template>
 
@@ -100,7 +97,7 @@ export default {
     ...mapActions('userStore', ['changePage']),
     async getTransductors () {
       await MASTER
-        .get('energy-transductors-list/')
+        .get('transductors')
         .then((res) => {
           this.transductors = res.data
         })
@@ -124,17 +121,35 @@ export default {
       },
       columns: [
         {
-          name: 'campus',
+          name: 'located',
           label: 'Campus',
           align: 'left',
-          field: 'campus',
+          field: row => {
+            const words = row.located.split(' ');
+            return words[0]
+          },
           sortable: true
         },
         {
           name: 'name',
           label: 'Nome',
           align: 'left',
-          field: 'name',
+          field: row => {
+            const id = row.id
+            const words = row.located.split('(');
+            return words[1].split(')')[0] + "-"+ id
+          },
+          sortable: true,
+          style: 'font-weight:bold'
+        },
+        {
+          name: 'ip',
+          label: 'End. IP',
+          align: 'left',
+          field: row => {
+            const ip = row.ip_address
+            return ip
+          },
           sortable: true,
           style: 'font-weight:bold'
         },
@@ -158,23 +173,30 @@ export default {
         {
           name: 'events_last72h',
           align: 'center',
-          label: 'Últ. 72h',
+          label: 'Últimas 72h',
           field: 'events_last72h',
           sortable: true,
           sort: (a, b) => parseInt(a, 10) - parseInt(b, 10)
         },
         {
-          name: 'grouping',
+          name: 'located',
           align: 'left',
           label: 'Grupos',
-          field: 'grouping',
+          field: row => {
+            const words = row.located.split(' ');
+            return words[0]
+          },
           sortable: true
         },
         {
           name: 'active',
           align: 'center',
           label: 'Ativo',
-          field: 'active',
+          field: row => {
+            if(row.status === "Active")
+              return true
+            return false
+          },
           sortable: true,
           sort: (a, b) => parseInt(a, 10) - parseInt(b, 10)
         },
@@ -190,6 +212,7 @@ export default {
   }
 }
 </script>
+
 
 <style>
   .q-table__top,
