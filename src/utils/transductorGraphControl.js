@@ -1,3 +1,5 @@
+import MASTER from '../services/masterApi/http-common'
+
 export const dimensions = [
   'Corrente',
   'Custo',
@@ -13,13 +15,12 @@ export const dimensions = [
   'Potência Reativa',
   'Tensão'
 ]
-import MASTER from '../services/masterApi/http-common'
 
 export async function getGraph (filter) {
   const graphOptions = getGraphOptions(filter.dimension)
   const startDate = getDate(filter.startDate, true)
   const endDate = getDate(filter.endDate, false)
-  const url = `/graph/instant/?transductor=${filter.transductor}&fields=${graphOptions.fields}&start_date=${startDate}&end_date=${endDate}&threshold=20`
+  const url = `/graph/instant/?transductor=${filter.transductor}&fields=${graphOptions.fields}&start_date=${startDate}&end_date=${endDate}`
   const graph = {
     unit: graphOptions.unit,
     dimension: filter.dimension,
@@ -102,9 +103,9 @@ export function getDate (date, isStartDate) {
 }
 
 function formatTimestamp(timestampList){
-  const c = timestampList.map((t) => new Date(t).toString())
+  const timestamp = timestampList.map((t) => new Date(t).toString())
 
-  return c.reverse()
+  return timestamp.reverse()
 }
 
 export function getGraphOptions (dimension) {
@@ -113,79 +114,91 @@ export function getGraphOptions (dimension) {
       return {
         url: 'minutely-threephase-current',
         unit: 'A',
-        graphType: 'linechart'
+        graphType: 'linechart',
+        fields: 'current_a,current_b,current_c'
       }
     case dimensions[1]: // Custo
       return {
         url: 'cost-consumption',
         unit: 'R$',
         graphType: 'barchart',
-        nameValue: 'cost'
+        nameValue: 'cost',
+        fields: ''
       }
     case dimensions[2]: // Consumo
       return {
         url: 'quarterly-total-consumption',
         unit: 'kWh',
         graphType: 'barchart',
-        nameValue: 'consumption'
+        nameValue: 'consumption',
+        fields: ''
       }
     case dimensions[3]: // DHT Corrente
       return {
         url: 'minutely-dht-current',
         unit: 'A',
-        graphType: 'linechart'
+        graphType: 'linechart',
+        fields: 'dht_current_a,dht_current_b,dht_current_c'
       }
     case dimensions[4]: // DHT Tensão
       return {
         url: 'minutely-dht-voltage',
         unit: 'V',
-        graphType: 'linechart'
+        graphType: 'linechart',
+        fields: 'dht_voltage_a,dht_voltage_b,dht_voltage_c'
       }
     case dimensions[5]: // Energia Captativa
       return {
         url: 'quarterly-total-capacitive-power',
         unit: 'kVArh',
         graphType: 'barchart',
-        nameValue: 'capacitive_power'
+        nameValue: 'capacitive_power',
+        fields: ''
       }
     case dimensions[6]: // Energia Indutiva
       return {
         url: 'quarterly-total-inductive-power',
         unit: 'kVArh',
         graphType: 'barchart',
-        nameValue: 'inductive_power'
+        nameValue: 'inductive_power',
+        fields: ''
       }
     case dimensions[7]: // Fator de Potencia
       return {
         url: 'minutely-power-factor',
         unit: ' ', // Não possui unidade, é uma grandeza adimensional
         graphType: 'linechart',
-        decimals: 2
+        decimals: 2,
+        fields: 'power_factor_a,power_factor_b,power_factor_c'
       }
     case dimensions[8]: // Geração
       return {
         url: 'quarterly-total-generation',
         unit: 'kWh',
         graphType: 'barchart',
-        nameValue: 'generation'
+        nameValue: 'generation',
+        fields: ''
       }
     case dimensions[9]: // Potencia Aparente
       return {
         url: 'minutely-apparent-power',
         unit: 'kVA',
-        graphType: 'linechart'
+        graphType: 'linechart',
+        fields: 'apparent_power_a,apparent_power_b,apparent_power_c'
       }
     case dimensions[10]: // Potencia Ativa
       return {
         url: 'minutely-active-power',
         unit: 'W',
-        graphType: 'linechart'
+        graphType: 'linechart',
+        fields: 'active_power_a,active_power_b,active_power_c'
       }
     case dimensions[11]: // Potencia Reativa
       return {
         url: 'minutely-reactive-power',
         unit: 'kVAr',
-        graphType: 'linechart'
+        graphType: 'linechart',
+        fields: 'reactive_power_a,reactive_power_b,reactive_power_c'
       }
     case dimensions[12]: // Tensão
       return {
@@ -198,7 +211,8 @@ export function getGraphOptions (dimension) {
       return {
         url: '',
         unit: '',
-        graphType: ''
+        graphType: '',
+        fields: ''
       }
   }
 }
