@@ -263,7 +263,7 @@ export default {
             show: true,
             datetimeUTC: false,
             datetimeFormatter: {
-              month: 'MMM',
+              month: 'dd MMM'
             },
             hideOverlappingLabels: true,
             style: {
@@ -297,7 +297,7 @@ export default {
 
         tooltip: {
           x: {
-            format: 'dd-MM-yyyy HH:mm',
+            format: 'dd MMM HH:mm',
             formatter: undefined
           },
           y: {
