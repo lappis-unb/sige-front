@@ -201,7 +201,11 @@ export default {
         },
 
         legend: {
-          show: this.show_legend
+          show: true,
+          position: 'top',
+          horizontalAlign: 'left', 
+          offsetY: -25,
+          fontSize: '14px'
         },
 
         stroke: {
