@@ -11,6 +11,7 @@
           option-label="name"
           input-debounce="0"
           label="Campus"
+          clearable
           :options="optionsCampus"
           @filter="filterCampus"
           class="col-4 elem select"
@@ -18,7 +19,7 @@
         >
           <template v-slot:no-option>
             <q-item>
-              <q-item-section class="text-grey">No results</q-item-section>
+              <q-item-section class="text-grey">Nenhum dado encontrado</q-item-section>
             </q-item>
           </template>
         </q-select>
@@ -29,9 +30,9 @@
           map-options
           emit-value
           option-value="id"
-          option-label="name"
+          option-label="acronym"
           input-debounce="0"
-          label="Filtro"
+          label="Unidade"
           :options="optionsGroup"
           @filter="filterFn"
           class="col-4 elem select"
@@ -39,7 +40,8 @@
         >
           <template v-slot:no-option>
             <q-item>
-              <q-item-section class="text-grey">No results</q-item-section>
+              <q-item-section v-if="!campusModel" class="text-grey">Selecione o campus</q-item-section>
+              <q-item-section v-else class="text-grey">Nenhum dado encontrado</q-item-section>
             </q-item>
           </template>
         </q-select>
@@ -131,7 +133,7 @@
           size="1rem"
           label="Aplicar"
           type="button"
-          @click="getChart()"
+          @click="getChart(1)"
           color="primary"
         />
       </div>
@@ -186,7 +188,7 @@ export default {
     this.optionsCampus = allCampus
     this.filteredDate.from = moment().startOf('month').format('DD-MM-YYYY')
     this.filteredDate.to = moment().format('DD-MM-YYYY')
-    this.getChart()
+    this.getChart(0)
   },
   computed: {
     ...mapGetters('totalCostStore', ['errorStartDate', 'errorEndDate', 'getUrl'])
@@ -212,12 +214,14 @@ export default {
     getGroups () {
       const updatedGroups = []
       const selectedCampus = allCampus.find(campus => campus.id === this.campusModel)
-      selectedCampus.groups_related.forEach(group => {
-        const alreadyInUpdatedGroups = updatedGroups.find(subGroup => subGroup.name === group.name)
-        if (!alreadyInUpdatedGroups) {
-          updatedGroups.push(group)
-        }
-      })
+      if(selectedCampus){
+        selectedCampus.children.forEach(group => {
+          const alreadyInUpdatedGroups = updatedGroups.find(subGroup => subGroup.name === group.name)
+          if (!alreadyInUpdatedGroups) {
+            updatedGroups.push(group)
+          }
+        })
+      }
       this.optionsModel = null
       this.optionsGroup = updatedGroups
     },
@@ -225,25 +229,25 @@ export default {
     verifyClearInput () {
       if (!this.filteredDate.from) {
         this.clearStartDate()
-        this.getChart()
+        this.getChart(0)
       } else {
         if (moment(this.filteredDate.from, 'DD-MM-YYYY').isValid()) {
           this.changeStartDate(this.filteredDate.from)
-          this.getChart()
+          this.getChart(0)
         }
       }
 
       if (!this.filteredDate.to) {
         this.clearEndDate()
-        this.getChart()
+        this.getChart(0)
       } else {
         if (moment(this.filteredDate.to, 'DD-MM-YYYY').isValid()) {
           this.changeEndDate(this.filteredDate.to)
-          this.getChart()
+          this.getChart(0)
         }
       }
     },
-    getChart () {
+    getChart (clicked) {
       if (moment(this.filteredDate.from, 'DD-MM-YYYY').isAfter(moment(this.filteredDate.to, 'DD-MM-YYYY'))) {
         this.$q.notify({
           type: 'negative',
@@ -251,6 +255,16 @@ export default {
           position: 'top'
         })
         return
+      }
+      if(clicked){
+        if (!this.filteredDate.from || !this.filteredDate.to) {
+          this.$q.notify({
+            type: 'negative',
+            message: 'Selecione uma data de início e de fim',
+            position: 'top'
+          })
+          return
+        }
       }
       chartService.getChartData(this.getUrl, 'R$', dimensions[1])
         .then((chart) => {
