@@ -42,7 +42,7 @@ export default {
     'exportOptions'
   ],
 
-  data () {
+  data() {
     const USED_VOLTAGE = 220
     return {
       measurements: [],
@@ -120,7 +120,7 @@ export default {
   },
 
   methods: {
-    updateAnnotations () {
+    updateAnnotations() {
       const dimensionAnnotations = this.annotations[this.filterOptions.dimension.toLowerCase()]
       this.$refs.chart.clearAnnotations()
 
@@ -132,40 +132,31 @@ export default {
     }
   },
 
-  mounted () {
+  mounted() {
     this.mounted = true
   },
 
   computed: {
     ...mapGetters('transductorStore', ['chartOptions', 'filterOptions', 'getPhaseChartLoadingStatus']),
     ...mapGetters('userStore', ['getPage']),
-    series () {
-      if (this.graphic_type === '1') {
-        return [
-          {
-            name: 'asdfadsf',
-            data: this.chartOptions.phase_a
-          }
-        ]
-      } else {
-        return [
-          {
-            name: 'Fase A',
-            data: this.chartOptions.phase_a
-          },
-          {
-            name: 'Fase B',
-            data: this.chartOptions.phase_b
-          },
-          {
-            name: 'Fase C',
-            data: this.chartOptions.phase_c
-          }
-        ]
-      }
+    series() {
+      return [
+        {
+          name: 'Fase A',
+          data: this.chartOptions.phase_a
+        },
+        {
+          name: 'Fase B',
+          data: this.chartOptions.phase_b
+        },
+        {
+          name: 'Fase C',
+          data: this.chartOptions.phase_c
+        }
+      ]
     },
 
-    chartConf () {
+    chartConf() {
       const filename = (this.exportOptions.location ? (this.exportOptions.location + ' - ') : ('')) +
       (this.exportOptions.dimension ? (this.exportOptions.dimension + ' - ') : ('')) + this.exportOptions.startDate + '-' + this.exportOptions.endDate
 
@@ -188,11 +179,33 @@ export default {
                 filename: filename
               }
             }
-          }
+          },
+          locales: [{
+            name: 'pt-BR',
+            options: {
+              shortMonths: [
+                'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+                'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
+              ],
+              toolbar: {
+                selection: 'Selecionar',
+                selectionZoom: 'Zoom de seleção',
+                zoomIn: 'Aproximar',
+                zoomOut: 'Afastar',
+                pan: 'Navegação',
+                reset: 'Redefinir Zoom',
+              }
+            }
+          }],
+          defaultLocale: 'pt-BR'
         },
 
         legend: {
-          show: this.show_legend
+          show: true,
+          position: 'top',
+          horizontalAlign: 'left', 
+          offsetY: -25,
+          fontSize: '14px'
         },
 
         stroke: {
@@ -249,9 +262,14 @@ export default {
 
         xaxis: {
           type: 'datetime',
-          show: true,
+          categories: this.chartOptions.timestamp,
           labels: {
+            show: true,
             datetimeUTC: false,
+            datetimeFormatter: {
+              month: 'dd MMM'
+            },
+            hideOverlappingLabels: true,
             style: {
               fontSize: '.8rem'
             }
@@ -283,7 +301,7 @@ export default {
 
         tooltip: {
           x: {
-            format: 'dd-MM-yyyy HH:mm',
+            format: 'dd MMM HH:mm',
             formatter: undefined
           },
           y: {

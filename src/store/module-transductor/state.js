@@ -4,6 +4,7 @@ export default {
     phase_a: [],
     phase_b: [],
     phase_c: [],
+    timestamp: [],
     values: [],
     min: 0,
     max: 0,
