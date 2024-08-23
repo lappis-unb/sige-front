@@ -60,6 +60,10 @@ export default {
         {
           link: '/tariffs',
           name: 'Tarifas'
+        },
+        {
+          link: '/lines',
+          name: 'Linhas'
         }
       ]
     }
