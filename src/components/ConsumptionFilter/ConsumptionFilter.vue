@@ -159,6 +159,30 @@ export default {
     },
 
     verifyClearInput () {
+
+       if (!moment(this.startDate, 'DD/MM/YYYY').isValid()) {
+        this.$q.notify({
+          type: 'negative',
+          message: 'Data inicial inválida'
+        })
+        return
+      }
+
+      if (!moment(this.endDate, 'DD/MM/YYYY').isValid()) {
+        this.$q.notify({
+          type: 'negative',
+          message: 'Data final inválida'
+        })
+        return
+      }
+
+      if (moment(this.startDate, 'DD/MM/YYYY').isAfter(moment(this.endDate, 'DD/MM/YYYY'))) {
+        this.$q.notify({
+          type: 'negative',
+          message: 'A data final não pode ser menor que a data inicial'
+        })
+        return
+      }
       if (!this.startDate) {
         this.clearStartDate()
       } else {
