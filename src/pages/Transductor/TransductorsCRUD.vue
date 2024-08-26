@@ -108,6 +108,25 @@
               </div>
 
               <div class="inputDiv">
+                <label>Potência Máxima em Watts: </label>
+                <q-input
+                class="inputField"
+                outlined
+                v-model="newTransductor.power"
+                label="Potência Máxima em Watts"/>
+              </div>
+              
+              <div class="inputDiv">
+                <label>Medidor é de geração?: </label>
+                <q-select
+                class="inputField"
+                outlined
+                :options="[{ label: 'Sim', value: true }, { label: 'Não', value: false }]"
+                v-model="newTransductor.is_generator"
+                label="Medidor é de geração?"/>
+              </div>
+
+              <div class="inputDiv">
                 <label>Campus: </label>
                 <q-select
                 class="inputField"
@@ -258,6 +277,25 @@
                 outlined
                 v-model="transductor.geolocation_longitude"
                 label="Longitude"/>
+              </div>
+
+              <div class="inputDiv">
+                <label>Potência Máxima em Watts: </label>
+                <q-input
+                class="inputField"
+                outlined
+                v-model="transductor.power"
+                label="Potência Máxima em Watts"/>
+              </div>
+              
+              <div class="inputDiv">
+                <label>Medidor é de geração?: </label>
+                <q-select
+                class="inputField"
+                outlined
+                :options="[{ label: 'Sim', value: true }, { label: 'Não', value: false }]"
+                v-model="transductor.is_generator"
+                label="Medidor é de geração?"/>
               </div>
 
               <div class="inputDiv">
@@ -425,6 +463,7 @@
           .get(`energy-transductors/${id}/`, {})
           .then(res => {
             this.transductor = res.data
+            this.transductor.is_generator = res.data.is_generator == true ? "Sim" : "Não" 
             this.isSelectedTransductor = true
           })
           .catch(err => {
@@ -432,11 +471,16 @@
           })
       },
       putTransductor () {
-        const { id } = this.transductor
+        const { id, is_generator } = this.transductor;
+        const transductorCopy = { ...this.transductor };
+        transductorCopy.is_generator = is_generator.value;
+        
         MASTER
-          .put('energy-transductors/' + id + '/', this.transductor)
+          .put('energy-transductors/' + id + '/', transductorCopy)
           .then(res => {
             this.transductor = res.data
+            this.transductor.is_generator = res.data.is_generator == true ? "Sim" : "Não" 
+
             this.transductors = this.transductors.map((transductor) => {
               if (transductor.id === id) return res.data
               return transductor
@@ -473,9 +517,15 @@
       },
       postTransductor () {
         this.newTransductor.grouping = [this.newTransductor.grouping]
+
+        const { id, is_generator } = this.newTransductor;
+        const newTransductorCopy = { ...this.newTransductor };
+        newTransductorCopy.is_generator = is_generator.value;
+        
         MASTER
-          .post('energy-transductors/', this.newTransductor)
+          .post('energy-transductors/', newTransductorCopy)
           .then(res => {
+            res.data.is_generator = res.data.is_generator == true ? "Sim" : "Não" 
             this.transductors.push(res.data)
             this.newTransductors = {}
             this.isCreatingNew = false
