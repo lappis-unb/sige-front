@@ -194,7 +194,10 @@ export default {
     ...mapGetters('totalCostStore', ['errorStartDate', 'errorEndDate', 'getUrl'])
   },
   methods: {
-    ...mapActions('totalCostStore', ['changePeriodicity', 'changeStartDate', 'changeEndDate', 'filterByCampus', 'filterByGroup', 'clearStartDate', 'clearEndDate', 'updateChart']),
+    ...mapActions('totalCostStore', [
+      'changePeriodicity', 'changeStartDate', 'changeEndDate', 'filterByCampus',
+      'filterByGroup', 'clearStartDate', 'clearEndDate', 'updateChart'
+    ]),
     filterFn (val, update) {
       update(() => {
         const needle = val.toLowerCase()
