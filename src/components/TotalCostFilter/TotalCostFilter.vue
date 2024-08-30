@@ -63,6 +63,7 @@
         <div class="dateFilter">
           <q-input
             v-model="filteredDate.from"
+            ref="startDateRef"
             dense
             outlined
             :mask="mask"
@@ -99,6 +100,7 @@
           </q-input>
           <q-input
             v-model="filteredDate.to"
+            ref="endDateRef"
             dense
             outlined
             :mask="mask"
@@ -177,7 +179,8 @@ export default {
         pluralDay: 'dias'
       },
       mask: '##/##/####',
-      value: false
+      value: false,
+      fieldsValidator: true
     }
   },
   props: {},
@@ -283,11 +286,19 @@ export default {
         .catch(() => console.log('Falha ao atualizar o gráfico!'))
     },
 
+    allFieldsValidated(){
+      this.fieldsValidator =
+        this.$refs.startDateRef.validate() &&
+        this.$refs.endDateRef.validate()
+      
+      return this.fieldsValidator
+    },
+
     applyFilter(){
-      if (!this.filteredDate.from || !this.filteredDate.to) {
+      if (!this.allFieldsValidated()) {
         this.$q.notify({
           type: 'negative',
-          message: 'Selecione uma data de início e de fim',
+          message: 'Preencha os campos corretamente.',
           position: 'top'
         })
         return
