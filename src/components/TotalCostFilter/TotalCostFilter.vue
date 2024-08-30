@@ -228,20 +228,28 @@ export default {
     },
 
     dateFormatRule(date) {
-      if(date)
-        return moment(date, "DD/MM/YYYY").isValid() || 'Data em formato inválido'
+      if(date){
+        const validation = moment(date, "DD/MM/YYYY").isValid()
+        return validation || 'Data em formato inválido'
+      }
     },
 
     endDateLessThanStartDateRule(endDate){
-      const validation = moment(this.filteredDate.from, 'DD/MM/YYYY').isAfter(moment(endDate, 'DD/MM/YYYY'))
+      const validation =
+        moment(this.filteredDate.from, 'DD/MM/YYYY').isAfter(moment(endDate, 'DD/MM/YYYY'))
       return !validation || 'Data menor que data inicial'
     },
-    
+
     startDateGreaterThanCurrentDateRule(startDate){
       const validation = moment(startDate, 'DD/MM/YYYY').isAfter(moment())
       return !validation || 'Data maior que a data atual'
     },
 
+    /**
+     * Verifica os valores dos campos de Data
+     * e chama funções para alterar os parâmetros
+     * da URL de filtragem na API
+     */
     verifyClearInput () {
       if (!this.filteredDate.from) {
         this.clearStartDate()
