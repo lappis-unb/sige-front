@@ -432,6 +432,8 @@
           })
       },
       putTransductor () {
+        this.transductor.geolocation_latitude = this.transductor.geolocation_latitude.replace(/,/g, '.');
+        this.transductor.geolocation_longitude = this.transductor.geolocation_longitude.replace(/,/g, '.');
         const { id } = this.transductor
         MASTER
           .put('energy-transductors/' + id + '/', this.transductor)
@@ -472,6 +474,8 @@
           })
       },
       postTransductor () {
+        this.newTransductor.geolocation_latitude = this.newTransductor.geolocation_latitude.replace(/,/g, '.');
+        this.newTransductor.geolocation_longitude = this.newTransductor.geolocation_longitude.replace(/,/g, '.');
         this.newTransductor.grouping = [this.newTransductor.grouping]
         MASTER
           .post('energy-transductors/', this.newTransductor)
