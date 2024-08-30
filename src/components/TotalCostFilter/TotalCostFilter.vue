@@ -133,7 +133,7 @@
           size="1rem"
           label="Aplicar"
           type="button"
-          @click="getChart(1)"
+          @click="applyFilter()"
           color="primary"
         />
       </div>
@@ -188,7 +188,7 @@ export default {
     this.optionsCampus = allCampus
     this.filteredDate.from = moment().startOf('month').format('DD-MM-YYYY')
     this.filteredDate.to = moment().format('DD-MM-YYYY')
-    this.getChart(0)
+    this.getChart()
   },
   computed: {
     ...mapGetters('totalCostStore', ['errorStartDate', 'errorEndDate', 'getUrl'])
@@ -232,25 +232,25 @@ export default {
     verifyClearInput () {
       if (!this.filteredDate.from) {
         this.clearStartDate()
-        this.getChart(0)
+        this.getChart()
       } else {
         if (moment(this.filteredDate.from, 'DD-MM-YYYY').isValid()) {
           this.changeStartDate(this.filteredDate.from)
-          this.getChart(0)
+          this.getChart()
         }
       }
 
       if (!this.filteredDate.to) {
         this.clearEndDate()
-        this.getChart(0)
+        this.getChart()
       } else {
         if (moment(this.filteredDate.to, 'DD-MM-YYYY').isValid()) {
           this.changeEndDate(this.filteredDate.to)
-          this.getChart(0)
+          this.getChart()
         }
       }
     },
-    getChart (clicked) {
+    getChart () {
       if (moment(this.filteredDate.from, 'DD-MM-YYYY').isAfter(moment(this.filteredDate.to, 'DD-MM-YYYY'))) {
         this.$q.notify({
           type: 'negative',
@@ -259,16 +259,6 @@ export default {
         })
         return
       }
-      if(clicked){
-        if (!this.filteredDate.from || !this.filteredDate.to) {
-          this.$q.notify({
-            type: 'negative',
-            message: 'Selecione uma data de início e de fim',
-            position: 'top'
-          })
-          return
-        }
-      }
       chartService.getChartData(this.getUrl, 'R$', dimensions[1])
         .then((chart) => {
           this.updateChart(chart)
@@ -276,6 +266,19 @@ export default {
           this.$parent.location.group = this.optionsGroup.find(group => group.id === this.optionsModel).name
         })
         .catch(() => console.log('Falha ao atualizar o gráfico!'))
+    },
+
+    applyFilter(){
+      if (!this.filteredDate.from || !this.filteredDate.to) {
+        this.$q.notify({
+          type: 'negative',
+          message: 'Selecione uma data de início e de fim',
+          position: 'top'
+        })
+        return
+      }
+
+      this.getChart();
     }
   }
 }
