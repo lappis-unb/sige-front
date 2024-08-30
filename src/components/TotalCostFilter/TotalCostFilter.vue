@@ -68,7 +68,7 @@
             :mask="mask"
             label="Período: Início"
             class="elem input"
-            :rules="[dateFormatRule]"
+            :rules="[dateFormatRule, startDateGreaterThanCurrentDateRule]"
             @input="verifyClearInput"
           >
             <template v-slot:prepend>
@@ -235,6 +235,11 @@ export default {
     endDateLessThanStartDateRule(endDate){
       const validation = moment(this.filteredDate.from, 'DD/MM/YYYY').isAfter(moment(endDate, 'DD/MM/YYYY'))
       return !validation || 'Data menor que data inicial'
+    },
+    
+    startDateGreaterThanCurrentDateRule(startDate){
+      const validation = moment(startDate, 'DD/MM/YYYY').isAfter(moment())
+      return !validation || 'Data maior que a data atual'
     },
 
     verifyClearInput () {
