@@ -68,7 +68,7 @@
             :mask="mask"
             label="Período: Início"
             class="elem input"
-            :rules="[dateFormatRule, startDateGreaterThanCurrentDateRule]"
+            :rules="[dateFormatRule, startDateGreaterThanCurrentDateRule, requiredFieldRule]"
             @input="verifyClearInput"
           >
             <template v-slot:prepend>
@@ -104,7 +104,7 @@
             :mask="mask"
             label="Período: Fim"
             class="elem input"
-            :rules="[dateFormatRule, endDateLessThanStartDateRule]"
+            :rules="[dateFormatRule, endDateLessThanStartDateRule, requiredFieldRule]"
             @input="verifyClearInput"
           >
             <template v-slot:prepend>
@@ -243,6 +243,12 @@ export default {
     startDateGreaterThanCurrentDateRule(startDate){
       const validation = moment(startDate, 'DD/MM/YYYY').isAfter(moment())
       return !validation || 'Data maior que a data atual'
+    },
+
+    requiredFieldRule(field){
+      // No momento sendo aplicado apenas nos campos de data
+      // mas pode ser acrescentado aos outros campos da filtragem
+      return !!field || 'Campo obrigatório'
     },
 
     /**
