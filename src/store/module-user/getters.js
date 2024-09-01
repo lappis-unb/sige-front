@@ -17,8 +17,14 @@ const getPage = (state) => {
   return state.currentPage
 }
 
+const isAdmin = (state) => {
+  console.log(state)
+  return state.admin
+}
+
 export {
   authStatus,
   getUser,
-  getPage
+  getPage,
+  isAdmin
 }

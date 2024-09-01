@@ -6,6 +6,7 @@ export default function () {
     useremail: '',
     is_superuser: false,
     currentPage: '',
-    userAuth: false
+    userAuth: false,
+    admin: true
   }
 }

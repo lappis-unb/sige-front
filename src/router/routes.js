@@ -50,6 +50,22 @@ export default function (ssrContext) {
         { path: '/reset_password/:token', name: 'reset_password', component: () => import('pages/ResetPassword.vue') }
       ]
     },
+    {
+      path: '/admin',
+      component: () => import('layouts/MainLayout.vue'),
+      beforeEnter (to, from, next) {
+        const { store } = ssrContext
+        const admin = store.getters['userStore/isAdmin']
+        if (admin) {
+          next()
+        } else {
+          next('/')
+        }
+      },
+      children: [
+        // Here is where we put the admin routes
+      ]
+    },
     { path: '/dashboard', name: 'dashboard', component: () => import('pages/DashboardBase.vue') }
   ]
 
