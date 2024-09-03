@@ -119,7 +119,7 @@ export default {
   async created() {
     const campiService = new CampiService();
     const allCampiInfo = await campiService.getAllCampiInfo();
-    const gamaCampus = allCampiInfo.find(campus => campus.name === "Fundação Universidade de Brasília").children;
+    const gamaCampus = allCampiInfo;
     this.optionsCampus = gamaCampus;
     if (gamaCampus.length > 0) {
     this.campusModel = gamaCampus[0].id;
