@@ -78,9 +78,9 @@ export default {
       deep: true
     }
   },
-  created () {
+  async created () {
     const id = this.$router.currentRoute.params.id
-    MASTER
+    await MASTER
       .get(`transductors/${id}/`)
       .then((res) => {
         this.model = res.data.model
@@ -91,14 +91,20 @@ export default {
         })
         this.changePage(res.data.name)
       })
+      .catch((err) => {
+        console.log('Erro ao buscar dados de medidor.', err)
+      })
   },
   methods: {
     ...mapActions('userStore', ['changePage']),
-    groupRequest (url) {
-      MASTER
+    async groupRequest (url) {
+      await MASTER
         .get(url)
         .then((res) => {
           this.groups.push(res.data.name)
+        })
+        .catch((err) => {
+          console.log('Erro ao buscar dados de grupos do medidor', err)
         })
     },
     goBack () {
