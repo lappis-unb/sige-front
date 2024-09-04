@@ -1,5 +1,11 @@
 <template>
-  <div>
+  <div v-if="loading" class="text-center q-pa-lg">
+    <q-spinner
+        color="primary"
+        size="3em"
+    />
+  </div>
+  <div v-else>
     <div class="btn q-px-md">
       <q-btn
         size="1rem"
@@ -169,6 +175,7 @@ export default {
   name: 'Slaves',
   data () {
     return {
+      loading: true,
       slaves: [],
       slave: {},
       isSelectedSlave: false,
@@ -219,6 +226,9 @@ export default {
         .catch(err => {
           this.err = err
           console.log('err')
+        })
+        .finally(() => {
+          this.loading = false
         })
     },
     getSlave (id) {

@@ -1,5 +1,11 @@
 <template>
-  <div>
+  <div v-if="loading" class="text-center q-pa-lg">
+    <q-spinner
+        color="primary"
+        size="3em"
+    />
+  </div>
+  <div v-else>
     <div class="container">
       <div class="btn q-px-md">
         <q-btn
@@ -65,6 +71,7 @@ export default {
   },
   data () {
     return {
+      loading: true,
       groups: [],
       group: {},
       dialog: false,
@@ -89,6 +96,7 @@ export default {
     this.changePage('Gerenciar instalações > Agrupamentos')
     await this.getGroupTypes()
     await this.getGroups()
+    this.loading = false
   },
   methods: {
     ...mapActions('userStore', ['changePage']),

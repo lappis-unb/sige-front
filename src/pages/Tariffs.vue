@@ -1,5 +1,11 @@
 <template>
-  <div>
+  <div v-if="loading" class="text-center q-pa-lg">
+    <q-spinner
+        color="primary"
+        size="3em"
+    />
+  </div>
+  <div v-else>
     <h3 class="title">Lista de Campi</h3>
     <div class="container">
       <div class="q-pa-md">
@@ -28,6 +34,7 @@ export default {
   name: 'Campi',
   data () {
     return {
+      loading: true,
       campi: [],
       campus: {},
       columns: [
@@ -49,6 +56,9 @@ export default {
         .catch(err => {
           this.err = err
           console.log('err')
+        })
+        .finally(() => {
+          this.loading = false
         })
     },
     goTo (id) {
