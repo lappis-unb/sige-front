@@ -63,13 +63,13 @@
         <div class="dateFilter">
           <q-input
             v-model="filteredDate.from"
+            ref="startDateRef"
             dense
             outlined
             :mask="mask"
             label="Período: Início"
             class="elem input"
-            :error="errorStartDate"
-            :rules="[() => !errorStartDate || 'Data inválida']"
+            :rules="[dateFormatRule, startDateGreaterThanCurrentDateRule, requiredFieldRule]"
             @input="verifyClearInput"
           >
             <template v-slot:prepend>
@@ -100,13 +100,13 @@
           </q-input>
           <q-input
             v-model="filteredDate.to"
+            ref="endDateRef"
             dense
             outlined
             :mask="mask"
             label="Período: Fim"
             class="elem input"
-            :error="errorEndDate"
-            :rules="[() => !errorEndDate || 'Data inválida']"
+            :rules="[dateFormatRule, endDateLessThanStartDateRule, requiredFieldRule]"
             @input="verifyClearInput"
           >
             <template v-slot:prepend>
@@ -116,7 +116,7 @@
                     v-model="filteredDate"
                     mask="DD/MM/YYYY" 
                     range
-                    @input="changeEndDate(filteredDate.to)" 
+                    @input="changeEndDate(filteredDate.to)"
                     :locale="ptBR_Locale"
                   >
                     <div class="row items-center justify-end">
@@ -133,7 +133,7 @@
           size="1rem"
           label="Aplicar"
           type="button"
-          @click="getChart(1)"
+          @click="applyFilter()"
           color="primary"
         />
       </div>
@@ -179,7 +179,8 @@ export default {
         pluralDay: 'dias'
       },
       mask: '##/##/####',
-      value: false
+      value: false,
+      fieldsValidator: true
     }
   },
   props: {},
@@ -188,13 +189,16 @@ export default {
     this.optionsCampus = allCampus
     this.filteredDate.from = moment().startOf('month').format('DD-MM-YYYY')
     this.filteredDate.to = moment().format('DD-MM-YYYY')
-    this.getChart(0)
+    this.getChart()
   },
   computed: {
     ...mapGetters('totalCostStore', ['errorStartDate', 'errorEndDate', 'getUrl'])
   },
   methods: {
-    ...mapActions('totalCostStore', ['changePeriodicity', 'changeStartDate', 'changeEndDate', 'filterByCampus', 'filterByGroup', 'clearStartDate', 'clearEndDate', 'updateChart']),
+    ...mapActions('totalCostStore', [
+      'changePeriodicity', 'changeStartDate', 'changeEndDate', 'filterByCampus',
+      'filterByGroup', 'clearStartDate', 'clearEndDate', 'updateChart'
+    ]),
     filterFn (val, update) {
       update(() => {
         const needle = val.toLowerCase()
@@ -226,46 +230,53 @@ export default {
       this.optionsGroup = updatedGroups
     },
 
+    dateFormatRule(date) {
+      if(date){
+        const validation = moment(date, "DD/MM/YYYY").isValid()
+        return validation || 'Data em formato inválido'
+      }
+    },
+
+    endDateLessThanStartDateRule(endDate){
+      const validation =
+        moment(this.filteredDate.from, 'DD/MM/YYYY').isAfter(moment(endDate, 'DD/MM/YYYY'))
+      return !validation || 'Data menor que data inicial'
+    },
+
+    startDateGreaterThanCurrentDateRule(startDate){
+      const validation = moment(startDate, 'DD/MM/YYYY').isAfter(moment())
+      return !validation || 'Data maior que a data atual'
+    },
+
+    requiredFieldRule(field){
+      // No momento sendo aplicado apenas nos campos de data
+      // mas pode ser acrescentado aos outros campos da filtragem
+      return !!field || 'Campo obrigatório'
+    },
+
+    /**
+     * Verifica os valores dos campos de Data
+     * e chama funções para alterar os parâmetros
+     * da URL de filtragem na API
+     */
     verifyClearInput () {
       if (!this.filteredDate.from) {
         this.clearStartDate()
-        this.getChart(0)
       } else {
         if (moment(this.filteredDate.from, 'DD-MM-YYYY').isValid()) {
           this.changeStartDate(this.filteredDate.from)
-          this.getChart(0)
         }
       }
 
       if (!this.filteredDate.to) {
         this.clearEndDate()
-        this.getChart(0)
       } else {
         if (moment(this.filteredDate.to, 'DD-MM-YYYY').isValid()) {
           this.changeEndDate(this.filteredDate.to)
-          this.getChart(0)
         }
       }
     },
-    getChart (clicked) {
-      if (moment(this.filteredDate.from, 'DD-MM-YYYY').isAfter(moment(this.filteredDate.to, 'DD-MM-YYYY'))) {
-        this.$q.notify({
-          type: 'negative',
-          message: 'A data final não pode ser menor que a data inicial',
-          position: 'top'
-        })
-        return
-      }
-      if(clicked){
-        if (!this.filteredDate.from || !this.filteredDate.to) {
-          this.$q.notify({
-            type: 'negative',
-            message: 'Selecione uma data de início e de fim',
-            position: 'top'
-          })
-          return
-        }
-      }
+    getChart () {
       chartService.getChartData(this.getUrl, 'R$', dimensions[1])
         .then((chart) => {
           this.updateChart(chart)
@@ -273,6 +284,27 @@ export default {
           this.$parent.location.group = this.optionsGroup.find(group => group.id === this.optionsModel).name
         })
         .catch(() => console.log('Falha ao atualizar o gráfico!'))
+    },
+
+    allFieldsValidated(){
+      this.fieldsValidator =
+        this.$refs.startDateRef.validate() &&
+        this.$refs.endDateRef.validate()
+      
+      return this.fieldsValidator
+    },
+
+    applyFilter(){
+      if (!this.allFieldsValidated()) {
+        this.$q.notify({
+          type: 'negative',
+          message: 'Preencha os campos corretamente.',
+          position: 'top'
+        })
+        return
+      }
+
+      this.getChart();
     }
   }
 }
