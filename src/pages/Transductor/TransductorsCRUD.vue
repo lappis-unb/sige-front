@@ -266,7 +266,7 @@
                 class="inputField"
                 outlined
                 :options="campi"
-                option-value="url"
+                option-value="id"
                 option-label="name"
                 emit-value
                 map-options
@@ -308,7 +308,7 @@
                 outlined
                 v-model="transductor.grouping"
                 :options="groups"
-                option-value="url"
+                option-value="id"
                 option-label="name"
                 emit-value
                 map-options
@@ -322,7 +322,7 @@
                 outlined
                 v-model="transductor.slave_server"
                 :options="slaves"
-                option-value="url"
+                option-value="id"
                 option-label="name"
                 emit-value
                 map-options
@@ -433,6 +433,7 @@
       },
       putTransductor () {
         const { id } = this.transductor
+        this.transductor.grouping = [this.transductor.grouping]
         MASTER
           .put('energy-transductors/' + id + '/', this.transductor)
           .then(res => {
